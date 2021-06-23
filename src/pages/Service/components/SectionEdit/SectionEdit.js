@@ -29,7 +29,6 @@ const SectionEdit = ({ section }) => {
 
   return (
     <div className="section-edit">
-
     </div>
   )
 }
