@@ -36,26 +36,40 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
   }, [])
 
   const handleClickForm = () => {
-    debugger
     setKey(Math.random())
     let b = []
     b.push(breadcrumbs[0])
     b.push(breadcrumbs[1])
+    b[1].link = null
     refreshBreadCrumbs({ breadcrumbs: b, title: breadcrumbs[1].title })
   }
 
-  const handleEditForm = (f) => {
+  const handleEditForm = async (f) => {
     setForm(f)
-    refreshBreadCrumbs({ title: f.name, onClick: handleClickForm, link: 'design' } )
+    refreshBreadCrumbs({ title: f.name } )
   }
 
-  const _refreshBreadCrumbs = (nav, title) => {
-    refreshBreadCrumbs({ nav, title } )
+  const _refreshBreadCrumbs = (title, nav) => {
+    let b = []
+    b.push(breadcrumbs[0])
+    b.push(breadcrumbs[1])
+    b[1].onClick = handleClickForm
+    b[1].link = 'design'
+    b.push({ title: nav })
+    refreshBreadCrumbs({ breadcrumbs: b, title } )
+  }
+
+  const exitSection = () => {
+    let b = []
+    b.push(breadcrumbs[0])
+    b.push(breadcrumbs[1])
+    b[1].link = null
+    refreshBreadCrumbs({ breadcrumbs: b, title: breadcrumbs[1].title } )
   }
 
   return (
     <div className="tab-forms">
-      { form !== null ? <FormEdit key={key} formId={form.id} refreshBreadCrumbs={_refreshBreadCrumbs} />
+      { form !== null ? <FormEdit key={key} formId={form.id} refreshBreadCrumbs={_refreshBreadCrumbs} exitSection={exitSection} />
       :
       <>
         <Row className="titles-section">

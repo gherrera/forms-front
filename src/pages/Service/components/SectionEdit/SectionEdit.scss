@@ -1,3 +1,19 @@
 .section-edit {
-  
+    .tools {
+        text-align: right;
+
+        button {
+            margin-left: 10px;
+        }
+    }
+    .catalogos {
+        border: 1px solid rgba(0,0,0,.2);
+        padding: 5px;
+        margin-bottom: 10px;
+    }
+    .section-components {
+        border: 1px solid rgba(0,0,0,.2);
+        padding: 5px;
+        margin-bottom: 5px;
+    }
 }

@@ -23,23 +23,25 @@ import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { getFormByIdPromise } from "./promises";
 
-const FormEdit = ({ formId, refreshBreadCrumbs }) => {
+const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
 	const { t } = useTranslation()
-  const [form, setForm] = useState(null)
+  const [form, setForm] = useState({})
   const [sections, setSections] = useState([])
   const [section, setSection] = useState(null)
+  const [changes, setChanges] = useState(false)
 
   useEffect(() => {
 		getFormByIdPromise(formId).then(f=>{
-			setForm(f)
+      setForm(f)
       setSections(f.sections)
 		})
-
 	}, [])
 
   const addSection = () => {
-    var joined = sections.concat({status: 'ACTIVE'});
+    let section = {id: Math.random(), status: 'ACTIVE', isNew: true}
+    let joined = sections.concat(section);
     setSections(joined)
+    setChanges(true)
   }
 
   const handleChangeTitle = (index, value) => {
@@ -52,10 +54,12 @@ const FormEdit = ({ formId, refreshBreadCrumbs }) => {
         }
       }
     ))
+    setChanges(true)
   }
 
   const deleteSection = (index) => {
     setSections(sections.filter((item, i) => i !== index));
+    setChanges(true)
   }
 
   const editSection = (s) => {
@@ -73,6 +77,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs }) => {
         }
       }
     ))
+    setChanges(true)
   }
 
   const changePrefillSection = (index, checked) => {
@@ -85,63 +90,112 @@ const FormEdit = ({ formId, refreshBreadCrumbs }) => {
         }
       }
     ))
+    setChanges(true)
   }
 
   const changeTypeSection = (index, value) => {
     setSections(
       sections.map((section, i) => {
         if (index == i) {
-          return { ...section, type: value };
+          if(section.isNew && (value === 'TABLE' || value === 'DECL')) {
+            return { ...section, type: value, components: [{ type: value, fieldSet: { cols: 2, fields: [{typeField: 'INPUT'}] }}]};
+          }else if(section.isNew && (value === 'HEADER' || value === 'CONTACT')) {
+            return { ...section, type: value, components: []};
+          }else if(section.isNew && (value === 'INTRO')) {
+            return { ...section, type: value, components: [{ type: 'PARAGRAPH' }]};
+          }else if(section.isNew && (value === 'TEXT')) {
+          }else {
+           return { ...section, type: value };
+          }
         } else {
           return section;
         }
       }
     ))
+    setChanges(true)
+  }
+
+  const refreshSection = (s) => {
+    setSections(
+      sections.map((section, i) => {
+        if (section.id === s.id) {
+          return s;
+        } else {
+          return section;
+        }
+      }
+    ))
+    setSection(s)
+    setChanges(true)
+  }
+
+  const exitSectionFn = () => {
+    setSection(null)
+    exitSection()
+  }
+
+  const saveForm = () => {
+    console.log(sections)
+    setChanges(false)
   }
 
   return (
     <div className="form-edit">
       { form === null ? <Spin/>
         :
-        <div className="form">
-          { section ? <SectionEdit section={section}/>
+        <>
+          { section ? <SectionEdit s={section} refreshThisSection={refreshSection} exitSection={exitSectionFn} />
           :
-          <>
-            <Row className="titles-section">
-              <Col span={8} offset={1}>Nombre de la Sección</Col>
-              <Col span={6}>Tipo de Sección</Col>
-              <Col span={3} className="center">Activar</Col>
-              <Col span={3} className="center">Prellenado</Col>
-              <Col span={3}>Edición</Col>
+          <div className="form">
+            <Row className="tools-btn">
+              <Col span={4} offset={20}>
+                <Button disabled={!changes} onClick={saveForm}>Guardar cambios</Button>
+              </Col>
             </Row>
-
-            { sections.map((section, index) =>
-              <Row className="rows-section">
-                <Col span={1}>
-                  { index === sections.length -1 && <Button icon="plus" size="small" onClick={addSection}/> }
-                </Col>
-                <Col span={8}><Input value={section.title} placeholder="Titulo de la sección" onChange={(e) => handleChangeTitle(index, e.target.value)}/></Col>
-                <Col span={6}>
-                  <Select defaultValue={section.type} onChange={(value) => changeTypeSection(index, value)}>
-                    <Select.Option value="INTRO">Introducción</Select.Option>
-                    <Select.Option value="HEADER">Encabezado</Select.Option>
-                    <Select.Option value="CONTACT">Datos Personales</Select.Option>
-                    <Select.Option value="DECL">Pregunta Tipo Declaración</Select.Option>
-                    <Select.Option value="TABLE">Tipo Tabla</Select.Option>
-                    <Select.Option value="TEXT">Cuadro de Texto</Select.Option>
-                  </Select>
-                </Col>
-                <Col span={3} className="center"><Checkbox defaultChecked={section.status === 'ACTIVE'} onChange={(value) => changeActiveSection(index, value)}/></Col>
-                <Col span={3} className="center"><Checkbox defaultChecked={section.prefilled === true} onChange={(value) => changePrefillSection(index, value)}/></Col>
-                <Col span={3}>
-                  <Button icon="edit" size="small" onClick={(e) => editSection(section)}/>
-                  { sections.length > 1 && <Button icon="delete" size="small" onClick={(e) => deleteSection(index)}/> }
-                </Col>
+            { sections.length > 0 ?
+            <>
+              <Row className="titles-section">
+                <Col span={8} offset={1}>Nombre de la Sección</Col>
+                <Col span={6}>Tipo de Sección</Col>
+                <Col span={3} className="center">Activar</Col>
+                <Col span={3} className="center">Prellenado</Col>
+                <Col span={3}>Edición</Col>
               </Row>
-            )}
-          </>
+
+              { sections.map((section, index) =>
+                <Row className="rows-section">
+                  <Col span={1}>
+                    { index === sections.length -1 && <Button icon="plus" size="small" onClick={addSection}/> }
+                  </Col>
+                  <Col span={8}><Input value={section.title} placeholder="Titulo de la sección" onChange={(e) => handleChangeTitle(index, e.target.value)}/></Col>
+                  <Col span={6}>
+                    <Select value={section.type} onChange={(value) => changeTypeSection(index, value)} disabled={section.isNew === undefined}>
+                      <Select.Option value="INTRO">Introducción</Select.Option>
+                      <Select.Option value="HEADER">Encabezado</Select.Option>
+                      <Select.Option value="CONTACT">Datos Personales</Select.Option>
+                      <Select.Option value="DECL">Pregunta Tipo Declaración</Select.Option>
+                      <Select.Option value="TABLE">Tipo Tabla</Select.Option>
+                      <Select.Option value="TEXT">Cuadro de Texto</Select.Option>
+                    </Select>
+                  </Col>
+                  <Col span={3} className="center"><Checkbox checked={section.status === 'ACTIVE'} onChange={(e) => changeActiveSection(index, e.target.checked)}/></Col>
+                  <Col span={3} className="center"><Checkbox checked={section.prefilled === true} onChange={(e) => changePrefillSection(index, e.target.checked)}/></Col>
+                  <Col span={3} className="tools">
+                    <Button icon="edit" size="small" disabled={section.type === null || section.type === undefined} onClick={(e) => editSection(section)}/>
+                    { sections.length > 1 && <Button icon="delete" size="small" onClick={(e) => deleteSection(index)}/> }
+                  </Col>
+                </Row>
+              )}
+            </>
+            :
+            <>
+                <p>Agregar primera sección</p>
+                <Button icon="plus" size="small" onClick={addSection} />
+            </>
+            }
+          </div>
           }
-        </div>
+        </>
       }
     </div>
   )
