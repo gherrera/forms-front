@@ -7,6 +7,6 @@ if (
   //api.url = 'https://api-docs-qa.gesintel.cl/api'
   api.url = 'http://localhost:5000/api'
 } else {
-  api.url = 'https://api-forms.htgsoluciones/api'
+  api.url = 'https://api-forms.htgsoluciones.com/api'
 }
 export default api
