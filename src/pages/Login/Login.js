@@ -132,7 +132,7 @@ class Login extends Component {
                 <Form onSubmit={ isRestore ? this.handleRestorePassword.bind(this) : this.handleSubmit.bind(this) } className="login-form">
                   <Row>
                     <Col xs={ 24 }>
-                      <h2>{ isRestore ? t('messages.aml.restorePassword') : 'Forms' }</h2>
+                      <h2>{ isRestore ? t('messages.aml.restorePassword') : 'Formularia' }</h2>
                     </Col>
                   </Row>
                   <Row>
