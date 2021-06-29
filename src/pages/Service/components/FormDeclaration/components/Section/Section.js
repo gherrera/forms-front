@@ -14,28 +14,28 @@ import { useTranslation } from "react-i18next";
 
 const { TextArea } = Input;
 
-const Section = ({ s, mode }) => {
+const Section = ({ section, mode }) => {
   const { t } = useTranslation()
-  const [section, setSection] = useState(s)
+  const [ sSection, setSSection ] = useState(section)
 
   const refreshSection = (s) => {
-    setSection(s)
+    setSSection(s)
   }
-
+  
   return (
     <div className="section-content">
-        <h4 className="section-title">{section.title}</h4>
+        <h4 className="section-title">{sSection.title}</h4>
         <div className="section-body">
-        { section.components && section.components.map((component, index) =>
+        { sSection.components && sSection.components.map((component, index) =>
             <Row className="preview-component">
                 { component.type === 'PARAGRAPH' &&
                     <Paragraph component={component} mode={mode} />
                 }
                 { component.type === 'FIELDSET' &&
-                    <FieldSet section={section} component={component} mode={mode} />
+                    <FieldSet section={sSection} component={component} mode={mode} />
                 }
                 { (component.type === 'TABLE' || component.type === 'DECL') &&
-                    <Table section={section} component={component} index={index} mode={mode} refreshSection={refreshSection} />
+                    <Table section={sSection} component={component} index={index} mode={mode} refreshSection={refreshSection} />
                 }
                 { component.type === 'FIELD' &&
                     <TextArea rows={4} />

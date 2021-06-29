@@ -29,7 +29,7 @@ const FormDeclaration = ({ form, mode }) => {
       </div>
       <div className="form-content">
         { form.sections && form.sections.map(section =>
-          <Section s={section} mode={mode} />
+          <Section section={section} mode={mode} />
         )}
       </div>
     </div>

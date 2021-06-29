@@ -30,7 +30,7 @@ const Preview = ({ form, section }) => {
         { mode !== 'json' ?
         <>
             { form && <FormDeclaration form={form} mode={mode} /> }
-            { section && <Section s={section} mode={mode} /> }
+            { section && <Section section={section} mode={mode} /> }
         </>
         : <h1>No Disponible</h1>
         }
