@@ -4,23 +4,16 @@ import ReactDOM from "react-dom";
 import {
   Col,
   Row,
-  Radio,
-  Select,
-  Menu,
-  Dropdown,
-  Icon,
-  Checkbox,
-  DatePicker,
   Button,
   Input,
-  Spin,
-  Form
+  Modal
 } from "antd";
 
 import { camelizerHelper } from "../../../../helpers/";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import { Table, FieldSet, Catalogo } from './components'
+import { TableEdit, FieldSetEdit, Catalogo, ParagraphEdit } from './components'
+import { Preview } from '../'
 
 const { TextArea } = Input;
 
@@ -29,6 +22,7 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
   const [section, setSection] = useState(s)
   const [catalogo, setCatalogo ] = useState([])
   const [changes, setChanges] = useState(false)
+  const [isVisiblePreview, setIsVisiblePreview] = useState(false)
 
   useEffect(() => {
     if(section.type === 'HEADER' || section.type === 'CONTACT') {
@@ -36,36 +30,36 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
       let catContacto = []
 
       let catH1 = {key: 'header', title: 'Encabezado', cols: 2, fields: [], active: false}
-      catH1.fields.push({ type: 'INPUT', title: 'Nombre', key: 'nombre', active: false})
-      catH1.fields.push({ type: 'INPUT', title: 'Ap Paterno', key: 'apPaterno', active: false})
-      catH1.fields.push({ type: 'INPUT', title: 'Ap Materno', key: 'apMaterno', active: false})
-      catH1.fields.push({ type: 'SELECT', title: 'Tipo de Documento', key: 'tipDoc', active: false})
-      catH1.fields.push({ type: 'INPUT', title: 'Documento', key: 'documento', active: false})
+      catH1.fields.push({ type: 'INPUT', title: 'Nombre', key: 'nombre', active: false, required: false, prefilled: false})
+      catH1.fields.push({ type: 'INPUT', title: 'Ap Paterno', key: 'apPaterno', active: false, required: false, prefilled: false})
+      catH1.fields.push({ type: 'INPUT', title: 'Ap Materno', key: 'apMaterno', active: false, required: false, prefilled: false})
+      catH1.fields.push({ type: 'SELECT', title: 'Tipo de Documento', key: 'tipDoc', active: false, required: false, prefilled: false})
+      catH1.fields.push({ type: 'INPUT', title: 'Documento', key: 'documento', active: false, required: false, prefilled: false})
       catHeader.push(catH1)
 
       let cat1 = {key: 'lugarOrigen', title: 'Lugar de origen', cols: 2, fields: [], active: false}
-      cat1.fields.push({ type: 'SELECT', title: 'Nacionalidad', key: 'nacionalidad', active: false})
-      cat1.fields.push({ type: 'SELECT', title: 'Estado civil', key: 'estadoCivil', active: false})
-      cat1.fields.push({ type: 'DATE', title: 'Fecha de nacimiento', key: 'fecNac', active: false})
-      cat1.fields.push({ type: 'SELECT', title: 'Pais de residencia', key: 'paisResidencia', active: false})
-      cat1.fields.push({ type: 'SELECT', title: 'Pais de nacimiento', key: 'paisNacimiento', active: false})
-      cat1.fields.push({ type: 'SELECT', title: 'Parentesco', key: 'parentesco', active: false})
+      cat1.fields.push({ type: 'SELECT', title: 'Nacionalidad', key: 'nacionalidad', active: false, required: false, prefilled: false})
+      cat1.fields.push({ type: 'SELECT', title: 'Estado civil', key: 'estadoCivil', active: false, required: false, prefilled: false})
+      cat1.fields.push({ type: 'DATE', title: 'Fecha de nacimiento', key: 'fecNac', active: false, required: false, prefilled: false})
+      cat1.fields.push({ type: 'SELECT', title: 'Pais de residencia', key: 'paisResidencia', active: false, required: false, prefilled: false})
+      cat1.fields.push({ type: 'SELECT', title: 'Pais de nacimiento', key: 'paisNacimiento', active: false, required: false, prefilled: false})
+      cat1.fields.push({ type: 'SELECT', title: 'Parentesco', key: 'parentesco', active: false, required: false, prefilled: false})
       catContacto.push(cat1)
 
       let cat2 = {key: 'contactoPersonal', title: 'Contacto personal', cols: 2, fields: [], active: false}
-      cat2.fields.push({ type: 'INPUT', title: 'Correo electronico', key: 'email', active: false})
-      cat2.fields.push({ type: 'INPUT', title: 'Telefono Fijo', key: 'telefono', active: false})
-      cat2.fields.push({ type: 'INPUT', title: 'Telefono Celular', key: 'celular', active: false})
+      cat2.fields.push({ type: 'INPUT', title: 'Correo electronico', key: 'email', active: false, required: false, prefilled: false})
+      cat2.fields.push({ type: 'INPUT', title: 'Telefono Fijo', key: 'telefono', active: false, required: false, prefilled: false})
+      cat2.fields.push({ type: 'INPUT', title: 'Telefono Celular', key: 'celular', active: false, required: false, prefilled: false})
       catContacto.push(cat2)
 
       let cat3 = {key: 'direccionPersonal', title: 'Direccion personal', cols: 2, fields: [], active: false}
-      cat3.fields.push({ type: 'SELECT', title: 'Region', key: 'region', active: false})
-      cat3.fields.push({ type: 'SELECT', title: 'Comuna', key: 'comuna', active: false})
-      cat3.fields.push({ type: 'INPUT', title: 'Dirección', key: 'direccion', active: false})
-      cat3.fields.push({ type: 'INPUT', title: 'Numero de calle', key: 'numCalle', active: false})
-      cat3.fields.push({ type: 'INPUT', title: 'Numero de puerta', key: 'numPuerta', active: false})
-      cat3.fields.push({ type: 'INPUT', title: 'Codigo postal', key: 'codPostal', active: false})
-      cat3.fields.push({ type: 'SELECT', title: 'Tipo de vivienda', key: 'tipVivienda', active: false})
+      cat3.fields.push({ type: 'SELECT', title: 'Region', key: 'region', active: false, required: false, prefilled: false})
+      cat3.fields.push({ type: 'SELECT', title: 'Comuna', key: 'comuna', active: false, required: false, prefilled: false})
+      cat3.fields.push({ type: 'INPUT', title: 'Dirección', key: 'direccion', active: false, required: false, prefilled: false})
+      cat3.fields.push({ type: 'INPUT', title: 'Numero de calle', key: 'numCalle', active: false, required: false, prefilled: false})
+      cat3.fields.push({ type: 'INPUT', title: 'Numero de puerta', key: 'numPuerta', active: false, required: false, prefilled: false})
+      cat3.fields.push({ type: 'INPUT', title: 'Codigo postal', key: 'codPostal', active: false, required: false, prefilled: false})
+      cat3.fields.push({ type: 'SELECT', title: 'Tipo de vivienda', key: 'tipVivienda', active: false, required: false, prefilled: false})
       catContacto.push(cat3)
 
       let cat = catHeader
@@ -79,6 +73,8 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
               comp.fields.map(f => {
                 if(fcat.key === f.key) {
                   fcat.active = true
+                  fcat.required = f.required
+                  fcat.prefilled = f.prefilled
                 }
               })
             })
@@ -102,19 +98,6 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
   const refreshSection = (s) => {
     setSection(s)
     setChanges(true)
-  }
-
-  const handleChangeText = (index, value) => {
-    let comp = []
-    section.components.map((component, i) => {
-      if(i === index) {
-        comp.push({ ...component, text: value })
-      }else {
-        comp.push(component)
-      }
-    })
-    let _s = { ...section, components: comp }
-    refreshSection(_s)
   }
 
   const handleChangeCatalogoActive = (cat) => {
@@ -163,22 +146,24 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
     let _fieldset = []
     _c.map(c => {
       let fields = c.fields.filter(f => f.active)
+      let _fields = []
       if(fields.length > 0) {
         fields.map(f => {
-          f.typeField = f.type
+          let _f = { ...f, typeField: f.type, type: 'FIELD'}
+          _fields.push(_f)
         })
         let exists = false
         section.components && section.components.map((fs, index) => {
           if(fs.type === 'FIELDSET') {
             if(fs.key === c.key) {
               exists = true
-              let _fs = { ...fs, fields }              
+              let _fs = { ...fs, fields: _fields }              
               _fieldset.push(_fs)
             }
           }
         })
         if(!exists) {
-          let _fs = {key: c.key, cols: 2, type: 'FIELDSET', title: c.title, fields}
+          let _fs = {key: c.key, cols: 2, type: 'FIELDSET', title: c.title, fields: _fields}
           _fieldset.push(_fs)
         }
       }
@@ -193,15 +178,24 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
     exitSection()
   }
 
+  const handlePreviewSection = () => {
+    setIsVisiblePreview(true)
+  }
+
+  const closeModalHandler = () => {
+    setIsVisiblePreview(false)
+  }
+
   return (
     <div className="section-edit">
       <Row>
-        <Col span={18}>
+        <Col span={16}>
           <h2>{ getTypeSection(section.type) }</h2>
         </Col>
-        <Col span={6} className="tools">
-          <Button onClick={exitSection}>Salir sin Guardar</Button>
+        <Col span={8} className="tools">
           <Button disabled={!changes} onClick={saveThisSection}>Guardar Cambios</Button>
+          <Button onClick={exitSection}>Salir sin Guardar</Button>
+          <Button onClick={handlePreviewSection}>Previsualizar</Button>
         </Col>
       </Row>
       { (section.type === 'HEADER' || section.type === 'CONTACT') &&
@@ -220,13 +214,13 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
         { section.components && section.components.map((component, index) =>
           <Row className={'row-' + component.type}>
             { component.type === 'PARAGRAPH' &&
-              <TextArea rows={4} value={component.text} placeholder="Ingrese aqui el texto de parrafo" onChange={(e) => handleChangeText(index, e.target.value)}/>
+              <ParagraphEdit section={section} component={component} index={index} fieldset={component.fieldSet} refreshSection={refreshSection}/>
             }
             { component.type === 'FIELDSET' &&
-              <FieldSet section={section} fieldset={component} refreshSection={refreshSection} />
+              <FieldSetEdit section={section} fieldset={component} refreshSection={refreshSection} />
             }
             { (component.type === 'TABLE' || component.type === 'DECL') &&
-              <Table section={section} component={component} index={index} fieldset={component.fieldSet} refreshSection={refreshSection} />
+              <TableEdit section={section} component={component} index={index} fieldset={component.fieldSet} refreshSection={refreshSection} />
             }
             { component.type === 'FIELD' &&
               <TextArea rows={4} disabled/>
@@ -234,6 +228,22 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
           </Row>
         )}
       </div>
+      { isVisiblePreview &&
+        <Modal
+          className="preview-modal"
+          footer={ null }
+          visible={ true }
+          onOk={ closeModalHandler  }
+          onCancel={ closeModalHandler }
+        >
+          <div>
+            <div className="top-bar">
+              Vista Previa
+            </div>
+            <Preview section={section} closeModalHandler={closeModalHandler} />
+          </div>
+        </Modal>
+      }
     </div>
   )
 }

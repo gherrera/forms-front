@@ -1,0 +1,20 @@
+.form-declaration {
+    margin: 10px;
+    padding-top: 10px;
+    border: 1px solid rgba(0,0,0,.1);
+    
+    .form-header {
+        background-color: #fff;
+        padding-left: 20px;
+        .form-title {
+        }
+    }
+    .form-content {
+        padding-top: 5px;
+        background-color: rgba(0,0,0,.04);
+    }
+
+    .section-content {
+        border: unset;
+    }
+}

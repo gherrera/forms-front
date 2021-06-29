@@ -1,0 +1,22 @@
+.fielset {
+    .ant-form-item {
+        margin-bottom: 5px;
+  
+        .ant-form-item-label {
+          line-height: 16px;
+        }
+    }
+
+    .ant-select, .ant-calendar-picker {
+        width: 100%;
+    }
+    .fieldset-title {
+        padding: 2px 2px 2px 5px;
+    }
+
+    &.CONTACT {
+        .fieldset-title {
+            background-color: rgba(0,0,0,.15);
+        }
+    }
+}

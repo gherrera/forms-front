@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import {
   Col,
   Row,
-  Radio,
+  Modal,
   Select,
   Menu,
   Dropdown,
@@ -16,12 +16,12 @@ import {
   Spin,
   notification
 } from "antd";
-import { SectionEdit } from '../'
+import { SectionEdit, Preview } from '../'
 
 import { camelizerHelper } from "../../../../helpers/";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import { getFormByIdPromise } from "./promises";
+import { getFormByIdPromise, saveFormPromise } from "./promises";
 
 const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
 	const { t } = useTranslation()
@@ -29,6 +29,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
   const [sections, setSections] = useState([])
   const [section, setSection] = useState(null)
   const [changes, setChanges] = useState(false)
+  const [isVisiblePreview, setIsVisiblePreview] = useState(false)
 
   useEffect(() => {
 		getFormByIdPromise(formId).then(f=>{
@@ -102,8 +103,9 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
           }else if(section.isNew && (value === 'HEADER' || value === 'CONTACT')) {
             return { ...section, type: value, components: []};
           }else if(section.isNew && (value === 'INTRO')) {
-            return { ...section, type: value, components: [{ type: 'PARAGRAPH' }]};
+            return { ...section, type: value, components: [{ type: 'PARAGRAPH', fieldSet: {fields: [{typeField: 'INPUT'}]} }]};
           }else if(section.isNew && (value === 'TEXT')) {
+            return { ...section, type: value, components: [{type: 'FIELD'}] };
           }else {
            return { ...section, type: value };
           }
@@ -135,8 +137,26 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
   }
 
   const saveForm = () => {
-    console.log(sections)
-    setChanges(false)
+    saveFormPromise({ ...form, sections}).then(response => {
+      if(response === 'success') {
+        notification.success({
+          message: 'Formulario guardado exitosamente'
+        })
+        setChanges(false)
+      }else {
+        notification.error({
+          message: 'Se ha producido un error al grabar los datos'
+        })
+      }
+    })
+  }
+
+  const handlePreviewSection = () => {
+    setIsVisiblePreview(true)
+  }
+
+  const closeModalHandler = () => {
+    setIsVisiblePreview(false)
   }
 
   return (
@@ -148,8 +168,9 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
           :
           <div className="form">
             <Row className="tools-btn">
-              <Col span={4} offset={20}>
+              <Col span={6} offset={18}>
                 <Button disabled={!changes} onClick={saveForm}>Guardar cambios</Button>
+                <Button onClick={handlePreviewSection}>Previsualizar</Button>
               </Col>
             </Row>
             { sections.length > 0 ?
@@ -192,6 +213,22 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
                 <p>Agregar primera sección</p>
                 <Button icon="plus" size="small" onClick={addSection} />
             </>
+            }
+            { isVisiblePreview &&
+              <Modal
+                className="preview-modal"
+                footer={ null }
+                visible={ true }
+                onOk={ closeModalHandler  }
+                onCancel={ closeModalHandler }
+              >
+                <div>
+                  <div className="top-bar">
+                    Vista Previa
+                  </div>
+                  <Preview form={form} closeModalHandler={closeModalHandler} />
+                </div>
+              </Modal>
             }
           </div>
           }

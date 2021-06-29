@@ -1,4 +1,4 @@
-.fieldset {
+.fieldset-edit {
   padding: 15px;
   border: 1px solid rgba(0,0,0,.1);
   position: relative;
@@ -11,10 +11,14 @@
     padding: 0px 5px 0px 5px;
   }
 
-  .comp-fieldSet {
+  .comp-fieldSet-edit {
     
     .titles-section {
       margin-top: 10px;
+      .ant-col {
+        padding-left: 5px;
+        padding-right: 5px;
+      }
     }
     .center {
       text-align: center;
