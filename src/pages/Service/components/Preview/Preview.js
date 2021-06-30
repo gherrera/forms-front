@@ -19,7 +19,7 @@ const Preview = ({ form, section }) => {
   const [ mode, setMode ] = useState("preview")
 
   return (
-    <div className="preview-content">
+    <div className={'preview-content preview-content-'+(form ? 'form' : 'section')}>
         <div className="preview-mode">
             <Radio.Group value={mode} size="small" buttonStyle="solid" onChange={(e) => setMode(e.target.value)}>
                 <Radio.Button value="preview">HTML</Radio.Button>

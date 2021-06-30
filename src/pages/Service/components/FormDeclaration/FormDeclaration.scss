@@ -6,6 +6,7 @@
     .form-header {
         background-color: #fff;
         padding-left: 20px;
+        padding-bottom: 10px;
         .form-title {
         }
     }
@@ -17,4 +18,28 @@
     .section-content {
         border: unset;
     }
+
+    .form-actions {
+        padding:20px;
+        
+        .ant-col {
+            text-align: right;
+        }
+    }
+
+    .has-errors-fieldset {
+        padding: 3px;
+        background-color: rgba(255,0,0,.06);
+        color: red;
+    }
+}
+
+.notif-error-required-fields {
+    //width: 650px;
+    .ant-notification-notice-description1 {
+        p {
+            margin-bottom: 5px;
+        }
+    }
+    //background-color: red;
 }

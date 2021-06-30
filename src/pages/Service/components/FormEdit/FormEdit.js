@@ -221,6 +221,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
                 visible={ true }
                 onOk={ closeModalHandler  }
                 onCancel={ closeModalHandler }
+                style={{ top: 20 }}
               >
                 <div>
                   <div className="top-bar">

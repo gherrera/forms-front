@@ -49,4 +49,10 @@
     .section-body {
         padding: 10px;
     }
+
+    &.mode-pdf {
+        input{ 
+            background-color: white;
+        }
+    }
 }

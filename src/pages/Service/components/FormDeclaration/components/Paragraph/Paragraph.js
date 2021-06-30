@@ -9,7 +9,7 @@ import { camelizerHelper } from "../../../../helpers";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 
-const Paragraph = ({ component, mode }) => {
+const Paragraph = ({ component, mode, handleChangeValues }) => {
   const { t } = useTranslation()
   const [fields, setFields] = useState({})
 
@@ -23,20 +23,26 @@ const Paragraph = ({ component, mode }) => {
     }
   }, [])
 
+  const handleChangeFieldValue = (field, value) => {
+    field.value = value
+    handleChangeValues(component.fieldSet)
+  }
+
   const getField = (field) => {
     if(field.typeField === 'INPUT') {
-      return <Input size="small" className="field-paragraph"/>
+      return <Input size="small" className="field-paragraph" disabled={mode === 'pdf'} placeholder={field.title} value={field.value} onChange={(e) => handleChangeFieldValue(field, e.target.value)} />
     }
   }
 
   const  getText = (text) => {
     let elems = []
     let data = text.split('<')
-    data.map(el => {
+    data.map((el, index) => {
       if(el.indexOf('>') > 0) {
         let key = el.substring(0, el.indexOf('>'))
-        if(fields[key]) {
-          elems.push(getField(fields[key]))
+        let i = parseInt(key)
+        if(!isNaN(i) && component.fieldSet && component.fieldSet.fields && component.fieldSet.fields[i-1]) {
+          elems.push(getField(component.fieldSet.fields[i-1]))
           elems.push(<span>{el.substring(el.indexOf('>')+1)}</span>)
         }else {
           elems.push(<span>&lt;{el}</span>)
