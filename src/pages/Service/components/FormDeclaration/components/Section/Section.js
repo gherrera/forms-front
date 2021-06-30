@@ -18,7 +18,7 @@ const Section = ({ form, decl, section, mode, refreshForm }) => {
   const { getFieldDecorator } = form;
   const [ sSection, setSSection ] = useState(section)
 
-  const refreshSection = (s) => {
+  const refreshSection = (s, updateValues=true) => {
     setSSection(s)
 
     if(refreshForm) {
@@ -34,7 +34,7 @@ const Section = ({ form, decl, section, mode, refreshForm }) => {
       _d.sections = _sec
       refreshForm(_d)
 
-      if(mode === 'html') {
+      if(mode === 'html' && updateValues) {
       //if(mode === 'preview') {
         saveSectionValuesPromise(decl.id, s)
       }

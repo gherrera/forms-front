@@ -106,7 +106,7 @@ const Table = ({ form, section, component, mode, refreshSection }) => {
       }
     })
     _s.components = comp
-    refreshSection(_s)
+    refreshSection(_s, key !== 'fieldSet')
   }
 
   const handleChangeValues = (fieldSet) => {
@@ -203,7 +203,7 @@ const Table = ({ form, section, component, mode, refreshSection }) => {
             </Row>
           </>
         }
-        {(mode !== 'pdf' || columns.length < 5) ? 
+        {(mode !== 'pdf' || columns.length <= component.fieldSet.fields.length) ? 
           <TableAntd columns={columns} size="small" dataSource={component.records} className="table-rows"/>
           :
           toDescriptionsPdf(component.records)
