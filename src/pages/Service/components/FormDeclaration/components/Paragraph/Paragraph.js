@@ -5,9 +5,7 @@ import {
   Input
 } from "antd";
 
-import { camelizerHelper } from "../../../../helpers";
 import { useTranslation } from "react-i18next";
-import moment from "moment";
 
 const Paragraph = ({ component, mode, handleChangeValues }) => {
   const { t } = useTranslation()

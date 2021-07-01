@@ -75,7 +75,7 @@ const Section = ({ form, decl, section, mode, refreshForm }) => {
                     <FieldSet section={sSection} parent={sSection} component={component} mode={mode} handleChangeValues={handleChangeValues} getFieldDecorator={getFieldDecorator} />
                 }
                 { (component.type === 'TABLE' || component.type === 'DECL') &&
-                    <Table section={sSection} component={component} mode={mode} refreshSection={refreshSection} />
+                    <Table section={sSection} component={component} mode={mode} handleChangeValues={handleChangeValues} />
                 }
                 { component.type === 'FIELD' &&
                     <TextArea rows={4} value={component.value} disabled={mode==='pdf'} onChange={(e) => handleChangeFieldValue(component, e.target.value)}/>

@@ -1,6 +1,5 @@
 import "./Table.scss";
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
 import {
   Col,
   Row,
@@ -12,12 +11,10 @@ import {
   notification
 } from "antd";
 
-import { camelizerHelper } from "../../../../helpers";
 import { useTranslation } from "react-i18next";
-import moment from "moment";
 import { FieldSet } from '..'
 
-const Table = ({ form, section, component, mode, refreshSection }) => {
+const Table = ({ form, section, component, mode, handleChangeValues }) => {
   const { t } = useTranslation()
   const { getFieldDecorator, validateFields, setFields, getFieldsError, setFieldsValue } = form;
   const [columns, setColumns] = useState([])
@@ -76,17 +73,7 @@ const Table = ({ form, section, component, mode, refreshSection }) => {
   );
 
   const handleChangeDecision = (value) => {
-    let _s = { ...section }
-    let comp = []
-    _s.components.map((c, i) => {
-      if(c.id === component.id) {
-        comp.push({ ...c, decision: value })
-      }else {
-        comp.push(c)
-      }
-    })
-    _s.components = comp
-    refreshSection(_s)
+    refreshSectionKey('decision', value)
 
     if(value && component.records.length === 0) {
       setError('Debe Agregar al menos 1 registro')
@@ -96,20 +83,11 @@ const Table = ({ form, section, component, mode, refreshSection }) => {
   }
 
   const refreshSectionKey = (key, value) => {
-    let _s = { ...section }
-    let comp = []
-    _s.components.map((c, i) => {
-      if(c.id === component.id) {
-        comp.push({ ...c, [key]: value })
-      }else {
-        comp.push(c)
-      }
-    })
-    _s.components = comp
-    refreshSection(_s, key !== 'fieldSet')
+    component[key] = value
+    handleChangeValues(component)
   }
 
-  const handleChangeValues = (fieldSet) => {
+  const handleChangeValuesFn = (fieldSet) => {
     refreshSectionKey('fieldSet', fieldSet)
   }
 
@@ -147,7 +125,6 @@ const Table = ({ form, section, component, mode, refreshSection }) => {
         message: 'Debe ingresar los campos requeridos'
       })
     }
-
   }
 
   const cleanFields = () => {
@@ -156,7 +133,7 @@ const Table = ({ form, section, component, mode, refreshSection }) => {
       field.value = null
       setFieldsValue({[field.id]: null})
     })
-    handleChangeValues(fieldSet)
+    handleChangeValuesFn(fieldSet)
   }
 
   return (
@@ -194,7 +171,7 @@ const Table = ({ form, section, component, mode, refreshSection }) => {
               parent={component}
               component={component.fieldSet} 
               mode={mode} 
-              handleChangeValues={handleChangeValues} 
+              handleChangeValues={handleChangeValuesFn} 
               getFieldDecorator={getFieldDecorator}
             />
             <Row className="btns-table">

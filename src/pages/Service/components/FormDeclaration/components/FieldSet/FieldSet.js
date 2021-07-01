@@ -1,6 +1,5 @@
 import "./FieldSet.scss";
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
 import {
   Col,
   Row,
@@ -10,7 +9,6 @@ import {
   Form
 } from "antd";
 
-import { camelizerHelper } from "../../../../helpers";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 
