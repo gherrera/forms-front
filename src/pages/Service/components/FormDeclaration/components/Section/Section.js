@@ -41,14 +41,14 @@ const Section = ({ form, decl, section, mode, refreshForm }) => {
      }
   }
 
-  const handleChangeValues = (fieldSet) => {
+  const handleChangeValues = (component) => {
     let _s = { ...section }
     let comp = []
     _s.components.map((c, i) => {
-      if(c.type === 'FIELDSET' && c.id === fieldSet.id) {
-        comp.push(fieldSet)
-      }else if(c.fieldSet && c.fieldSet.id === fieldSet.id) {
-        comp.push({ ...c, fieldSet: fieldSet })
+      if((c.type === 'FIELD' || c.type === 'FIELDSET') && c.id === component.id) {
+        comp.push(component)
+      }else if(c.fieldSet && c.fieldSet.id === component.id) {
+        comp.push({ ...c, fieldSet: component })
       }else {
         comp.push(c)
       }
@@ -58,17 +58,8 @@ const Section = ({ form, decl, section, mode, refreshForm }) => {
   }
   
   const handleChangeFieldValue = (component, value) => {
-    let _s = { ...section }
-    let comp = []
-    _s.components.map((c, i) => {
-      if(c.id === component.id) {
-        comp.push({ ...c, value: value })
-      }else {
-        comp.push(c)
-      }
-    })
-    _s.components = comp
-    refreshSection(_s)
+    component.value = value
+    handleChangeValues(component)
   }
 
   return (

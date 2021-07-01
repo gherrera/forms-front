@@ -19,7 +19,6 @@ const Preview = ({ form, section }) => {
   const [ json, setJson ] = useState({})
 
   const handleChangeMode = (value) => {
-    debugger
     setMode(value)
     if(value === 'json') {
       if(form) {

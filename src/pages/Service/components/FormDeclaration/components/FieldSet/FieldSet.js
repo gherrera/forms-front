@@ -56,7 +56,7 @@ const FieldSet = ({ section, parent, component, mode, handleChangeValues, getFie
                   <Input disabled={true} value={field.value}/>
                   :  
                   getFieldDecorator(field.id, {
-                    initialValue: field.value,
+                    initialValue: field.value !== null && field.value !== '' && field.typeField === 'DATE' ? moment(field.value, 'DD/MM/YYYY') : field.value,
                     validateTrigger: "onChange",
                     rules:
                       [
