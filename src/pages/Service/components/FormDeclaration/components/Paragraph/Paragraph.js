@@ -12,6 +12,7 @@ import moment from "moment";
 const Paragraph = ({ component, mode, handleChangeValues }) => {
   const { t } = useTranslation()
   const [fields, setFields] = useState({})
+  const [ hasErrors, setHasErrors ] = useState(false)
 
   useEffect(() => {
     if(component.fieldSet && component.fieldSet.fields) {
@@ -20,12 +21,17 @@ const Paragraph = ({ component, mode, handleChangeValues }) => {
         _fields[field.key] = field
       })
       setFields(_fields)
+
+      let errores = component.fieldSet.fields.filter(f => f.required && (f.value === null || f.value === ''));
+      setHasErrors(errores.length > 0)
     }
   }, [])
 
   const handleChangeFieldValue = (field, value) => {
     field.value = value
     handleChangeValues(component.fieldSet)
+    let errores = component.fieldSet.fields.filter(f => f.required && (f.value === null || f.value === ''));
+    setHasErrors(errores.length > 0)
   }
 
   const getField = (field) => {
@@ -56,6 +62,7 @@ const Paragraph = ({ component, mode, handleChangeValues }) => {
 
   return (
     <div className="paragraph-form">
+      { mode !== 'pdf' && hasErrors && <Row className="has-errors-fieldset">Faltan campos requeridos</Row>}
       <Row>
         { component.text && getText(component.text) }
       </Row>

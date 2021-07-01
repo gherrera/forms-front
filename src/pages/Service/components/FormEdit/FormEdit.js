@@ -32,11 +32,15 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
   const [isVisiblePreview, setIsVisiblePreview] = useState(false)
 
   useEffect(() => {
+		loadFormdById(formId)
+	}, [])
+
+  const loadFormdById = (formId) => {
 		getFormByIdPromise(formId).then(f=>{
       setForm(f)
       setSections(f.sections)
 		})
-	}, [])
+  }
 
   const addSection = () => {
     let section = {id: Math.random(), status: 'ACTIVE', isNew: true}
@@ -143,6 +147,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
           message: 'Formulario guardado exitosamente'
         })
         setChanges(false)
+        loadFormdById(formId)
       }else {
         notification.error({
           message: 'Se ha producido un error al grabar los datos'

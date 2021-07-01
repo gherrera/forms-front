@@ -55,4 +55,12 @@
             background-color: white;
         }
     }
+
+    .has-errors-fieldset {
+        padding: 2px;
+        font-size: .9em;
+        background-color: rgba(255,0,0,.06);
+        color: red;
+        margin-bottom: 1px;
+    }
 }

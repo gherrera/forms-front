@@ -41,6 +41,13 @@ const FormDeclaration = ({ form, mode }) => {
             hasErrorsSection = true
             descriptions.push(<p>Debe agregar al menos 1 registro en la seccion {section.title}</p>)
           }
+        }else if(component.type === 'PARAGRAPH') {
+          let errores = component.fieldSet.fields.filter(f => f.required && (f.value === null || f.value === ''));
+          if(errores.length > 0) {
+            let title = component.title !== null && component.title !== '' ? component.title : section.title
+            descriptions.push(<p>Faltan datos en la seccion {title}</p>)
+            hasErrorsSection = true
+          }
         }
       })
       if(hasErrorsSection) {
