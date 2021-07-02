@@ -5,7 +5,8 @@ import Home from './Home/Home'
 import Login from './Login/Login'
 import NotAuthorized from './NotAuthorized/NotAuthorized'
 import NotFound from './NotFound/NotFound'
-import Service from './Service/Service'
+import Design from './Design/Design'
+import FormDeclarationComponent from './FormDeclaration/FormDeclaration'
 
 
 export const AdminPage = Admin
@@ -15,4 +16,5 @@ export const HomePage = Home
 export const LoginPage = Login
 export const NotAuthorizedPage = NotAuthorized
 export const NotFoundPage = NotFound
-export const ServicePage = Service
+export const DesignPage = Design
+export const FormDeclaration = FormDeclarationComponent

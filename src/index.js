@@ -5,13 +5,15 @@ import { I18nextProvider } from 'react-i18next'
 import i18nextConfig from './config/i18next'
 import moment from 'moment'
 import 'moment/locale/es'
+import { datasourcesContext } from './contexts'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { LayoutPrivate, LayoutPublic } from './layouts'
 import { Loading, ModalChangePassword } from './layouts/Private/components'
-import { AdminPage,HomePage, LoginPage, NotAuthorizedPage, NotFoundPage,ServicePage } from './pages'
+import { AdminPage,HomePage, LoginPage, NotAuthorizedPage, NotFoundPage,DesignPage } from './pages'
 import { LocalStorageService } from './services'
 import { authTokenValidatorHelper, sessionStorageCleanerHelper, authTokenRenewerHelper } from './helpers'
 import { animateLogoutPromise, changePasswordPromise, getCurrentUserPromise, logoutPromise, removeLoginAnimationsPromise } from './promises'
+import { getDataSourcesCatalogoPromise, getDataSourcesFormPromise } from "./promises/";
 
 class App extends Component {
   state = {
@@ -19,7 +21,30 @@ class App extends Component {
     isActivated: true,
     isLoading: true,
     isLoggedIn: false,
-    isModalChangePasswordVisible: false
+    isModalChangePasswordVisible: false,
+    datasources: {},
+    datasourcesCat: {}
+  }
+
+  loadDatasourcesCatalogo() {
+    getDataSourcesCatalogoPromise().then(ds => {
+      let datasources = { }
+      if(Object.keys(ds).length > 0) {
+        datasources = { CAT: ds }
+      }
+      this.setState({ datasourcesCat: ds, datasources})
+    })
+  }
+
+  loadFormDatasource(formId) {
+    getDataSourcesFormPromise(formId).then(ds => {
+      const { datasources } = this.state
+      debugger
+      if(Object.keys(ds).length > 0) {
+        datasources.FORM = ds 
+      }
+      this.setState({ datasources })
+    })
   }
 
   async componentDidMount() {
@@ -52,12 +77,13 @@ class App extends Component {
           if (currentUser.client.pais !== 'CHI') {
             i18nextConfig.changeLanguage(language.substring(0,2) + currentUser.client.pais)
           }
+
+          this.loadDatasourcesCatalogo()
         }
       }
     //}
     await this.setState({ isLoading: false })
-
-    //currentUser.cliente.pais = 'CHI' || 'PER' || 'CR'
+    
   }
 
   handleThemeCheck() {
@@ -84,6 +110,8 @@ class App extends Component {
           isLoggedIn: true
         })
         new authTokenRenewerHelper(this.handleLogout.bind(this))
+
+        this.loadDatasourcesCatalogo()
       }
     }
   }
@@ -138,7 +166,7 @@ class App extends Component {
   }
 
   render() {
-    const { currentUser, isLoading, isLoggedIn, isModalChangePasswordVisible } = this.state
+    const { currentUser, isLoading, isLoggedIn, isModalChangePasswordVisible, datasources } = this.state
     const Layout = isLoggedIn ? LayoutPrivate : LayoutPublic
 
     if (isLoading) {
@@ -146,23 +174,25 @@ class App extends Component {
     } else {
       return (
         <I18nextProvider i18n={ i18nextConfig }>
-          <Router>
-            <Layout currentUser={ currentUser } logoutHandler={ this.handleLogout.bind(this) }>
-              <Switch>
-                <Route path="/" exact render={ () => this.renderComponent(HomePage) } />
-                <Route path="/administracion" exact render={ () => this.renderComponent(AdminPage) } />
-                <Route path="/design" exact render={ () => this.renderComponent(ServicePage, 'design') } />
+          <datasourcesContext.Provider value={{ datasources, loadFormDatasource: this.loadFormDatasource.bind(this) }} >
+            <Router>
+              <Layout currentUser={ currentUser } logoutHandler={ this.handleLogout.bind(this) }>
+                <Switch>
+                  <Route path="/" exact render={ () => this.renderComponent(HomePage) } />
+                  <Route path="/administracion" exact render={ () => this.renderComponent(AdminPage) } />
+                  <Route path="/design" exact render={ () => this.renderComponent(DesignPage, 'design') } />
 
-                <Route render={ () => <NotFoundPage /> } />
-              </Switch>
-              <ModalChangePassword
-                visible={ isModalChangePasswordVisible }
-                onOk={ this.handleSaveChangePassword.bind(this) }
-                onCancel={ this.handleCloseModalChangePassword.bind(this) }
-                isForced
-                />
-            </Layout>
-          </Router>
+                  <Route render={ () => <NotFoundPage /> } />
+                </Switch>
+                <ModalChangePassword
+                  visible={ isModalChangePasswordVisible }
+                  onOk={ this.handleSaveChangePassword.bind(this) }
+                  onCancel={ this.handleCloseModalChangePassword.bind(this) }
+                  isForced
+                  />
+              </Layout>
+            </Router>
+          </datasourcesContext.Provider>
         </I18nextProvider>
       )
     }
