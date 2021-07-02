@@ -39,7 +39,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
   }
 
   const addSection = () => {
-    let section = {id: Math.random(), status: 'ACTIVE', isNew: true}
+    let section = {id: getRandomId(), status: 'ACTIVE', isNew: true}
     let joined = sections.concat(section);
     setSections(joined)
     setChanges(true)
@@ -95,26 +95,32 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     setChanges(true)
   }
 
+  const getRandomId = () => {
+    return 'R' + Math.floor(Math.random() * 1000000);
+  }
+
   const changeTypeSection = (index, value) => {
-    setSections(
-      sections.map((section, i) => {
-        if (index == i) {
-          if(section.isNew && (value === 'TABLE' || value === 'DECL')) {
-            return { ...section, type: value, components: [{ type: value, fieldSet: { type: 'FIELDSET', cols: 2, fields: [{type: 'FIELD', typeField: 'INPUT'}] }}]};
-          }else if(section.isNew && (value === 'HEADER' || value === 'CONTACT')) {
-            return { ...section, type: value, components: []};
-          }else if(section.isNew && (value === 'INTRO')) {
-            return { ...section, type: value, components: [{ type: 'PARAGRAPH', fieldSet: {type: 'FIELDSET', fields: [{type: 'FIELD', typeField: 'INPUT'}]} }]};
-          }else if(section.isNew && (value === 'TEXT')) {
-            return { ...section, type: value, components: [{type: 'FIELD'}] };
-          }else {
-           return { ...section, type: value };
-          }
-        } else {
-          return section;
+    let sec = sections.map((section, i) => {
+      if (index == i) {
+        if(section.isNew && (value === 'TABLE' || value === 'DECL')) {
+          return { ...section, type: value, components: [{ id: getRandomId(), type: value, fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT'}] }}]};
+        }else if(section.isNew && (value === 'HEADER' || value === 'CONTACT')) {
+          return { ...section, type: value, components: []};
+        }else if(section.isNew && (value === 'INTRO')) {
+          return { ...section, type: value, components: [{ id: getRandomId(), type: 'PARAGRAPH', fieldSet: {id: getRandomId(), type: 'FIELDSET', fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT'}]} }]};
+        }else if(section.isNew && (value === 'TEXT')) {
+          return { ...section, type: value, components: [{id: getRandomId(), type: 'FIELD'}] };
+        }else {
+          return { ...section, type: value };
         }
+      } else {
+        return section;
       }
-    ))
+    })
+
+    setSections(sec)
+    let f = { ...form, sections: sec }
+    setForm(f)
     setChanges(true)
   }
 
