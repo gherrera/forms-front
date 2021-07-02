@@ -100,11 +100,11 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
       sections.map((section, i) => {
         if (index == i) {
           if(section.isNew && (value === 'TABLE' || value === 'DECL')) {
-            return { ...section, type: value, components: [{ type: value, fieldSet: { cols: 2, fields: [{typeField: 'INPUT'}] }}]};
+            return { ...section, type: value, components: [{ type: value, fieldSet: { type: 'FIELDSET', cols: 2, fields: [{type: 'FIELD', typeField: 'INPUT'}] }}]};
           }else if(section.isNew && (value === 'HEADER' || value === 'CONTACT')) {
             return { ...section, type: value, components: []};
           }else if(section.isNew && (value === 'INTRO')) {
-            return { ...section, type: value, components: [{ type: 'PARAGRAPH', fieldSet: {fields: [{typeField: 'INPUT'}]} }]};
+            return { ...section, type: value, components: [{ type: 'PARAGRAPH', fieldSet: {type: 'FIELDSET', fields: [{type: 'FIELD', typeField: 'INPUT'}]} }]};
           }else if(section.isNew && (value === 'TEXT')) {
             return { ...section, type: value, components: [{type: 'FIELD'}] };
           }else {
