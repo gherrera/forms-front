@@ -24,7 +24,6 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
   const [section, setSection] = useState(null)
   const [changes, setChanges] = useState(false)
   const [isVisiblePreview, setIsVisiblePreview] = useState(false)
-  const [ isLoading, setIsLoading ] = useState(false)
   const { loadFormDatasource } = useContext(datasourcesContext)
 
   useEffect(() => {

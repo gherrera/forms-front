@@ -4,7 +4,8 @@ import ReactDOM from "react-dom";
 import {
   Col,
   Row,
-  Button
+  Button,
+  Spin
 } from "antd";
 import { FormEdit } from '../'
 
@@ -17,10 +18,12 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
   const [forms, setForms] = useState([])
   const [form, setForm] = useState(null)
   const [key, setKey] = useState(Math.random())
+  const [ isLoading, setIsLoading ] = useState(false)
 
   useEffect(() => {
       getFormByClienteIdPromise().then(response => {
         setForms(response)
+        setIsLoading(false)
       })
   }, [])
 
@@ -58,28 +61,33 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
 
   return (
     <div className="tab-forms">
-      { form !== null ? <FormEdit key={key} formId={form.id} refreshBreadCrumbs={_refreshBreadCrumbs} exitSection={exitSection} />
+      { isLoading ? <Spin/>
       :
       <>
-        <Row className="titles-section">
-          <Col span={6}>Categoria</Col>
-          <Col span={6}>Formulario</Col>
-          <Col span={3}>Creado por</Col>
-          <Col span={3}>Fecha de Creación</Col>
-          <Col span={3}>Ultima modificacion</Col>
-          <Col span={3}>Edición</Col>
-        </Row>
-
-        { forms.map((form, index) =>
-          <Row className="rows-section">
-            <Col span={6}>{form.category}</Col>
-            <Col span={6}>{form.name}</Col>
-            <Col span={3}>{form.userCreate}</Col>
-            <Col span={3}>{moment(form.creationDate).format('DD/MM/YYYY HH:mm')}</Col>
-            <Col span={3}>{form.updateDate && moment(form.updateDate).format('DD/MM/YYYY HH:mm')}</Col>
-            <Col span={3}><Button icon="edit" size="small" onClick={(e) => handleEditForm(form)}/></Col>
+        { form !== null ? <FormEdit key={key} formId={form.id} refreshBreadCrumbs={_refreshBreadCrumbs} exitSection={exitSection} />
+        :
+        <>
+          <Row className="titles-section">
+            <Col span={6}>Categoria</Col>
+            <Col span={6}>Formulario</Col>
+            <Col span={3}>Creado por</Col>
+            <Col span={3}>Fecha de Creación</Col>
+            <Col span={3}>Ultima modificacion</Col>
+            <Col span={3}>Edición</Col>
           </Row>
-        )}
+
+          { forms.map((form, index) =>
+            <Row className="rows-section">
+              <Col span={6}>{form.category}</Col>
+              <Col span={6}>{form.name}</Col>
+              <Col span={3}>{form.userCreate}</Col>
+              <Col span={3}>{moment(form.creationDate).format('DD/MM/YYYY HH:mm')}</Col>
+              <Col span={3}>{form.updateDate && moment(form.updateDate).format('DD/MM/YYYY HH:mm')}</Col>
+              <Col span={3}><Button icon="edit" size="small" onClick={(e) => handleEditForm(form)}/></Col>
+            </Row>
+          )}
+        </>
+        }
       </>
       }
     </div>
