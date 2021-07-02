@@ -19,11 +19,12 @@ import { getFormByIdPromise, saveFormPromise } from "./promises";
 
 const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
 	const { t } = useTranslation()
-  const [form, setForm] = useState({})
+  const [form, setForm] = useState(null)
   const [sections, setSections] = useState([])
   const [section, setSection] = useState(null)
   const [changes, setChanges] = useState(false)
   const [isVisiblePreview, setIsVisiblePreview] = useState(false)
+  const [ isLoading, setIsLoading ] = useState(false)
   const { loadFormDatasource } = useContext(datasourcesContext)
 
   useEffect(() => {
@@ -32,6 +33,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
 	}, [])
 
   const loadFormdById = (formId) => {
+    setForm(null)
 		getFormByIdPromise(formId).then(f=>{
       setForm(f)
       setSections(f.sections)
