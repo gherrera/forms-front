@@ -103,7 +103,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     let sec = sections.map((section, i) => {
       if (index == i) {
         if(section.isNew && (value === 'TABLE' || value === 'DECL')) {
-          return { ...section, type: value, components: [{ id: getRandomId(), type: value, fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT'}] }}]};
+          return { ...section, type: value, components: [{ id: getRandomId(), type: value, records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT'}] }}]};
         }else if(section.isNew && (value === 'HEADER' || value === 'CONTACT')) {
           return { ...section, type: value, components: []};
         }else if(section.isNew && (value === 'INTRO')) {

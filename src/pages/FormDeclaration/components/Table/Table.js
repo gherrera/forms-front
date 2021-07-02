@@ -44,7 +44,7 @@ const Table = ({ form, section, component, mode, handleChangeValues }) => {
     if(component.type === 'DECL') {
       if(component.decision === null || component.decision === undefined) {
         setError('Debe marcar una decision')
-      }else if(component.decision && component.records.length === 0) {
+      }else if(component.decision && component.records && component.records.length === 0) {
         setError('Debe Agregar al menos 1 registro')
       }
     }
@@ -75,7 +75,7 @@ const Table = ({ form, section, component, mode, handleChangeValues }) => {
   const handleChangeDecision = (value) => {
     refreshSectionKey('decision', value)
 
-    if(value && component.records.length === 0) {
+    if(value && component.records && component.records.length === 0) {
       setError('Debe Agregar al menos 1 registro')
     }else {
       setError(null)
