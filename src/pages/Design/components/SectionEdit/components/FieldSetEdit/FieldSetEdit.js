@@ -53,12 +53,16 @@ const FieldSetEdit = ({ hasHeader=true, section, fieldset, refreshSection }) => 
     return comp
   }
 
+  const getRandomId = () => {
+    return 'R' + Math.floor(Math.random() * 1000000);
+  }
+
   const addField = () => {
     let fields = []
     fieldset.fields.map(f => {
       fields.push(f)
     })
-    fields.push({type: 'FIELD', typeField: 'INPUT'})
+    fields.push({id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: true})
 
     let comp = getComponentsUpdated(fields)    
     let _s = { ...section, components:  comp}
@@ -112,8 +116,12 @@ const FieldSetEdit = ({ hasHeader=true, section, fieldset, refreshSection }) => 
       <div className="comp-fieldSet-edit">
         { hasHeader &&
           <Row>
-            <Col span={1}>Título</Col>
-            <Col span={7}><Input value={fieldset.title} onChange={(e) => handlerChangeAttr('title', e.target.value)} size="small" /></Col>
+            { (section.type === 'HEADER' || section.type === 'CONTACT') &&
+            <>
+              <Col span={1}>Título</Col>
+              <Col span={7}><Input value={fieldset.title} onChange={(e) => handlerChangeAttr('title', e.target.value)} size="small" /></Col>
+            </>
+            }
             <Col span={2} offset={1}>Columnas</Col>
             <Col span={1}>
               <Select value={fieldset.cols} onChange={(value) => handlerChangeAttr('cols', value)} size="small">

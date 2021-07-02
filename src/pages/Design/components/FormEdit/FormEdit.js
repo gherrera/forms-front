@@ -103,13 +103,13 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     let sec = sections.map((section, i) => {
       if (index == i) {
         if(section.isNew && (value === 'TABLE' || value === 'DECL')) {
-          return { ...section, type: value, components: [{ id: getRandomId(), type: value, records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT'}] }}]};
+          return { ...section, type: value, components: [{ id: getRandomId(), type: value, records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: true, tableVisible: true}] }}]};
         }else if(section.isNew && (value === 'HEADER' || value === 'CONTACT')) {
           return { ...section, type: value, components: []};
         }else if(section.isNew && (value === 'INTRO')) {
-          return { ...section, type: value, components: [{ id: getRandomId(), type: 'PARAGRAPH', fieldSet: {id: getRandomId(), type: 'FIELDSET', fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT'}]} }]};
+          return { ...section, type: value, components: [{ id: getRandomId(), type: 'PARAGRAPH', fieldSet: {id: getRandomId(), type: 'FIELDSET', fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: true}]} }]};
         }else if(section.isNew && (value === 'TEXT')) {
-          return { ...section, type: value, components: [{id: getRandomId(), type: 'FIELD'}] };
+          return { ...section, type: value, components: [{id: getRandomId(), type: 'FIELD', required: true}] };
         }else {
           return { ...section, type: value };
         }
