@@ -1,5 +1,5 @@
 import "./FieldSetEdit.scss";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Col,
   Row,
@@ -8,32 +8,18 @@ import {
   Button,
   Input,
   Tooltip,
-  Modal,
-  Form,
-  Table
+  Modal
 } from "antd";
 
 import { useTranslation } from "react-i18next";
-import { datasourcesContext } from '../../../../../../contexts'
-
-const { Option, OptGroup } = Select;
+import { Datasources } from "../";
 
 const FieldSetEdit = ({ hasHeader=true, section, fieldset, refreshSection }) => {
 	const { t } = useTranslation()
   const [ isVisibleModalDS, setIsVisibleModalDS ] = useState(false)
   const [ indexFieldDS, setIndexFieldDS ] = useState(-1)
-  const [ selectedDS, setSelectedDS ] = useState(null)
-  const [ selectedValueDS, setSelectedValueDS ] = useState(null)
-	const { datasources } = useContext(datasourcesContext)
+  const [ fieldDS, setFieldDS ] = useState(null)
 
-  const colsDS = [
-    {
-      title: 'Valores',
-      render: (text, record) => {
-        return record
-      }
-    }
-  ]
   useEffect(() => {
 
   }, [])
@@ -104,28 +90,20 @@ const FieldSetEdit = ({ hasHeader=true, section, fieldset, refreshSection }) => 
     refreshSection(_s)
   }
 
-  const showDataSource = (index) => {
+  const showDataSource = (field, index) => {
+    setFieldDS(field)
     setIndexFieldDS(index)
-    setSelectedValueDS(null)
-    if(fieldset.fields[index].source) handleChangeDatasource(fieldset.fields[index].source)
+    //if(fieldset.fields[index].source) handleChangeDatasource(fieldset.fields[index].source)
     setIsVisibleModalDS(true)
   }
 
   const closeModalHandler = () => {
     setIndexFieldDS(-1)
-    setSelectedValueDS(null)
-    setSelectedDS(null)
     setIsVisibleModalDS(false)
   }
 
-  const handleChangeDatasource = (value) => {
-    let data = value.split(':')
-    setSelectedDS(datasources[data[0]][data[1]])
-    setSelectedValueDS(value)
-  }
-
-  const handleClickSelectDS = () => {
-    handleChangeAttribute(indexFieldDS, 'source', selectedValueDS)
+  const handleClickSelectDS = (valueDS) => {
+    handleChangeAttribute(indexFieldDS, 'source', valueDS)
     closeModalHandler()
   }
 
@@ -187,7 +165,7 @@ const FieldSetEdit = ({ hasHeader=true, section, fieldset, refreshSection }) => 
                 <Col span={4} offset={6}>
                   { field.typeField === 'SELECT' && 
                     <Tooltip title="Fuente de Datos">
-                      <Button icon="unordered-list" size="small" onClick={() => showDataSource(index)}/>
+                      <Button icon="unordered-list" size="small" onClick={() => showDataSource(field, index)}/>
                     </Tooltip>
                   }
                 </Col>
@@ -210,39 +188,7 @@ const FieldSetEdit = ({ hasHeader=true, section, fieldset, refreshSection }) => 
           onOk={ closeModalHandler  }
           onCancel={ closeModalHandler }
           >
-            <Row>
-              { datasources &&
-              <>
-                <Form.Item label="Seleccionar Fuente de Datos">
-                  <Select className="form-datasource" onChange={handleChangeDatasource} value={selectedValueDS}>
-                    { datasources.FORM &&
-                      <OptGroup label="Mis datos">
-                        { Object.values(datasources.FORM).map(ds =>
-                          <Option value={'FORM:'+ds.code}>{ds.description} ({ds.values.length})</Option>            
-                        )}
-                      </OptGroup>
-                    }
-                    { datasources.CAT &&
-                      <OptGroup label="Sistema">
-                        { Object.values(datasources.CAT).map(ds =>
-                          <Option value={'CAT:'+ds.code}>{ds.description} ({ds.values.length})</Option>            
-                        )}
-                      </OptGroup>
-                    }
-                  </Select>
-                </Form.Item>
-                { selectedDS &&
-                <> 
-                  <Table columns={colsDS} size="small" dataSource={selectedDS.values}/>
-                  <Row className="tools-datasource">
-                    <Button onClick={closeModalHandler}>Cerrar</Button>
-                    <Button type="primary" onClick={handleClickSelectDS}>Aplicar</Button>
-                  </Row>
-                </>
-                }
-              </>
-              }
-            </Row>
+            <Datasources formId={section.formId} field={fieldDS} handleClickSelectDS={handleClickSelectDS} closeModalHandler={closeModalHandler} />
         </Modal>
       }
     </div>

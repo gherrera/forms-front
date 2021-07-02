@@ -64,6 +64,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
   }
 
   const editSection = (s) => {
+    s.formId = formId
     setSection(s)
     refreshBreadCrumbs(form.name + ' - ' + s.title, s.title)
   }

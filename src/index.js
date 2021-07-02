@@ -39,7 +39,6 @@ class App extends Component {
   loadFormDatasource(formId) {
     getDataSourcesFormPromise(formId).then(ds => {
       const { datasources } = this.state
-      debugger
       if(Object.keys(ds).length > 0) {
         datasources.FORM = ds 
       }

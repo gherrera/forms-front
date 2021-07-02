@@ -11,8 +11,6 @@ import {
 
 import { useTranslation } from "react-i18next";
 
-const { TextArea } = Input;
-
 const Catalogo = ({ catalogo, handleChangeCatalogoActive, handlerChangeCatalogo }) => {
   const { t } = useTranslation()
 
