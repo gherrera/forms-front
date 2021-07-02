@@ -18,7 +18,7 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
   const [forms, setForms] = useState([])
   const [form, setForm] = useState(null)
   const [key, setKey] = useState(Math.random())
-  const [ isLoading, setIsLoading ] = useState(false)
+  const [ isLoading, setIsLoading ] = useState(true)
 
   useEffect(() => {
       getFormByClienteIdPromise().then(response => {
