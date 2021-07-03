@@ -1,5 +1,13 @@
 .paragraph-form {
     .field-paragraph {
         width: 250px;
+        margin-bottom: 5px;
+
+        &.ant-calendar-picker {
+            width: 170px;
+        }
+    }
+    p {
+        margin-bottom: .3em;
     }
 }

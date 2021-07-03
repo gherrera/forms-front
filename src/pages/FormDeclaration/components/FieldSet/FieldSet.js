@@ -43,7 +43,17 @@ const FieldSet = ({ section, parent, component, mode, handleChangeValues, getFie
     if(field.source && field.source.indexOf(':') > 0) {
       let ds = field.source.split(':')
       if(datasources[ds[0]] && datasources[ds[0]][ds[1]]) {
-        return datasources[ds[0]][ds[1]].values
+        let allvalues = datasources[ds[0]][ds[1]].values
+        let values = allvalues.filter(v => v.parent === null)
+        let withparent = allvalues.filter(v => v.parent !== null)
+        withparent.map(fp => {
+          let d = fp.parent.split(':')
+          let parent = component.fields.find(f => f.source === ds[0]+':'+d[0])
+          if(parent && parent.value === d[1]) {
+            values.push(fp)
+          }
+        })
+        return values.sort((a, b) => a.value > b.value ? 1 : -1)
       }
     }
     return ["No hay datos"]
@@ -81,10 +91,14 @@ const FieldSet = ({ section, parent, component, mode, handleChangeValues, getFie
                         readOnly = {field.readOnly !== false}
                         onChange={(e) => handleChangeFieldValue(field, e.target.value)}/>
                     : field.typeField === 'SELECT' ?
-                      <Select 
+                      <Select
+                        showSearch
+                        onFocus= {(e)=>handleReadOnly(field,false)}
+                        onBlur= {(e)=>handleReadOnly(field,true)}
+                        readOnly = {field.readOnly !== false}
                         onChange={(value) => handleChangeFieldValue(field, value)}>
                           { getValuesFromDS(field).map(val =>
-                            <Select.Option value={val}>{val}</Select.Option>
+                            <Select.Option value={val.value}>{val.value}</Select.Option>
                           )}
                         </Select>
                     :

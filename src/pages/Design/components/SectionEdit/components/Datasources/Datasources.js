@@ -40,9 +40,7 @@ const Datasources = ({ formId, field, handleClickSelectDS, closeModalHandler }) 
     const colsDS = [
         {
             title: 'Valores',
-            render: (text, record) => {
-            return record
-            }
+            dataIndex: 'value'
         }
     ]
     
@@ -116,7 +114,9 @@ const Datasources = ({ formId, field, handleClickSelectDS, closeModalHandler }) 
                         <Select className="form-datasource" onChange={handleChangeDatasource} value={selectedValueDS} disabled={editDS}>
                             <OptGroup label="Mis datos">
                                 <Option value={'FORM:NEW'}>+ Nuevo</Option>
-                                { datasources.FORM && Object.values(datasources.FORM).map(ds =>
+                                { datasources.FORM && Object.values(datasources.FORM)
+                                    .sort((a, b) => a.description > b.description ? 1 : -1)
+                                    .map(ds =>
                                 <Option value={'FORM:'+ds.code}>
                                     <Col span={22}>{ds.description}</Col>
                                     <Col span={2}>{ds.values.length}</Col>
@@ -125,7 +125,9 @@ const Datasources = ({ formId, field, handleClickSelectDS, closeModalHandler }) 
                             </OptGroup>
                             { datasources.CAT &&
                             <OptGroup label="Sistema">
-                                { Object.values(datasources.CAT).map(ds =>
+                                { Object.values(datasources.CAT)
+                                    .sort((a, b) => a.description > b.description ? 1 : -1)
+                                    .map(ds =>
                                 <Option value={'CAT:'+ds.code}>
                                     <Col span={22}>{ds.description}</Col>
                                     <Col span={2}>{ds.values.length}</Col>
@@ -166,7 +168,7 @@ const Datasources = ({ formId, field, handleClickSelectDS, closeModalHandler }) 
                             <TextArea rows={10} value={textValues} onChange={handleChangeValues}/>
                         </>
                     :
-                        <Table columns={colsDS} size="small" dataSource={selectedDS && selectedDS.values}/>
+                        <Table columns={colsDS} size="small" dataSource={selectedDS && selectedDS.values} pagination={{ defaultPageSize: 5}}/>
                     }
                 </>
                 }

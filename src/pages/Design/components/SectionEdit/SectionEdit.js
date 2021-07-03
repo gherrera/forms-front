@@ -172,7 +172,6 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
   }
 
   const saveThisSection = () => {
-    debugger
     saveSectionPromise(section).then(response => {
       refreshThisSection(response)
       setChanges(false)
@@ -220,7 +219,7 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
               <ParagraphEdit section={section} component={component} index={index} fieldset={component.fieldSet} refreshSection={refreshSection}/>
             }
             { component.type === 'FIELDSET' &&
-              <FieldSetEdit section={section} fieldset={component} refreshSection={refreshSection} />
+              <FieldSetEdit section={section} component={component} fieldset={component} refreshSection={refreshSection} />
             }
             { (component.type === 'TABLE' || component.type === 'DECL') &&
               <TableEdit section={section} component={component} index={index} fieldset={component.fieldSet} refreshSection={refreshSection} />

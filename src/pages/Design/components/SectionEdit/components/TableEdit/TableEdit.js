@@ -39,7 +39,7 @@ const Table = ({ section, component, index, fieldset, refreshSection }) => {
       <Row style={{marginBottom: '10px'}}>
         <Col span={24}>
           <Form.Item label="Texto sección">
-              <TextArea value={component.text} onChange={(e) => handleChangeText(e.target.value)}/>
+              <TextArea value={component.text} rows={4} onChange={(e) => handleChangeText(e.target.value)}/>
           </Form.Item>
         </Col>
       </Row>
@@ -48,7 +48,7 @@ const Table = ({ section, component, index, fieldset, refreshSection }) => {
       <Row>
         <Col span={21}>
           <Form.Item label="Texto pregunta declaracion">
-            <TextArea value={component.text} onChange={(e) => handleChangeText(e.target.value)}/>
+            <TextArea value={component.text} rows={4} onChange={(e) => handleChangeText(e.target.value)}/>
           </Form.Item>
         </Col>
         <Col span={2} offset={1}>
@@ -65,7 +65,7 @@ const Table = ({ section, component, index, fieldset, refreshSection }) => {
         </Col>
       </Row>
     }
-    { fieldset && <FieldSetEdit section={section} fieldset={fieldset} refreshSection={refreshSection} /> }
+    { fieldset && <FieldSetEdit section={section} component={component} fieldset={fieldset} refreshSection={refreshSection} /> }
     </div>
   )
 }

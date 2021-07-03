@@ -14,7 +14,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { Datasources } from "../";
 
-const FieldSetEdit = ({ hasHeader=true, section, fieldset, refreshSection }) => {
+const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSection }) => {
 	const { t } = useTranslation()
   const [ isVisibleModalDS, setIsVisibleModalDS ] = useState(false)
   const [ indexFieldDS, setIndexFieldDS ] = useState(-1)
@@ -26,13 +26,13 @@ const FieldSetEdit = ({ hasHeader=true, section, fieldset, refreshSection }) => 
 
   const handlerChangeAttr = (attr, value) => {
     let comp = []
-    section.components.map((component) => {
-      if(component.type === 'FIELDSET' && component.id === fieldset.id) {
-        comp.push({ ...component, [attr]: value })
-      }else if(component.fieldSet && component.fieldSet.id === fieldset.id) {
-        comp.push({ ...component, fieldSet: { ...component.fieldSet, [attr]: value }})
+    section.components.map((c) => {
+      if(c.type === 'FIELDSET' && c.id === fieldset.id) {
+        comp.push({ ...c, [attr]: value })
+      }else if(c.fieldSet && c.fieldSet.id === fieldset.id) {
+        comp.push({ ...c, fieldSet: { ...c.fieldSet, [attr]: value }})
       }else {
-        comp.push(component)
+        comp.push(c)
       }
     })
     let _s = { ...section, components:  comp}
@@ -41,13 +41,13 @@ const FieldSetEdit = ({ hasHeader=true, section, fieldset, refreshSection }) => 
 
   const getComponentsUpdated = (fields) => {
     let comp = []
-    section.components.map((component) => {
-      if(component.type === 'FIELDSET' && component.id === fieldset.id) {
-        comp.push({ ...component, fields })
-      }else if(component.fieldSet && component.fieldSet.id === fieldset.id) {
-        comp.push({ ...component, fieldSet: { ...component.fieldSet, fields }})
+    section.components.map((c) => {
+      if(c.type === 'FIELDSET' && c.id === fieldset.id) {
+        comp.push({ ...c, fields })
+      }else if(c.fieldSet && c.fieldSet.id === fieldset.id) {
+        comp.push({ ...c, fieldSet: { ...c.fieldSet, fields }})
       }else {
-        comp.push(component)
+        comp.push(c)
       }
     })
     return comp
@@ -144,8 +144,8 @@ const FieldSetEdit = ({ hasHeader=true, section, fieldset, refreshSection }) => 
           <Row className="titles-section">
             <Col span={9} offset={1}>Título</Col>
             <Col span={5}>Tipo</Col>
-            <Col span={3} className="center">Requerido</Col>
-            <Col span={3} className="center">Tabla Visible</Col>
+            <Col span={component.type === 'PARAGRAPH' ? 6 : 3} className="center">Requerido</Col>
+            { component.type !== 'PARAGRAPH' && <Col span={3} className="center">Tabla Visible</Col> }
             <Col span={3}></Col>
           </Row>
           { fieldset.fields.map((field, index) =>
@@ -163,12 +163,14 @@ const FieldSetEdit = ({ hasHeader=true, section, fieldset, refreshSection }) => 
                   <Select.Option value="SELECT">Desplegable</Select.Option>
                 </Select>
               </Col>
-              <Col span={3} className="center">
+              <Col span={component.type === 'PARAGRAPH' ? 6 : 3} className="center">
                   <Checkbox checked={field.required === true} onChange={(e) => handleChangeAttribute(index, 'required', e.target.checked)} size="small"/>
               </Col>
-              <Col span={3} className="center">
-                  <Checkbox checked={field.tableVisible === true} onChange={(e) => handleChangeAttribute(index, 'tableVisible', e.target.checked)} size="small"/>
-              </Col>
+              { component.type !== 'PARAGRAPH' &&
+                <Col span={3} className="center">
+                    <Checkbox checked={field.tableVisible === true} onChange={(e) => handleChangeAttribute(index, 'tableVisible', e.target.checked)} size="small"/>
+                </Col>
+              }
               <Col span={3}>
                 <Col span={4} offset={6}>
                   { field.typeField === 'SELECT' && 

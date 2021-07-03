@@ -39,16 +39,29 @@ const Table = ({ form, section, component, mode, handleChangeValues }) => {
       })
       setFieldsPdf(fields)
     }
+    cols.push({
+      title: 'Acción',
+      width: '80px',
+      render: (text, record, index) => {
+        return <Button icon="delete" size="small" onClick={() => removeRecord(index)} />
+      }
+    })
     setColumns(cols)
 
+    verifyValidations()
+  }, [])
+
+  const verifyValidations = () => {
     if(component.type === 'DECL') {
       if(component.decision === null || component.decision === undefined) {
         setError('Debe marcar una decision')
-      }else if(component.decision && component.records && component.records.length === 0) {
+      }else if(component.decision && component.records.length === 0) {
         setError('Debe Agregar al menos 1 registro')
+      }else {
+        setError(null)
       }
     }
-  }, [])
+  }
 
   const toDescriptionsPdf = (records) => (
     <>
@@ -95,6 +108,14 @@ const Table = ({ form, section, component, mode, handleChangeValues }) => {
     return Object.keys(fieldsError).some((field) => fieldsError[field]);
   }
 
+  const removeRecord = (index) => {
+    let t = { ...component }
+    let records = t.records
+    records.splice(index, 1)
+    refreshSectionKey('records', records)
+    verifyValidations()
+  }
+
   const addRecord = () => {
     let ids = component.fieldSet.fields.map(f => f.id);
     validateFields(ids).then((error, values) => {
@@ -107,18 +128,9 @@ const Table = ({ form, section, component, mode, handleChangeValues }) => {
       records.push({fields})
 
       refreshSectionKey('records', records)
-      
-      if(component.type === 'DECL') {
-        if(component.decision === null || component.decision === undefined) {
-          setError('Debe marcar una decision')
-        }else if(component.decision && component.records.length === 0) {
-          setError('Debe Agregar al menos 1 registro')
-        }else {
-          setError(null)
-        }
-      }
+      verifyValidations();
+
       cleanFields()
-      
     })
     if(hasErrorsFn(getFieldsError())) {
       notification.error({
