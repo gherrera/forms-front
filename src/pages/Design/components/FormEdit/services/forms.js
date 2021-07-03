@@ -14,5 +14,12 @@ export default {
 			method: 'post',
 			body: form
 		})
+	},
+	saveSection: (section) => {
+		return apiRequestorHelper({
+			url: apiConfig.url + '/saveSection',
+			method: 'post',
+			body: section
+		})
 	}
 }

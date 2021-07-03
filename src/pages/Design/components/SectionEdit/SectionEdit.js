@@ -10,6 +10,7 @@ import {
 
 import { useTranslation } from "react-i18next";
 import { TableEdit, FieldSetEdit, Catalogo, ParagraphEdit } from './components'
+import { saveSectionPromise } from "../FormEdit/promises";
 import { Preview } from '../'
 
 const { TextArea } = Input;
@@ -171,8 +172,13 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
   }
 
   const saveThisSection = () => {
-    refreshThisSection(section)
-    exitSection()
+    debugger
+    saveSectionPromise(section).then(response => {
+      refreshThisSection(response)
+      setChanges(false)
+    })
+
+    //exitSection()
   }
 
   const handlePreviewSection = () => {

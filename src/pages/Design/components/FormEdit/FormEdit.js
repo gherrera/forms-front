@@ -9,7 +9,7 @@ import {
   Button,
   Input,
   Spin,
-  notification
+  Popconfirm
 } from "antd";
 import { SectionEdit, Preview } from '../'
 import { datasourcesContext } from '../../../../contexts'
@@ -22,7 +22,6 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
   const [form, setForm] = useState(null)
   const [sections, setSections] = useState([])
   const [section, setSection] = useState(null)
-  const [changes, setChanges] = useState(false)
   const [isVisiblePreview, setIsVisiblePreview] = useState(false)
   const { loadFormDatasource } = useContext(datasourcesContext)
 
@@ -43,57 +42,44 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     let section = {id: getRandomId(), status: 'ACTIVE', isNew: true}
     let joined = sections.concat(section);
     setSections(joined)
-    setChanges(true)
-  }
-
-  const handleChangeTitle = (index, value) => {
-    setSections(
-      sections.map((section, i) => {
-        if (index == i) {
-          return { ...section, title: value };
-        } else {
-          return section;
-        }
-      }
-    ))
-    setChanges(true)
   }
 
   const deleteSection = (index) => {
-    setSections(sections.filter((item, i) => i !== index));
-    setChanges(true)
+    let sec = sections.filter((item, i) => i !== index)
+    setSections(sec);
+
+    saveForm(sec)
+  }
+
+  const handleChangeAttrSection = (index, key, value) => {
+    let sec = sections.map((section, i) => {
+      if (index == i) {
+        return { ...section, [key]: value };
+      } else {
+        return section;
+      }
+    })
+    setSections(sec)
+
+    if(sec[index].type !== null && sec[index].type !== undefined) saveForm(sec)
+  }
+
+  const handleChangeTitle = (index, value) => {
+    handleChangeAttrSection(index, 'title', value)
+  }
+
+  const changeActiveSection = (index, checked) => {
+    handleChangeAttrSection(index, 'status', checked ? 'ACTIVE' : 'INACTIVE')
+  }
+
+  const changePrefillSection = (index, checked) => {
+    handleChangeAttrSection(index, 'prefilled', checked)
   }
 
   const editSection = (s) => {
     s.formId = formId
     setSection(s)
     refreshBreadCrumbs(form.name + ' - ' + s.title, s.title)
-  }
-
-  const changeActiveSection = (index, checked) => {
-    setSections(
-      sections.map((section, i) => {
-        if (index == i) {
-          return { ...section, status: checked ? 'ACTIVE' : 'INACTIVE' };
-        } else {
-          return section;
-        }
-      }
-    ))
-    setChanges(true)
-  }
-
-  const changePrefillSection = (index, checked) => {
-    setSections(
-      sections.map((section, i) => {
-        if (index == i) {
-          return { ...section, prefilled: checked };
-        } else {
-          return section;
-        }
-      }
-    ))
-    setChanges(true)
   }
 
   const getRandomId = () => {
@@ -122,7 +108,8 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     setSections(sec)
     let f = { ...form, sections: sec }
     setForm(f)
-    setChanges(true)
+
+    saveForm(sec)
   }
 
   const refreshSection = (s) => {
@@ -136,7 +123,6 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
       }
     ))
     setSection(s)
-    setChanges(true)
   }
 
   const exitSectionFn = () => {
@@ -144,19 +130,10 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     exitSection()
   }
 
-  const saveForm = () => {
-    saveFormPromise({ ...form, sections}).then(response => {
-      if(response === 'success') {
-        notification.success({
-          message: 'Formulario guardado exitosamente'
-        })
-        setChanges(false)
-        loadFormdById(formId)
-      }else {
-        notification.error({
-          message: 'Se ha producido un error al grabar los datos'
-        })
-      }
+  const saveForm = (s) => {
+    saveFormPromise({ ...form, sections: s}).then(f => {
+      setForm(f)
+      setSections(f.sections)
     })
   }
 
@@ -178,7 +155,6 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
           <div className="form">
             <Row className="tools-btn">
               <Col span={6} offset={18}>
-                <Button disabled={!changes} onClick={saveForm}>Guardar cambios</Button>
                 <Button onClick={handlePreviewSection}>Previsualizar</Button>
               </Col>
             </Row>
@@ -199,7 +175,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
                   </Col>
                   <Col span={8}><Input value={section.title} placeholder="Titulo de la sección" onChange={(e) => handleChangeTitle(index, e.target.value)}/></Col>
                   <Col span={6}>
-                    <Select value={section.type} onChange={(value) => changeTypeSection(index, value)} disabled={section.isNew === undefined}>
+                    <Select value={section.type} onChange={(value) => changeTypeSection(index, value)} disabled={!section.isNew}>
                       <Select.Option value="INTRO">Introducción</Select.Option>
                       <Select.Option value="HEADER">Encabezado</Select.Option>
                       <Select.Option value="CONTACT">Datos Personales</Select.Option>
@@ -212,7 +188,11 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
                   <Col span={3} className="center"><Checkbox checked={section.prefilled === true} onChange={(e) => changePrefillSection(index, e.target.checked)}/></Col>
                   <Col span={3} className="tools">
                     <Button icon="edit" size="small" disabled={section.type === null || section.type === undefined} onClick={(e) => editSection(section)}/>
-                    { sections.length > 1 && <Button icon="delete" size="small" onClick={(e) => deleteSection(index)}/> }
+                    { sections.length > 1 && 
+                      <Popconfirm title="Confirma eliminar la Sección?" onConfirm={(e) => deleteSection(index)}>
+                        <Button icon="delete" size="small" />
+                      </Popconfirm>
+                    }
                   </Col>
                 </Row>
               )}
