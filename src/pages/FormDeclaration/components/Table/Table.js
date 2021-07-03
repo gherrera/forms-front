@@ -151,14 +151,14 @@ const Table = ({ form, section, component, mode, handleChangeValues }) => {
   return (
     <div className="table-form">
       { component.type === 'TABLE' &&
-      <Row>
+      <Row className="header-table">
         <Col span={21}>
             {component.text}
         </Col>
       </Row>
       }
       { component.type === 'DECL' &&
-      <Row>
+      <Row className="header-table">
         { mode !== 'pdf' && error !== null && <Row className="has-errors-fieldset">{error}</Row>}
         <Col span={21}>
             {component.text}
