@@ -39,7 +39,7 @@ const Datasources = ({ formId, field, handleClickSelectDS, closeModalHandler }) 
 
     const colsDS = [
         {
-            title: 'Valores',
+            title: 'Opciones',
             dataIndex: 'value'
         }
     ]
@@ -164,7 +164,7 @@ const Datasources = ({ formId, field, handleClickSelectDS, closeModalHandler }) 
                 <>
                     { editDS ?
                         <> 
-                            <h4 className="title-datasource-values">Valores</h4>
+                            <h4 className="title-datasource-values">Opciones</h4>
                             <TextArea rows={10} value={textValues} onChange={handleChangeValues}/>
                         </>
                     :

@@ -5,12 +5,12 @@ import { Breadcrumbs } from '../'
 
 export default ({ children, description, title, icon, breadcrumbs }) => (
   <div className="page-header">
-    <Col span={6}>
+    <Col span={7}>
       { breadcrumbs &&
           <Breadcrumbs items={ breadcrumbs } />
       }
     </Col>
-    <Col span={12} className="center">
+    <Col span={10} className="center">
       { icon &&
         <figure className="page-icon">
           <Icon type={ icon } />

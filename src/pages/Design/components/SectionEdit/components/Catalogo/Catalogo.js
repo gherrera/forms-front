@@ -4,7 +4,7 @@ import {
   Col,
   Row,
   Checkbox,
-  Input,
+  Icon,
   Tooltip,
   Switch
 } from "antd";
@@ -27,7 +27,7 @@ const Catalogo = ({ catalogo, handleChangeCatalogoActive, handlerChangeCatalogo 
 
   return (
     <Row className="catalogo">
-        <Row className="content" gutter={[6, 6]}>
+        <Row className="content" gutter={[12, 12]}>
             <Row>
                 <Col className="title" span={22}>{catalogo.title}</Col>
                 <Col span={2} className="switch-cat">
@@ -44,8 +44,13 @@ const Catalogo = ({ catalogo, handleChangeCatalogoActive, handlerChangeCatalogo 
                         <Col span={4}>
                             <Tooltip title="Requerido"><Checkbox checked={field.active && field.required} disabled={!catalogo.active || !field.active} size="small" onChange={(e) => handlerChangeCatalogoField(field, 'required', e.target.checked)} /></Tooltip>
                         </Col>
-                        <Col span={4}>
+                        <Col span={3}>
                             <Tooltip title="Prellenado"><Checkbox checked={field.active && field.prefilled} disabled={!catalogo.active || !field.active} size="small" onChange={(e) => handlerChangeCatalogoField(field, 'prefilled', e.target.checked)} /></Tooltip>
+                        </Col>
+                        <Col span={1}>
+                            <Tooltip title={field.type === 'INPUT' ? 'Texto editable' : field.type === 'SELECT' ? 'Desplegable' : 'Fecha'}>
+                                <Icon size="small" type={field.type === 'INPUT' ? 'edit' : field.type === 'SELECT' ? 'unordered-list' : 'calendar'}/>
+                            </Tooltip>
                         </Col>
                     </Row>
                 </Col>
