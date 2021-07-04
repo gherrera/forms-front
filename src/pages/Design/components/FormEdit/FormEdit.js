@@ -9,7 +9,8 @@ import {
   Button,
   Input,
   Spin,
-  Popconfirm
+  Popconfirm,
+  Tooltip
 } from "antd";
 import { SectionEdit, Preview } from '../'
 import { datasourcesContext } from '../../../../contexts'
@@ -145,6 +146,15 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     setIsVisiblePreview(false)
   }
 
+  const handleMoveSection = (index, moveTo) => {
+    let sec = sections
+    let tmp = sec[moveTo]
+    debugger
+    sec[moveTo] = sec[index]
+    sec[index] = tmp
+    saveForm(sec)
+  }
+
   return (
     <div className="form-edit">
       { form === null ? <Spin/>
@@ -171,7 +181,11 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
               { sections.map((section, index) =>
                 <Row className="rows-section">
                   <Col span={1}>
-                    { index === sections.length -1 && <Button icon="plus" size="small" onClick={addSection}/> }
+                    { index === sections.length -1 && 
+                      <Tooltip title="Nueva Sección">
+                        <Button icon="plus" size="small" onClick={addSection}/>
+                      </Tooltip>
+                    }
                   </Col>
                   <Col span={8}><Input value={section.title} placeholder="Titulo de la sección" onChange={(e) => handleChangeTitle(index, e.target.value)}/></Col>
                   <Col span={6}>
@@ -187,12 +201,18 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
                   <Col span={3} className="center"><Checkbox checked={section.status === 'ACTIVE'} onChange={(e) => changeActiveSection(index, e.target.checked)}/></Col>
                   <Col span={3} className="center"><Checkbox checked={section.prefilled === true} onChange={(e) => changePrefillSection(index, e.target.checked)}/></Col>
                   <Col span={3} className="tools">
-                    <Button icon="edit" size="small" disabled={section.type === null || section.type === undefined} onClick={(e) => editSection(section)}/>
-                    { sections.length > 1 && 
-                      <Popconfirm title="Confirma eliminar la Sección?" onConfirm={(e) => deleteSection(index)}>
-                        <Button icon="delete" size="small" />
-                      </Popconfirm>
-                    }
+                    <Tooltip title="Modificar">
+                      <Button icon="edit" size="small" disabled={section.type === null || section.type === undefined} onClick={(e) => editSection(section)}/>
+                    </Tooltip>
+                    <Popconfirm title="Confirma eliminar la Sección?" onConfirm={(e) => deleteSection(index)}>
+                      <Button icon="delete" size="small" />
+                    </Popconfirm>
+                    <Tooltip title="Mover hacia abajo">
+                      <Button icon="arrow-down" size="small" disabled={index === sections.length-1} onClick={() => handleMoveSection(index, index+1)} />
+                    </Tooltip>
+                    <Tooltip title="Mover hacia arriba">
+                      <Button icon="arrow-up" size="small" disabled={index === 0} onClick={() => handleMoveSection(index, index-1)} />
+                    </Tooltip>
                   </Col>
                 </Row>
               )}
