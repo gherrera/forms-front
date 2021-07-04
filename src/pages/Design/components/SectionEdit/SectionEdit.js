@@ -89,7 +89,7 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
 
       let cat7 = {key: 'infoPropiedades', title: 'Información de Propiedades', cols: 2, fields: [], active: false}
       cat7.fields.push({ type: 'INPUT', title: 'Nombre de Sociedad', key: 'nombreSociedad', active: false, required: false, prefilled: false})
-      cat7.fields.push({ type: 'INPUT', title: 'Tipo de Documento de Identidad', key: 'tipoDocumento', active: false, required: false, prefilled: false, source: 'CAT:TIPO_DOC'})
+      cat7.fields.push({ type: 'SELECT', title: 'Tipo de Documento de Identidad', key: 'tipoDocumento', active: false, required: false, prefilled: false, source: 'CAT:TIPO_DOC'})
       cat7.fields.push({ type: 'INPUT', title: 'Documento Identidad', key: 'documento', active: false, required: false, prefilled: false})
       cat7.fields.push({ type: 'INPUT', title: 'Cargo Ejercido', key: 'cargo', active: false, required: false, prefilled: false})
       cat7.fields.push({ type: 'INPUT', title: 'Porcentaje de Participación', key: 'porcentaje', active: false, required: false, prefilled: false})
