@@ -1,17 +1,21 @@
 import "./TabForms.scss";
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
 import {
   Col,
   Row,
   Button,
-  Spin
+  Spin,
+  Input,
+  Checkbox,
+  Modal,
+  Form,
+  Select
 } from "antd";
 import { FormEdit } from '../'
 
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import { getFormByClienteIdPromise } from "./promises";
+import { getFormByClienteIdPromise, updateFormPromise } from "./promises";
 
 const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
 	const { t } = useTranslation()
@@ -19,13 +23,20 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
   const [form, setForm] = useState(null)
   const [key, setKey] = useState(Math.random())
   const [ isLoading, setIsLoading ] = useState(true)
+  const [ isVisibleNewForm, setIsVisibleNewForm ] = useState(false)
+  const [ newFormObj, setNewFormObj ] = useState({})
 
   useEffect(() => {
-      getFormByClienteIdPromise().then(response => {
-        setForms(response)
-        setIsLoading(false)
-      })
+    loadForms()
   }, [])
+
+  const loadForms = () => {
+    setIsLoading(true)
+    getFormByClienteIdPromise().then(response => {
+      setForms(response)
+      setIsLoading(false)
+    })
+  }
 
   const handleClickForm = () => {
     setKey(Math.random())
@@ -59,6 +70,46 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
     refreshBreadCrumbs({ breadcrumbs: b, title: breadcrumbs[1].title } )
   }
 
+  const handleChangeAttrForm = (index, key, value) => {
+    let fs = forms.map((f, i) => {
+      if (index == i) {
+        return { ...f, [key]: value };
+      } else {
+        return f;
+      }
+    })
+    let f = fs[index]
+    updateFormPromise(f)
+    setForms(fs)
+  }
+
+  const changeNameForm = (index, value) => {
+    handleChangeAttrForm(index, 'name', value)
+  }
+
+  const changeActiveForm = (index, checked) => {
+    handleChangeAttrForm(index, 'status', checked ? 'ACTIVE' : 'INACTIVE')
+  }
+
+  const handleChangeAttrNewForm = (key, value) => {
+    let f = { ...newFormObj, [key]: value }
+    setNewFormObj(f)
+  }
+
+  const handleOpenNewForm = () => {
+    setNewFormObj({})
+    setIsVisibleNewForm(true)
+  }
+
+  const closeModalHandler = (create) => {
+    if(create) {
+      updateFormPromise({ ...newFormObj, status: 'ACTIVE' }).then(r => {
+        loadForms()
+      })
+    }
+    setIsVisibleNewForm(false)
+  }
+
   return (
     <div className="tab-forms">
       { isLoading ? <Spin/>
@@ -67,25 +118,53 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
         { form !== null ? <FormEdit key={key} formId={form.id} refreshBreadCrumbs={_refreshBreadCrumbs} exitSection={exitSection} />
         :
         <>
-          <Row className="titles-section">
-            <Col span={6}>Categoria</Col>
-            <Col span={6}>Formulario</Col>
+          <Row className="tools-form">
+            <Button icon="plus" type="primary" onClick={handleOpenNewForm}>Nuevo Formulario</Button>
+          </Row>
+          <Row className="titles-form">
+            <Col span={4}>Categoria</Col>
+            <Col span={5}>Nombre</Col>
             <Col span={3}>Creado por</Col>
             <Col span={3}>Fecha de Creación</Col>
             <Col span={3}>Ultima modificacion</Col>
+            <Col span={3}>Activo</Col>
             <Col span={3}>Edición</Col>
           </Row>
 
           { forms.map((form, index) =>
-            <Row className="rows-section">
-              <Col span={6}>{form.category}</Col>
-              <Col span={6}>{form.name}</Col>
+            <Row className="rows-form">
+              <Col span={4}>{form.category}</Col>
+              <Col span={5}><Input size="small" value={form.name} onChange={(e) => changeNameForm(index, e.target.value)}/></Col>
               <Col span={3}>{form.userCreate}</Col>
               <Col span={3}>{moment(form.creationDate).format('DD/MM/YYYY HH:mm')}</Col>
               <Col span={3}>{form.updateDate && moment(form.updateDate).format('DD/MM/YYYY HH:mm')}</Col>
+              <Col span={3}>
+                <Checkbox checked={form.status === 'ACTIVE'} onChange={(e) => changeActiveForm(index, e.target.checked)}/>
+              </Col>
               <Col span={3}><Button icon="edit" size="small" onClick={(e) => handleEditForm(form)}/></Col>
             </Row>
           )}
+          { isVisibleNewForm &&
+            <Modal
+              visible={true}
+              title="Nuevo Formulario"
+              onOk={ () => closeModalHandler(true)  }
+              onCancel={ () => closeModalHandler(false) }
+            >
+              <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
+                <Form.Item label="Categoría">
+                  <Select onChange={(value) => handleChangeAttrNewForm('category', value)}>
+                    <Select.Option value="CLIENTE">Cliente</Select.Option>
+                    <Select.Option value="COLABORADOR">Colaborador</Select.Option>
+                    <Select.Option value="PROVEEDOR">Proveedor</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item label="Formulario">
+                  <Input onChange={(e) => handleChangeAttrNewForm('name', e.target.value)}/>
+                </Form.Item>
+              </Form>
+            </Modal>
+          }
         </>
         }
       </>

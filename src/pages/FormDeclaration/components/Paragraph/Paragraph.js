@@ -44,17 +44,14 @@ const Paragraph = ({ component, mode, handleChangeValues }) => {
     if(field.source && field.source.indexOf(':') > 0) {
       let ds = field.source.split(':')
       if(datasources[ds[0]] && datasources[ds[0]][ds[1]]) {
-        let allvalues = datasources[ds[0]][ds[1]].values
-        let values = allvalues.filter(v => v.parent === null)
-        let withparent = allvalues.filter(v => v.parent !== null)
-        withparent.map(fp => {
-          let d = fp.parent.split(':')
-          let parent = component.fields.find(f => f.source === ds[0]+':'+d[0])
-          if(parent && parent.value === d[1]) {
-            values.push(fp)
+        let datasource = datasources[ds[0]][ds[1]] 
+        if(datasource.parent) {
+          let parent = component.fieldSet.fields.find(f => f.source === ds[0]+':'+datasource.parent)
+          if(parent) {
+            return datasource.values.filter(v => v.parent == parent.value)
           }
-        })
-        return values.sort((a, b) => a.value > b.value ? 1 : -1)
+        }
+        return datasource.values
       }
     }
     return ["No hay datos"]
@@ -62,7 +59,7 @@ const Paragraph = ({ component, mode, handleChangeValues }) => {
 
   const getField = (field) => {
     if(field.typeField === 'INPUT' || mode === 'pdf') {
-      return <Input size="small" className="field-paragraph" 
+      return <Input size="small" className={'field-paragraph'+(mode !== 'pdf' && field.required ? ' required':'')+(field.value ? ' withval':' noval')} 
         disabled={mode === 'pdf'} 
         placeholder={field.title} 
         value={ field.value }
@@ -72,8 +69,7 @@ const Paragraph = ({ component, mode, handleChangeValues }) => {
         readOnly = {field.readOnly !== false}
         onChange={(e) => handleChangeFieldValue(field, e.target.value)} />
     }else if(field.typeField === 'SELECT') {
-      return <Select size="small" className="field-paragraph" 
-          disabled={mode === 'pdf'} 
+      return <Select size="small" className={'field-paragraph'+(mode !== 'pdf' && field.required ? ' required':'')+(field.value ? ' withval':' noval')}
           showSearch
           placeholder={field.title} 
           value={field.value} 
@@ -86,8 +82,9 @@ const Paragraph = ({ component, mode, handleChangeValues }) => {
             )}
           </Select>
     }else {
-      return <DatePicker placeholder={field.title} size="small" className="field-paragraph" 
+      return <DatePicker size="small" className={'field-paragraph'+(mode !== 'pdf' && field.required ? ' required':'')+(field.value ? ' withval':' noval')}
       format="DD/MM/YYYY"
+      placeholder={field.title}
       value={field.value && moment(field.value,"DD/MM/YYYY")}
       onChange={(momentObj) => handleChangeFieldValue(field, momentObj ? moment(momentObj).format( "DD/MM/YYYY" ) : null ) } />
     }

@@ -23,8 +23,8 @@ const Table = ({ form, section, component, mode, handleChangeValues }) => {
 
   useEffect(() => {
     let cols = []
+    let fields = {}
     if(component.fieldSet && component.fieldSet.fields) {
-      let fields = {}
       component.fieldSet.fields.map(field => {
         fields[field.key] = field
         if(field.tableVisible === true) {
@@ -37,19 +37,22 @@ const Table = ({ form, section, component, mode, handleChangeValues }) => {
           })
         }
       })
+    }
+    if(mode !== 'pdf') {
+      cols.push({
+        title: 'Acción',
+        width: '80px',
+        render: (text, record, index) => {
+          return <Button icon="delete" size="small" onClick={() => removeRecord(index)} />
+        }
+      })
+      verifyValidations()
+    }else {
       setFieldsPdf(fields)
     }
-    cols.push({
-      title: 'Acción',
-      width: '80px',
-      render: (text, record, index) => {
-        return <Button icon="delete" size="small" onClick={() => removeRecord(index)} />
-      }
-    })
     setColumns(cols)
 
-    verifyValidations()
-  }, [])
+  }, [mode])
 
   const verifyValidations = () => {
     if(component.type === 'DECL') {
@@ -119,10 +122,11 @@ const Table = ({ form, section, component, mode, handleChangeValues }) => {
   const addRecord = () => {
     let ids = component.fieldSet.fields.map(f => f.id);
     validateFields(ids).then((error, values) => {
+      debugger
       let t = { ...component }
       let records = t.records ? t.records : []
       let fields = {}
-      component.fieldSet.fields.map(f => {
+      component.fieldSet.fields.map((f,index) => {
         fields[f.key] = f.value
       })
       records.push({fields})
@@ -192,7 +196,7 @@ const Table = ({ form, section, component, mode, handleChangeValues }) => {
             </Row>
           </>
         }
-        {(mode !== 'pdf' || columns.length <= component.fieldSet.fields.length) ? 
+        {(mode !== 'pdf' || columns.length === component.fieldSet.fields.length) ? 
           <TableAntd columns={columns} size="small" dataSource={component.records} className="table-rows"/>
           :
           toDescriptionsPdf(component.records)

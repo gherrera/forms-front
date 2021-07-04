@@ -62,7 +62,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
     fieldset.fields.map(f => {
       fields.push(f)
     })
-    fields.push({id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: true})
+    fields.push({id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: true, key: 'field'+(fields.length+1)})
 
     let comp = getComponentsUpdated(fields)    
     let _s = { ...section, components:  comp}
@@ -157,7 +157,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
               </Col>
               <Col span={9}><Input value={field.title} placeholder="Ingrese nombre del atributo" size="small" onChange={(e) => handleChangeAttribute(index, 'title', e.target.value)}/></Col>
               <Col span={5}>
-                <Select value={field.typeField} onChange={(value) => handleChangeAttribute(index, 'typeField', value)} size="small">
+                <Select value={field.typeField} onChange={(value) => handleChangeAttribute(index, 'typeField', value)} size="small" style={{width:'95%'}}>
                   <Select.Option value="INPUT">Texto</Select.Option>
                   <Select.Option value="DATE">Fecha</Select.Option>
                   <Select.Option value="SELECT">Desplegable</Select.Option>

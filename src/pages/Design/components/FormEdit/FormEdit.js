@@ -153,13 +153,13 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
           { section ? <SectionEdit s={section} refreshThisSection={refreshSection} exitSection={exitSectionFn} />
           :
           <div className="form">
-            <Row className="tools-btn">
-              <Col span={6} offset={18}>
-                <Button onClick={handlePreviewSection}>Previsualizar</Button>
-              </Col>
-            </Row>
             { sections.length > 0 ?
             <>
+              <Row className="tools-btn">
+                <Col span={6} offset={18}>
+                  <Button onClick={handlePreviewSection}>Previsualizar</Button>
+                </Col>
+              </Row>
               <Row className="titles-section">
                 <Col span={8} offset={1}>Nombre de la Sección</Col>
                 <Col span={6}>Tipo de Sección</Col>

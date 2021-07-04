@@ -13,5 +13,12 @@ export default {
 			url: apiConfig.url + '/getFormById/' + id,
 			method: 'post'
 		})
+	},
+	updateForm: (form) => {
+		return apiRequestorHelper({
+			url: apiConfig.url + '/updateForm',
+			method: 'post',
+			body: form
+		})
 	}
 }

@@ -43,17 +43,14 @@ const FieldSet = ({ section, parent, component, mode, handleChangeValues, getFie
     if(field.source && field.source.indexOf(':') > 0) {
       let ds = field.source.split(':')
       if(datasources[ds[0]] && datasources[ds[0]][ds[1]]) {
-        let allvalues = datasources[ds[0]][ds[1]].values
-        let values = allvalues.filter(v => v.parent === null)
-        let withparent = allvalues.filter(v => v.parent !== null)
-        withparent.map(fp => {
-          let d = fp.parent.split(':')
-          let parent = component.fields.find(f => f.source === ds[0]+':'+d[0])
-          if(parent && parent.value === d[1]) {
-            values.push(fp)
+        let datasource = datasources[ds[0]][ds[1]] 
+        if(datasource.parent) {
+          let parent = component.fields.find(f => f.source === ds[0]+':'+datasource.parent)
+          if(parent) {
+            return datasource.values.filter(v => v.parent == parent.value)
           }
-        })
-        return values.sort((a, b) => a.value > b.value ? 1 : -1)
+        }
+        return datasource.values
       }
     }
     return ["No hay datos"]
