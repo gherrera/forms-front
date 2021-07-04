@@ -157,7 +157,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
               </Col>
               <Col span={9}><Input value={field.title} placeholder="Ingrese nombre del atributo" size="small" onChange={(e) => handleChangeAttribute(index, 'title', e.target.value)}/></Col>
               <Col span={5}>
-                <Select value={field.typeField} onChange={(value) => handleChangeAttribute(index, 'typeField', value)} size="small" style={{width:'95%'}}>
+                <Select value={field.typeField} onChange={(value) => handleChangeAttribute(index, 'typeField', value)} size="small">
                   <Select.Option value="INPUT">Texto</Select.Option>
                   <Select.Option value="DATE">Fecha</Select.Option>
                   <Select.Option value="SELECT">Desplegable</Select.Option>

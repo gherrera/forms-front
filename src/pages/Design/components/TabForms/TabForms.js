@@ -121,7 +121,7 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
           <Row className="tools-form">
             <Button icon="plus" type="primary" onClick={handleOpenNewForm}>Nuevo Formulario</Button>
           </Row>
-          <Row className="titles-form">
+          <Row className="titles-section">
             <Col span={4}>Categoria</Col>
             <Col span={5}>Nombre</Col>
             <Col span={3}>Creado por</Col>
@@ -132,7 +132,7 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
           </Row>
 
           { forms.map((form, index) =>
-            <Row className="rows-form">
+            <Row className="rows-section">
               <Col span={4}>{form.category}</Col>
               <Col span={5}><Input size="small" value={form.name} onChange={(e) => changeNameForm(index, e.target.value)}/></Col>
               <Col span={3}>{form.userCreate}</Col>
