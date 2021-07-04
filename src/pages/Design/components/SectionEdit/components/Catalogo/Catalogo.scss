@@ -19,6 +19,17 @@
         .field-cat {
             padding: 7px;
             border: 1px dotted rgba(0,0,0,.15);
+
+            .field-type {
+              text-align: right;
+              padding-right: 5px;
+              i {
+                border: 1px solid rgba(0,0,0,.2);
+                border-radius: 10px;
+                padding: 3px;
+                font-size: 10px;
+              }
+            }
         }
 
         .cat {
