@@ -184,7 +184,6 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
 
     let _fieldset = []
     _c.map(c => {
-      debugger
       let fields = c.fields.filter(f => f.active)
       let _fields = []
       if(fields.length > 0) {

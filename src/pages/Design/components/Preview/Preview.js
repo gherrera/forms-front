@@ -13,12 +13,20 @@ const Preview = ({ form, section }) => {
   const { t } = useTranslation()
   const [ mode, setMode ] = useState("preview")
   const [ json, setJson ] = useState({})
+  const [ formPreview, setFormPreview ] = useState(null)
+
+  useEffect(() => {
+    if(form) {
+      let f = { ...form, sections: form.sections.filter(s => s.status === 'ACTIVE')}
+      setFormPreview(f)
+    }
+  }, [])
 
   const handleChangeMode = (value) => {
     setMode(value)
     if(value === 'json') {
-      if(form) {
-        getJsonFormPromise(form).then(response => {
+      if(formPreview) {
+        getJsonFormPromise(formPreview).then(response => {
           setJson(response)
         })
       }else {
@@ -40,7 +48,7 @@ const Preview = ({ form, section }) => {
         </div>
         { mode !== 'json' ?
         <>
-            { form && <FormDeclaration form={form} mode={mode} /> }
+            { formPreview && <FormDeclaration form={formPreview} mode={mode} /> }
             { section && <Section section={section} mode={mode} /> }
         </>
         : 

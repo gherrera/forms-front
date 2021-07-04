@@ -19,7 +19,6 @@ const FieldSet = ({ section, parent, component, mode, handleChangeValues, getFie
 	const { datasources } = useContext(datasourcesContext)
 
   useEffect(() => {
-    debugger
     if(parent.id === section.id) {
       let errores = component.fields.filter(f => f.required && (f.value === null || f.value === ''));
       setHasErrors(errores.length > 0)
@@ -27,7 +26,6 @@ const FieldSet = ({ section, parent, component, mode, handleChangeValues, getFie
   }, [])
 
   const handleChangeFieldValue = (field, value) => {
-    debugger
     field.value = value
     if(parent.id === section.id) {
       let errores = component.fields.filter(f => f.required && (f.value === null || f.value === ''));
@@ -37,7 +35,6 @@ const FieldSet = ({ section, parent, component, mode, handleChangeValues, getFie
   }
 
   const handleReadOnly = (field,readOnly)=>{
-    debugger
     field.readOnly = readOnly
     handleChangeValues(component)
   }

@@ -149,7 +149,6 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
   const handleMoveSection = (index, moveTo) => {
     let sec = sections
     let tmp = sec[moveTo]
-    debugger
     sec[moveTo] = sec[index]
     sec[index] = tmp
     saveForm(sec)
