@@ -122,7 +122,6 @@ const Table = ({ form, section, component, mode, handleChangeValues }) => {
   const addRecord = () => {
     let ids = component.fieldSet.fields.map(f => f.id);
     validateFields(ids).then((error, values) => {
-      debugger
       let t = { ...component }
       let records = t.records ? t.records : []
       let fields = {}

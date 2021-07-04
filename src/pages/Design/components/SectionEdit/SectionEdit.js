@@ -148,7 +148,7 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
     let comp = []
     cats.map(c => {
       if(c.active) {
-        let _comp = { ...c, type: 'FIELDSET'}
+        let _comp = { ...c, type: 'FIELDSET', id: getRandomId()}
         _comp.fields = _comp.fields.filter(f => f.active).map(f => {
           return { ...f, typeField: f.type, type: 'FIELD', id: getRandomId()}
         })
@@ -184,6 +184,7 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
 
     let _fieldset = []
     _c.map(c => {
+      debugger
       let fields = c.fields.filter(f => f.active)
       let _fields = []
       if(fields.length > 0) {
