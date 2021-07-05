@@ -118,7 +118,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
           <Row>
             { (section.type === 'HEADER' || section.type === 'CONTACT') &&
             <>
-              <Col span={1}>Título</Col>
+              <Col md={1} sm={2}>Título</Col>
               <Col span={7}><Input value={fieldset.title} onChange={(e) => handlerChangeAttr('title', e.target.value)} size="small" /></Col>
             </>
             }
@@ -133,7 +133,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
             </Col>
             { (section.type === 'HEADER' || section.type === 'CONTACT') &&
               <>
-              <Col span={1} offset={1}>Atributos</Col>
+              <Col span={2} offset={1}>Atributos</Col>
               <Col span={1}>{fieldset.fields ? fieldset.fields.length : 'NA'}</Col>
               </>
             }
