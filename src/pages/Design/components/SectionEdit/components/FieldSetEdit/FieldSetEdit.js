@@ -142,11 +142,11 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
         { section.type !== 'HEADER' && section.type !== 'CONTACT' && fieldset.fields &&
           <>
           <Row className="titles-section">
-            <Col span={9} offset={1}>Título</Col>
-            <Col span={5}>Tipo</Col>
+            <Col span={9} offset={1}>Nombre del atributo</Col>
+            <Col span={4}>Tipo</Col>
             <Col span={component.type === 'PARAGRAPH' ? 6 : 3} className="center">Requerido</Col>
             { component.type !== 'PARAGRAPH' && <Col span={3} className="center">Tabla Visible</Col> }
-            <Col span={3}></Col>
+            <Col span={4} className="center">Acciones</Col>
           </Row>
           { fieldset.fields.map((field, index) =>
             <Row className="rows-section">
@@ -156,7 +156,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
                 }
               </Col>
               <Col span={9}><Input value={field.title} placeholder="Ingrese nombre del atributo" size="small" onChange={(e) => handleChangeAttribute(index, 'title', e.target.value)}/></Col>
-              <Col span={5}>
+              <Col span={4}>
                 <Select value={field.typeField} onChange={(value) => handleChangeAttribute(index, 'typeField', value)} size="small">
                   <Select.Option value="INPUT">Texto</Select.Option>
                   <Select.Option value="DATE">Fecha</Select.Option>
@@ -171,17 +171,15 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
                     <Checkbox checked={field.tableVisible === true} onChange={(e) => handleChangeAttribute(index, 'tableVisible', e.target.checked)} size="small"/>
                 </Col>
               }
-              <Col span={3}>
-                <Col span={4} offset={6}>
-                  { field.typeField === 'SELECT' && 
-                    <Tooltip title="Fuente de Datos">
-                      <Button icon="unordered-list" size="small" onClick={() => showDataSource(field, index)}/>
-                    </Tooltip>
-                  }
-                </Col>
-                <Col span={4}>
-                  { fieldset.fields.length > 1 && <Tooltip title="Eliminar"><Button icon="delete" size="small" onClick={() => deleteField(index)}/></Tooltip> }
-                </Col>
+              <Col span={4} className="tools-fieldset">
+                { field.typeField === 'SELECT' && 
+                  <Tooltip title="Fuente de Datos">
+                    <Button icon="unordered-list" size="small" onClick={() => showDataSource(field, index)}/>
+                  </Tooltip>
+                }
+                <Tooltip title="Eliminar">
+                    <Button icon="delete" size="small" disabled={fieldset.fields.length === 1} onClick={() => deleteField(index)}/>
+                </Tooltip>
               </Col>
             </Row>
           )}

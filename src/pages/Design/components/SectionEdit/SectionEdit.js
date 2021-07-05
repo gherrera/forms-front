@@ -232,10 +232,10 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
   return (
     <div className="section-edit">
       <Row>
-        <Col span={16}>
+        <Col span={12} md={12} sm={24} xs={24}>
           <h2>{ getTypeSection(section.type) }</h2>
         </Col>
-        <Col span={8} className="tools">
+        <Col span={12} md={12} sm={24} xs={24} className="tools">
           <Button disabled={!changes} onClick={saveThisSection}>Guardar Cambios</Button>
           <Button onClick={exitSection}>Salir sin Guardar</Button>
           <Button onClick={handlePreviewSection}>Previsualizar</Button>
