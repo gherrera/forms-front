@@ -98,7 +98,7 @@ const FormDeclaration = ({ form, mode }) => {
       { mode !== 'pdf' &&
         <Row className="form-actions">
             <Col offset={20} span={4}>
-              <Button onClick={sendForm} disabled={mode === 'pdf'}>Enviar</Button>
+              <Button onClick={sendForm} disabled={mode !== 'html'}>Enviar</Button>
             </Col>
         </Row>
       }
