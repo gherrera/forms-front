@@ -5,7 +5,9 @@ import {
   Row,
   Button,
   Input,
-  Modal
+  Modal,
+  Checkbox,
+  notification
 } from "antd";
 
 import { useTranslation } from "react-i18next";
@@ -27,7 +29,7 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
       let catHeader = []
       let catContacto = []
 
-      let catH1 = {key: 'header', title: 'Encabezado', cols: 2, fields: [], active: false}
+      let catH1 = {key: 'header', title: 'Encabezado', cols: 2, fields: [], active: true}
       catH1.fields.push({ type: 'INPUT', title: 'Nombre', key: 'nombre', active: false, required: false, prefilled: false})
       catH1.fields.push({ type: 'INPUT', title: 'Ap Paterno', key: 'apPaterno', active: false, required: false, prefilled: false})
       catH1.fields.push({ type: 'INPUT', title: 'Ap Materno', key: 'apMaterno', active: false, required: false, prefilled: false})
@@ -214,6 +216,10 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
 
   const saveThisSection = () => {
     saveSectionPromise(section).then(response => {
+      notification.success({
+        message: 'Datos guardados',
+        description: 'Se guardaron los datos exitosamente'
+      })
       refreshThisSection(response)
       setChanges(false)
     })
@@ -229,16 +235,31 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
     setIsVisiblePreview(false)
   }
 
+  const handleChangeAttribute = (index, attr, value) => {
+    let comp = []
+    section.components.map((c,i) => {
+      if(i === index) {
+        comp.push({ ...c, [attr]: value})
+      }else {
+        comp.push(c)
+      }
+    })
+
+    let _s = { ...section, components:  comp}
+    refreshSection(_s)
+  }
+
   return (
     <div className="section-edit">
       <Row>
         <Col span={12} md={12} sm={24} xs={24}>
-          <h2>{ getTypeSection(section.type) }</h2>
+          {/*<h2>{ getTypeSection(section.type) }</h2>*/}
+          <h2>{ section.title }</h2>
         </Col>
         <Col span={12} md={12} sm={24} xs={24} className="tools">
-          <Button disabled={!changes} onClick={saveThisSection}>Guardar Cambios</Button>
-          <Button onClick={exitSection}>Salir sin Guardar</Button>
-          <Button onClick={handlePreviewSection}>Previsualizar</Button>
+          <Button disabled={!changes} onClick={saveThisSection} type="primary">Guardar Cambios</Button>
+          {/*<Button onClick={exitSection}>Salir sin Guardar</Button>*/}
+          <Button onClick={handlePreviewSection} type="primary">Previsualizar</Button>
         </Col>
       </Row>
       { (section.type === 'HEADER' || section.type === 'CONTACT') &&
@@ -252,10 +273,10 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
 
       <div className="section-components">
         { section.components && (section.type === 'HEADER' || section.type === 'CONTACT') &&
-          <Row><h4>Atributos seleccionados</h4></Row>
+          <Row><h4>Datos seleccionados</h4></Row>
         }
         { section.components && section.components.map((component, index) =>
-          <Row className={'row-' + component.type}>
+          <Row className={'row-component-section row-' + component.type}>
             { component.type === 'PARAGRAPH' &&
               <ParagraphEdit section={section} component={component} index={index} fieldset={component.fieldSet} refreshSection={refreshSection}/>
             }
@@ -266,7 +287,12 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
               <TableEdit section={section} component={component} index={index} fieldset={component.fieldSet} refreshSection={refreshSection} />
             }
             { component.type === 'FIELD' &&
-              <TextArea rows={4} disabled/>
+              <Row>
+                <Col span={3}>Texto requerido</Col>
+                <Col>
+                  <Checkbox size="small" checked={component.required} onChange={(e) => handleChangeAttribute(index, 'required', e.target.checked)} />
+                </Col>
+              </Row>
             }
           </Row>
         )}

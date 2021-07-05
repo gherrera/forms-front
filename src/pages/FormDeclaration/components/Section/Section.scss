@@ -48,6 +48,19 @@
 
     .section-body {
         padding: 10px;
+
+        .section-component {
+            margin-bottom: 5px;
+
+            .field-section {
+                &.required {
+                    &.noval {
+                        border: 1px solid rgba(255,0,0,.5);
+                        border-radius: 4px;
+                    }
+                }
+            }
+        }
     }
 
     &.mode-pdf {

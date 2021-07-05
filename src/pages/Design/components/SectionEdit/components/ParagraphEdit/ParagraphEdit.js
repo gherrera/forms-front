@@ -31,8 +31,12 @@ const ParagraphEdit = ({ section, component, index, fieldset, refreshSection }) 
   return (
     <div className="paragraph-edit">
         <TextArea rows={5} value={component.text} placeholder="Ingrese aqui el texto de parrafo" onChange={(e) => handleChangeText(e.target.value)}/>
-        <h3>Agregar atributos opcionales (Deben ser incluidos con el número del campo entre &lt;&gt;, Ej. &lt;1&gt; )</h3>
-        { fieldset && <FieldSetEdit hasHeader={false} section={section} component={component} fieldset={fieldset} refreshSection={refreshSection} /> }
+        { fieldset && 
+          <>
+            <h3>Agregar datos opcionales (Deben ser incluidos con el número del campo entre &lt;&gt;, Ej. &lt;1&gt; )</h3>
+            <FieldSetEdit hasHeader={false} section={section} component={component} fieldset={fieldset} refreshSection={refreshSection} /> }
+          </>
+        }
     </div>
   )
 }

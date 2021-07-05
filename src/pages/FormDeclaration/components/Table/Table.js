@@ -56,7 +56,7 @@ const Table = ({ form, section, component, mode, handleChangeValues }) => {
 
   const verifyValidations = () => {
     if(component.type === 'DECL') {
-      if(component.decision === null || component.decision === undefined) {
+      if(component.decision === null || component.decision === undefined && mode === 'html') {
         setError('Debe marcar una decision')
       }else if(component.decision && component.records.length === 0) {
         setError('Debe Agregar al menos 1 registro')

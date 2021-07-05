@@ -1,4 +1,12 @@
 .section-edit {
+    .row-component-section {
+        margin-bottom: 5px;
+
+        &.row-FIELD {
+            border: 1px solid rgba(0,0,0,.1);
+            padding: 5px;
+        }
+    }
     .tools {
         text-align: right;
 

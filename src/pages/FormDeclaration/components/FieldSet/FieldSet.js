@@ -16,6 +16,7 @@ import { datasourcesContext } from '../../../../contexts'
 const FieldSet = ({ section, parent, component, mode, handleChangeValues, getFieldDecorator }) => {
   const { t } = useTranslation()
   const [ hasErrors, setHasErrors ] = useState(false)
+  const [ changes, setChanges ] = useState(false)
 	const { datasources } = useContext(datasourcesContext)
 
   useEffect(() => {
@@ -31,6 +32,7 @@ const FieldSet = ({ section, parent, component, mode, handleChangeValues, getFie
       let errores = component.fields.filter(f => f.required && (f.value === null || f.value === ''));
       setHasErrors(errores.length > 0)
     }
+    setChanges(true)
     handleChangeValues(component)
   }
 
@@ -58,7 +60,7 @@ const FieldSet = ({ section, parent, component, mode, handleChangeValues, getFie
 
   return (
     <div className={'fieldset '+section.type}>
-      { mode !== 'pdf' && hasErrors && <Row className="has-errors-fieldset">Faltan campos requeridos</Row>}
+      { mode !== 'pdf' && changes && hasErrors && <Row className="has-errors-fieldset">Faltan campos requeridos</Row>}
       { component.title !== null &&
         <Row className="fieldset-title">
           {component.title}

@@ -13,6 +13,7 @@ import { datasourcesContext } from '../../../../contexts'
 
 const Paragraph = ({ component, mode, handleChangeValues }) => {
   const { t } = useTranslation()
+  const [ changes, setChanges ] = useState(false)
   const [ hasErrors, setHasErrors ] = useState(false)
 	const { datasources } = useContext(datasourcesContext)
 
@@ -33,6 +34,7 @@ const Paragraph = ({ component, mode, handleChangeValues }) => {
     handleChangeValues(component.fieldSet)
     let errores = component.fieldSet.fields.filter(f => f.required && (f.value === null || f.value === ''));
     setHasErrors(errores.length > 0)
+    setChanges(true)
   }
 
   const handleReadOnly = (field,readOnly)=>{
@@ -121,7 +123,7 @@ const Paragraph = ({ component, mode, handleChangeValues }) => {
 
   return (
     <div className="paragraph-form">
-      { mode !== 'pdf' && hasErrors && <Row className="has-errors-fieldset">Faltan campos requeridos</Row>}
+      { mode !== 'pdf' && changes && hasErrors && <Row className="has-errors-fieldset">Faltan campos requeridos</Row>}
       <Row>
         { component.text && getText(component.text) }
       </Row>

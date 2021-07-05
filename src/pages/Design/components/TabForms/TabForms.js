@@ -9,7 +9,10 @@ import {
   Checkbox,
   Modal,
   Form,
-  Select
+  Select,
+  Tooltip,
+  notification,
+  Popconfirm
 } from "antd";
 import { FormEdit } from '../'
 
@@ -58,7 +61,7 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
     b.push(breadcrumbs[1])
     b[1].onClick = handleClickForm
     b[1].link = 'design'
-    b.push({ title: nav })
+    if(nav) b.push({ title: nav })
     refreshBreadCrumbs({ breadcrumbs: b, title } )
   }
 
@@ -110,6 +113,15 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
     setIsVisibleNewForm(false)
   }
 
+  const handleDeleteForm = (form) => {
+    updateFormPromise({ ...form, deleted: true }).then(r => {
+      loadForms()
+      notification.success({
+        message: 'Formulario borrado'
+      })
+    })
+  }
+
   return (
     <div className="tab-forms">
       { isLoading ? <Spin/>
@@ -141,7 +153,22 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
               <Col span={3}>
                 <Checkbox checked={form.status === 'ACTIVE'} onChange={(e) => changeActiveForm(index, e.target.checked)}/>
               </Col>
-              <Col span={3}><Button icon="edit" size="small" onClick={(e) => handleEditForm(form)}/></Col>
+              <Col span={3} className="tools-rows-forms">
+                <Tooltip title="Modificar">
+                  <Button icon="edit" size="small" onClick={(e) => handleEditForm(form)}/>
+                </Tooltip>
+                <Tooltip title="Historial">
+                  <Button icon="folder-open" size="small" />
+                </Tooltip>
+                <Tooltip title="Eliminar">
+                  <Popconfirm title="Confirma eliminar la Sección?" onConfirm={(e) => handleDeleteForm(form)}>
+                    <Button icon="delete" size="small" />
+                  </Popconfirm>
+                </Tooltip>
+                <Tooltip title="Enviar por Correo">
+                  <Button icon="mail" size="small" />
+                </Tooltip>
+              </Col>
             </Row>
           )}
           { isVisibleNewForm &&

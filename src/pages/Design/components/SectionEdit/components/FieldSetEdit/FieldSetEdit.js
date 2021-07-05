@@ -8,7 +8,8 @@ import {
   Button,
   Input,
   Tooltip,
-  Modal
+  Modal,
+  Icon
 } from "antd";
 
 import { useTranslation } from "react-i18next";
@@ -62,7 +63,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
     fieldset.fields.map(f => {
       fields.push(f)
     })
-    fields.push({id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: true, key: 'field'+(fields.length+1)})
+    fields.push({id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: true, tableVisible: true, key: 'field'+(fields.length+1)})
 
     let comp = getComponentsUpdated(fields)    
     let _s = { ...section, components:  comp}
@@ -116,13 +117,17 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
       <div className="comp-fieldSet-edit">
         { hasHeader &&
           <Row>
-            { (section.type === 'HEADER' || section.type === 'CONTACT') &&
+            { section.type === 'CONTACT' &&
             <>
               <Col md={1} sm={2}>Título</Col>
               <Col span={7}><Input value={fieldset.title} onChange={(e) => handlerChangeAttr('title', e.target.value)} size="small" /></Col>
             </>
             }
-            <Col span={2} offset={1}>Columnas</Col>
+            <Col span={3} offset={1}>
+              <Tooltip title="Seleccione el número de columna en las cuales desea ordenar los datos a solicitar">
+                <Icon size="small" type="info-circle"/>
+              </Tooltip> Nro de Columnas
+            </Col>
             <Col span={1}>
               <Select value={fieldset.cols} onChange={(value) => handlerChangeAttr('cols', value)} size="small">
                   <Select.Option value={1}>1</Select.Option>
@@ -133,7 +138,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
             </Col>
             { (section.type === 'HEADER' || section.type === 'CONTACT') &&
               <>
-              <Col span={2} offset={1}>Atributos</Col>
+              <Col span={3} offset={1}>Datos seleccionados</Col>
               <Col span={1}>{fieldset.fields ? fieldset.fields.length : 'NA'}</Col>
               </>
             }
@@ -142,7 +147,16 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
         { section.type !== 'HEADER' && section.type !== 'CONTACT' && fieldset.fields &&
           <>
           <Row className="titles-section">
-            <Col span={9} offset={1}>Nombre del atributo</Col>
+            { component.type === 'PARAGRAPH' ? 
+              <>
+                <Col span={1} offset={1}>&lt;#&gt;</Col>
+                <Col span={8}>Nombre del dato</Col>
+              </>
+              :
+              <>
+                <Col span={9} offset={1}>Nombre del dato</Col>
+              </>
+            }
             <Col span={4}>Tipo</Col>
             <Col span={component.type === 'PARAGRAPH' ? 6 : 3} className="center">Requerido</Col>
             { component.type !== 'PARAGRAPH' && <Col span={3} className="center">Tabla Visible</Col> }
@@ -155,7 +169,10 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
                   <Button icon="plus" size="small" onClick={addField}/> 
                 }
               </Col>
-              <Col span={9}><Input value={field.title} placeholder="Ingrese nombre del atributo" size="small" onChange={(e) => handleChangeAttribute(index, 'title', e.target.value)}/></Col>
+              { component.type === 'PARAGRAPH' && 
+                <Col span={1}>&lt;{index+1}&gt;</Col>
+              }
+              <Col span={component.type === 'PARAGRAPH' ? 8 : 9}><Input value={field.title} placeholder="Ingrese nombre del dato" size="small" onChange={(e) => handleChangeAttribute(index, 'title', e.target.value)}/></Col>
               <Col span={4}>
                 <Select value={field.typeField} onChange={(value) => handleChangeAttribute(index, 'typeField', value)} size="small">
                   <Select.Option value="INPUT">Texto</Select.Option>

@@ -67,7 +67,7 @@ const Section = ({ form, decl, section, mode, refreshForm }) => {
         <h4 className="section-title">{sSection.title}</h4>
         <div className="section-body">
         { sSection.components && sSection.components.map((component, index) =>
-            <Row className="preview-component">
+            <Row className="section-component">
                 { component.type === 'PARAGRAPH' &&
                     <Paragraph component={component} mode={mode} handleChangeValues={handleChangeValues} />
                 }
@@ -78,7 +78,9 @@ const Section = ({ form, decl, section, mode, refreshForm }) => {
                     <Table section={sSection} component={component} mode={mode} handleChangeValues={handleChangeValues} />
                 }
                 { component.type === 'FIELD' &&
-                    <TextArea rows={4} value={component.value} disabled={mode==='pdf'} onChange={(e) => handleChangeFieldValue(component, e.target.value)}/>
+                    <TextArea rows={4} value={component.value} disabled={mode==='pdf'} onChange={(e) => handleChangeFieldValue(component, e.target.value)}
+                     className={'field-section'+(mode !== 'pdf' && component.required ? ' required':'')+(component.value ? ' withval':' noval')}
+                    />
                 }
             </Row>
         )}

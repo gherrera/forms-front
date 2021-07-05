@@ -47,10 +47,14 @@ const FormDeclaration = ({ form, mode }) => {
             descriptions.push(<p>Debe agregar al menos 1 registro en la seccion {section.title}</p>)
           }
         }else if(component.type === 'PARAGRAPH') {
-          let errores = component.fieldSet.fields.filter(f => f.required && (f.value === null || f.value === ''));
-          if(errores.length > 0) {
+          let errores = component.fieldSet && component.fieldSet.fields && component.fieldSet.fields.filter(f => f.required && (f.value === null || f.value === ''));
+          if(errores && errores.length > 0) {
             let title = component.title !== null && component.title !== '' ? component.title : section.title
             descriptions.push(<p>Faltan datos en la seccion {title}</p>)
+            hasErrorsSection = true
+          }
+        }else if(component.type === 'FIELD') {
+          if(component.required && (component.value === null || component.value === '')) {
             hasErrorsSection = true
           }
         }
@@ -69,8 +73,8 @@ const FormDeclaration = ({ form, mode }) => {
     if(hasErrorsForm) {
       notification.error({
         className: 'notif-error-required-fields',
-        message: 'Faltan campos requeridos',
-        description: 'Hay errores en el formulario'
+        message: 'Hay errores en el formulario',
+        description: 'Faltan campos requeridos'
       })
     }
 }
@@ -94,7 +98,7 @@ const FormDeclaration = ({ form, mode }) => {
       { mode !== 'pdf' &&
         <Row className="form-actions">
             <Col offset={20} span={4}>
-              <Button onClick={sendForm} disabled={mode !== 'html'}>Enviar</Button>
+              <Button onClick={sendForm} disabled={mode === 'pdf'}>Enviar</Button>
             </Col>
         </Row>
       }

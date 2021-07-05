@@ -40,7 +40,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
   }
 
   const addSection = () => {
-    let section = {id: getRandomId(), status: 'ACTIVE', isNew: true}
+    let section = {id: getRandomId(), status: 'ACTIVE', type: null}
     let joined = sections.concat(section);
     setSections(joined)
   }
@@ -62,7 +62,11 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     })
     setSections(sec)
 
-    if(sec[index].type !== null && sec[index].type !== undefined) saveForm(sec)
+    if(key !== 'title' && sec[index].type !== null && sec[index].type !== undefined) saveForm(sec)
+  }
+
+  const handleBlurTitle = () => {
+    saveForm(sections)
   }
 
   const handleChangeTitle = (index, value) => {
@@ -77,10 +81,21 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     handleChangeAttrSection(index, 'prefilled', checked)
   }
 
+  const getTypeSection = (type) => {
+    if(type === 'INTRO') return "Introducción"
+    else if(type === 'HEADER') return "Encabezado"
+    else if(type === 'CONTACT') return "Datos Personales"
+    else if(type === 'TABLE') return "Tabla"
+    else if(type === 'DECL') return "Pregunta Tipo Declaración"
+    else if(type === 'TABLE') return "Tabla"
+    else if(type === 'TEXT') return "Cuadro de Texto"
+    else if(type === 'COMMENTS') return "Comentarios"
+  }
+
   const editSection = (s) => {
     s.formId = formId
     setSection(s)
-    refreshBreadCrumbs(form.name + ' - ' + s.title, s.title)
+    refreshBreadCrumbs(s.title + ' - ' + getTypeSection(s.type), null)
   }
 
   const getRandomId = () => {
@@ -89,15 +104,17 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
 
   const changeTypeSection = (index, value) => {
     let sec = sections.map((section, i) => {
-      if (index == i) {
-        if(section.isNew && (value === 'TABLE' || value === 'DECL')) {
+      if (index == i && section.type === null) {
+        if(value === 'TABLE' || value === 'DECL') {
           return { ...section, type: value, components: [{ id: getRandomId(), type: value, records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: true, tableVisible: true}] }}]};
-        }else if(section.isNew && (value === 'HEADER' || value === 'CONTACT')) {
+        }else if(value === 'HEADER' || value === 'CONTACT') {
           return { ...section, type: value, components: []};
-        }else if(section.isNew && (value === 'INTRO')) {
-          return { ...section, type: value, components: [{ id: getRandomId(), type: 'PARAGRAPH', fieldSet: {id: getRandomId(), type: 'FIELDSET', fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: true}]} }]};
-        }else if(section.isNew && (value === 'TEXT')) {
-          return { ...section, type: value, components: [{id: getRandomId(), type: 'FIELD', required: true}] };
+        }else if(value === 'INTRO') {
+          return { ...section, type: value, components: [{ id: getRandomId(), type: 'PARAGRAPH', fieldSet: {id: getRandomId(), type: 'FIELDSET', fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: false}]} }]};
+        }else if(value === 'TEXT') {
+          return { ...section, type: value, components: [{id: getRandomId(), type: 'PARAGRAPH'}] };
+        }else if(value === 'COMMENTS') {
+          return { ...section, type: value, components: [{id: getRandomId(), type: 'PARAGRAPH'}, {id: getRandomId(), type: 'FIELD', required: true}] };
         }else {
           return { ...section, type: value };
         }
@@ -166,7 +183,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
             <>
               <Row className="tools-btn">
                 <Col span={6} offset={18}>
-                  <Button onClick={handlePreviewSection}>Previsualizar</Button>
+                  <Button onClick={handlePreviewSection} type="primary">Previsualizar</Button>
                 </Col>
               </Row>
               <Row className="titles-section">
@@ -186,15 +203,16 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
                       </Tooltip>
                     }
                   </Col>
-                  <Col span={8}><Input value={section.title} placeholder="Titulo de la sección" onChange={(e) => handleChangeTitle(index, e.target.value)}/></Col>
+                  <Col span={8}><Input value={section.title} placeholder="Titulo de la sección" onChange={(e) => handleChangeTitle(index, e.target.value)} onBlur={handleBlurTitle}/></Col>
                   <Col span={6}>
-                    <Select value={section.type} onChange={(value) => changeTypeSection(index, value)} disabled={!section.isNew}>
+                    <Select value={section.type} onChange={(value) => changeTypeSection(index, value)} disabled={section.type !== null}>
                       <Select.Option value="INTRO">Introducción</Select.Option>
                       <Select.Option value="HEADER">Encabezado</Select.Option>
                       <Select.Option value="CONTACT">Datos Personales</Select.Option>
                       <Select.Option value="DECL">Pregunta Tipo Declaración</Select.Option>
                       <Select.Option value="TABLE">Tipo Tabla</Select.Option>
                       <Select.Option value="TEXT">Cuadro de Texto</Select.Option>
+                      <Select.Option value="COMMENTS">Comentarios</Select.Option>
                     </Select>
                   </Col>
                   <Col span={3} className="center"><Checkbox checked={section.status === 'ACTIVE'} onChange={(e) => changeActiveSection(index, e.target.checked)}/></Col>
