@@ -34,7 +34,7 @@ const ParagraphEdit = ({ section, component, index, fieldset, refreshSection }) 
         { fieldset && 
           <>
             <h3>Agregar datos opcionales (Deben ser incluidos con el número del campo entre &lt;&gt;, Ej. &lt;1&gt; )</h3>
-            <FieldSetEdit hasHeader={false} section={section} component={component} fieldset={fieldset} refreshSection={refreshSection} /> }
+            <FieldSetEdit hasHeader={false} section={section} component={component} fieldset={fieldset} refreshSection={refreshSection} />
           </>
         }
     </div>

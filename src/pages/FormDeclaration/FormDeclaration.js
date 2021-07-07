@@ -32,7 +32,7 @@ const FormDeclaration = ({ form, mode }) => {
       let descriptions = []
       section.components && section.components.map(component => {
         if(component.type === 'FIELDSET') {
-          let errores = component.fields.filter(f => f.required && (f.value === null || f.value === ''));
+          let errores = component.fields.filter(f => ((f.required && (f.value === null || f.value === '')) || f.errors) );
           if(errores.length > 0) {
             let title = component.title !== null && component.title !== '' ? component.title : section.title
             descriptions.push(<p>Faltan datos en la seccion {title}</p>)

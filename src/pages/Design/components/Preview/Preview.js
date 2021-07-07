@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 
 const Preview = ({ form, section }) => {
   const { t } = useTranslation()
-  const [ mode, setMode ] = useState("preview")
+  const [ mode, setMode ] = useState("html")
   const [ json, setJson ] = useState({})
   const [ formPreview, setFormPreview ] = useState(null)
 

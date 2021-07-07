@@ -117,12 +117,13 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
       <div className="comp-fieldSet-edit">
         { hasHeader &&
           <Row>
-            { section.type === 'CONTACT' &&
-            <>
-              <Col md={1} sm={2}>Título</Col>
-              <Col span={7}><Input value={fieldset.title} onChange={(e) => handlerChangeAttr('title', e.target.value)} size="small" /></Col>
-            </>
-            }
+            <Col md={1} sm={2}>Título</Col>
+            <Col span={7}>
+              <Input value={fieldset.hasTitle ? fieldset.title : ''} onChange={(e) => handlerChangeAttr('title', e.target.value)} size="small" disabled={!fieldset.hasTitle} />
+            </Col>
+            <Col span={1} className="chk-title">
+              <Checkbox checked={fieldset.hasTitle} onChange={(e) => handlerChangeAttr('hasTitle', e.target.checked)} size="small" />
+            </Col>
             <Col span={3} offset={1}>
               <Tooltip title="Seleccione el número de columna en las cuales desea ordenar los datos a solicitar">
                 <Icon size="small" type="info-circle"/>

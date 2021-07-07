@@ -16,7 +16,7 @@ import { FieldSet } from '..'
 
 const Table = ({ form, section, component, mode, handleChangeValues }) => {
   const { t } = useTranslation()
-  const { getFieldDecorator, validateFields, setFields, getFieldsError, setFieldsValue } = form;
+  const { getFieldDecorator, validateFields, getFieldsError, setFieldsValue } = form;
   const [columns, setColumns] = useState([])
   const [fieldsPdf, setFieldsPdf] = useState({})
   const [ error, setError ] = useState(null)
@@ -188,6 +188,7 @@ const Table = ({ form, section, component, mode, handleChangeValues }) => {
               mode={mode} 
               handleChangeValues={handleChangeValuesFn} 
               getFieldDecorator={getFieldDecorator}
+              getFieldsError={getFieldsError}
             />
             <Row className="btns-table">
               <Button onClick={addRecord}>Añadir</Button>

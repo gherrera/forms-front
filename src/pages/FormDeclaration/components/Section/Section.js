@@ -1,6 +1,5 @@
 import "./Section.scss";
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
 import {
   Row,
   Input,
@@ -15,7 +14,7 @@ const { TextArea } = Input;
 
 const Section = ({ form, decl, section, mode, refreshForm }) => {
   const { t } = useTranslation()
-  const { getFieldDecorator } = form;
+  const { getFieldDecorator, getFieldsError } = form;
   const [ sSection, setSSection ] = useState(section)
 
   const refreshSection = (s, updateValues=true) => {
@@ -72,7 +71,11 @@ const Section = ({ form, decl, section, mode, refreshForm }) => {
                     <Paragraph component={component} mode={mode} handleChangeValues={handleChangeValues} />
                 }
                 { component.type === 'FIELDSET' &&
-                    <FieldSet section={sSection} parent={sSection} component={component} mode={mode} handleChangeValues={handleChangeValues} getFieldDecorator={getFieldDecorator} />
+                    <FieldSet section={sSection} parent={sSection} component={component} mode={mode} 
+                      handleChangeValues={handleChangeValues} 
+                      getFieldDecorator={getFieldDecorator} 
+                      getFieldsError={getFieldsError}
+                    />
                 }
                 { (component.type === 'TABLE' || component.type === 'DECL') &&
                     <Table section={sSection} component={component} mode={mode} handleChangeValues={handleChangeValues} />

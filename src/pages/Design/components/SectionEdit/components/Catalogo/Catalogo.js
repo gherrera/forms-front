@@ -17,6 +17,7 @@ const Catalogo = ({ catalogo, handleChangeCatalogoActive, handlerChangeCatalogo 
   const handlerChangeCatalogoField = (field, attr, value) => {
     let _f = { ...field }
     _f[attr] = value
+    if(attr === 'active' && value) _f.required=true
     handlerChangeCatalogo(catalogo, _f)
   }
 
