@@ -9,7 +9,7 @@ import { TabForms } from './components'
 class Design extends Component {
   state = {
     breadcrumbs: this.getBreadcrumbs(),
-    title: 'Diseño',
+    title: '',
     keyTab: Math.random()
 	}
 
@@ -27,7 +27,7 @@ class Design extends Component {
   }
 
   clickMenuDesign() {
-    this.setState({ keyTab: Math.random(), breadcrumbs: this.getBreadcrumbs(), title: 'Diseño' })
+    this.setState({ keyTab: Math.random(), breadcrumbs: this.getBreadcrumbs(), title: '' })
   }
 
   refreshBreadCrumbs({ title, onClick, link, breadcrumbs, nav} ) {

@@ -15,7 +15,7 @@ export default ({ className, items }) => {
       for (let i = 0; i < items.length; i++) {
         breadcrumbsItems.push(
           <li key={ i } className="breadcumbs-item">
-            <Icon type={ items[i].icon } />
+            { items[i].icon && <Icon type={ items[i].icon } /> }
             {items[i].link ?
               <NavLink to={ items[i].link } onClick={items[i].onClick !== undefined ? items[i].onClick : null}>
                 { items[i].icon === 'user' ? <div className="camelized-name">{ camelizerHelper(items[i].title) }</div> : items[i].title }

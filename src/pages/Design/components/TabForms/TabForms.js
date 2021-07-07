@@ -42,26 +42,38 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
   }
 
   const handleClickForm = () => {
+    debugger
     setKey(Math.random())
     let b = []
     b.push(breadcrumbs[0])
-    b.push(breadcrumbs[1])
-    b[1].link = null
-    refreshBreadCrumbs({ breadcrumbs: b, title: breadcrumbs[1].title })
+    if(breadcrumbs.length === 2) {
+      b.push(breadcrumbs[1])
+      b[1].link = null
+    }
+    refreshBreadCrumbs({ breadcrumbs: b, title: form.name })
   }
 
   const handleEditForm = async (f) => {
+    debugger
     setForm(f)
-    refreshBreadCrumbs({ title: f.name } )
+    let b = []
+    b.push(breadcrumbs[0])
+    refreshBreadCrumbs({ breadcrumbs: b, title: f.name } )
+    //refreshBreadCrumbs({ title: f.name } )
   }
 
   const _refreshBreadCrumbs = (title, nav) => {
+    debugger
     let b = []
     b.push(breadcrumbs[0])
-    b.push(breadcrumbs[1])
+    if(breadcrumbs.length === 2) {
+      b.push(breadcrumbs[1])
+    }else {
+      b.push({title: form.name})
+    }
     b[1].onClick = handleClickForm
-    b[1].link = 'design'
-    if(nav) b.push({ title: nav })
+    b[1].link = 'design'      
+  if(nav) b.push({ title: nav })
     refreshBreadCrumbs({ breadcrumbs: b, title } )
   }
 

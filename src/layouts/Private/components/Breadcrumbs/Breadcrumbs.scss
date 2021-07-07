@@ -1,7 +1,4 @@
 .breadcrumbs {
-  float: left;
-  margin: 0 auto 0;
-  padding: 10px 0 10px;
 
   &.enter-animation {
     animation-duration: 1s;
@@ -11,9 +8,6 @@
 
   &.top {
     padding-top: 84px;
-  }
-
-  &.bottom {
   }
 
   .camelized-name {
@@ -42,7 +36,7 @@
 
       &:after {
         content: '/';
-        padding: 0 10px;
+        padding: 0 5px;
       }
 
       &:last-child:after {

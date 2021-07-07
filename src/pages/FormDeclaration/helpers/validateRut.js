@@ -1,4 +1,4 @@
-export default (rut) => {
+export default (rut, type) => {
 	let valor = rut.replace(/\./g,'')
 	valor = valor.replace('-','')
 	let cuerpo = valor.slice(0,-1)
@@ -27,8 +27,10 @@ export default (rut) => {
 	// Validar que el Cuerpo coincide con su Dígito Verificador
 	if(dvEsperado != dv) { return false }
 	// Si todo sale bien, eliminar errores (decretar que es válido)
-	if (parseInt(cuerpo)>=50000000){ 
+	if (type==='Person' && parseInt(cuerpo)>=50000000){ 
 		return false
-	}
+	}else if (type==='Entity' && parseInt(cuerpo)<50000000){ 
+		return false
+    }
 	return true
 }

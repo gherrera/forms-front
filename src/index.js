@@ -36,13 +36,14 @@ class App extends Component {
     })
   }
 
-  loadFormDatasource(formId) {
+  loadFormDatasource(formId, callback) {
     getDataSourcesFormPromise(formId).then(ds => {
       const { datasources } = this.state
       if(Object.keys(ds).length > 0) {
         datasources.FORM = ds 
       }
       this.setState({ datasources })
+      if(callback) callback()
     })
   }
 

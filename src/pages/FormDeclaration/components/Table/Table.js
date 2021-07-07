@@ -14,7 +14,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { FieldSet } from '..'
 
-const Table = ({ form, section, component, mode, handleChangeValues }) => {
+const Table = ({ form, section, component, mode, handleChangeValues, showErrors }) => {
   const { t } = useTranslation()
   const { getFieldDecorator, validateFields, getFieldsError, setFieldsValue } = form;
   const [columns, setColumns] = useState([])
@@ -162,7 +162,7 @@ const Table = ({ form, section, component, mode, handleChangeValues }) => {
       }
       { component.type === 'DECL' &&
       <Row className="header-table">
-        { mode !== 'pdf' && error !== null && <Row className="has-errors-fieldset">{error}</Row>}
+        { mode !== 'pdf' && error !== null && showErrors && <Row className="has-errors-fieldset">{error}</Row>}
         <Col span={21}>
             {component.text}
         </Col>
@@ -186,6 +186,7 @@ const Table = ({ form, section, component, mode, handleChangeValues }) => {
               parent={component}
               component={component.fieldSet} 
               mode={mode} 
+              showErrors={showErrors}
               handleChangeValues={handleChangeValuesFn} 
               getFieldDecorator={getFieldDecorator}
               getFieldsError={getFieldsError}

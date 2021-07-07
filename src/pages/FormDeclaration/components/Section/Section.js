@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 
 const { TextArea } = Input;
 
-const Section = ({ form, decl, section, mode, refreshForm }) => {
+const Section = ({ form, decl, section, mode, refreshForm, showErrors }) => {
   const { t } = useTranslation()
   const { getFieldDecorator, getFieldsError } = form;
   const [ sSection, setSSection ] = useState(section)
@@ -34,7 +34,6 @@ const Section = ({ form, decl, section, mode, refreshForm }) => {
       refreshForm(_d)
 
       if(mode === 'html' && updateValues) {
-      //if(mode === 'preview') {
         saveSectionValuesPromise(decl.id, s)
       }
      }
@@ -72,13 +71,14 @@ const Section = ({ form, decl, section, mode, refreshForm }) => {
                 }
                 { component.type === 'FIELDSET' &&
                     <FieldSet section={sSection} parent={sSection} component={component} mode={mode} 
+                      showErrors={showErrors}
                       handleChangeValues={handleChangeValues} 
                       getFieldDecorator={getFieldDecorator} 
                       getFieldsError={getFieldsError}
                     />
                 }
                 { (component.type === 'TABLE' || component.type === 'DECL') &&
-                    <Table section={sSection} component={component} mode={mode} handleChangeValues={handleChangeValues} />
+                    <Table section={sSection} component={component} mode={mode} handleChangeValues={handleChangeValues} showErrors={showErrors} />
                 }
                 { component.type === 'FIELD' &&
                     <TextArea rows={4} value={component.value} disabled={mode==='pdf'} onChange={(e) => handleChangeFieldValue(component, e.target.value)}

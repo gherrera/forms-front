@@ -66,14 +66,18 @@ const Datasources = ({ formId, field, handleClickSelectDS, closeModalHandler }) 
     const getTextDS = () => {
         let text = ''
         selectedDS && selectedDS.values && selectedDS.values.map((t,index) => {
-            text += t
+            text += t.value
             if(index < (selectedDS.values.length-1)) text += '\n'
         })
         return text
     }
 
     const handleSaveDS = () => {
-        let values = textValues.split('\n')
+        let val = textValues.split('\n')
+        let values = []
+        val.map(v => {
+            values.push({value: v})
+        })
         let sDS = { ...selectedDS, values}
 
         let data = selectedValueDS.split(':')
@@ -98,9 +102,12 @@ const Datasources = ({ formId, field, handleClickSelectDS, closeModalHandler }) 
     }
 
     const handleSaveNewDS = () => {
-        saveDataSourcePromise(formId, 'FORM', {description: valueNewDS, values: []}).then(r => {
-            loadFormDatasource(formId)
-            closeModalNewHandler()
+        saveDataSourcePromise(formId, 'FORM', {description: valueNewDS, values: []}).then(code => {
+            loadFormDatasource(formId, () => {
+                closeModalNewHandler()
+                handleChangeDatasource('FORM:'+code)
+                setEditDS(true)
+            })
         })
     }
 
@@ -148,7 +155,7 @@ const Datasources = ({ formId, field, handleClickSelectDS, closeModalHandler }) 
                                 <>
                                     { selectedValueDS && selectedValueDS.startsWith('FORM') &&
                                         <Tooltip title="Grabar">
-                                            <Button size="small" icon="save" onClick={handleSaveDS} disabled={!enableSave}/>
+                                            <Button size="small" icon="save" type="primary" onClick={handleSaveDS} disabled={!enableSave}/>
                                         </Tooltip>
                                     }
                                     <Tooltip title="Cancelar">
@@ -165,7 +172,7 @@ const Datasources = ({ formId, field, handleClickSelectDS, closeModalHandler }) 
                     { editDS ?
                         <> 
                             <h4 className="title-datasource-values">Opciones</h4>
-                            <TextArea rows={10} value={textValues} onChange={handleChangeValues}/>
+                            <TextArea rows={10} value={textValues} onChange={handleChangeValues} placeholder="Ingrese las opciones en lineas separadas"/>
                         </>
                     :
                         <Table columns={colsDS} size="small" dataSource={selectedDS && selectedDS.values} pagination={{ defaultPageSize: 5}}/>
@@ -174,7 +181,7 @@ const Datasources = ({ formId, field, handleClickSelectDS, closeModalHandler }) 
                 }
                 <Row className="tools-datasource">
                     <Button onClick={closeModalHandler}>Cerrar</Button>
-                    <Button type="primary" onClick={() => handleClickSelectDS(selectedValueDS)} disabled={!selectedDS || selectedValueDS === 'FORM:NEW'}>Aplicar</Button>
+                    <Button type="primary" onClick={() => handleClickSelectDS(selectedValueDS)} disabled={editDS || !selectedDS || selectedValueDS === 'FORM:NEW'}>Aplicar</Button>
                 </Row>
               </>
               }
@@ -185,8 +192,8 @@ const Datasources = ({ formId, field, handleClickSelectDS, closeModalHandler }) 
                     className="modal-new-datasource"
                     footer={ null }
                     visible={ true }
-                    onOk={ closeModalNewHandler  }
-                    onCancel={ closeModalNewHandler }
+                    onOk={ () => closeModalNewHandler(true)  }
+                    onCancel={ () => closeModalNewHandler(false) }
 
                     >
                     <Form.Item label="Ingresar nombre">

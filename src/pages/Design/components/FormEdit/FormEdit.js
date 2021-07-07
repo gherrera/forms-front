@@ -83,8 +83,9 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
 
   const getTypeSection = (type) => {
     if(type === 'INTRO') return "Introducción"
-    else if(type === 'HEADER') return "Encabezado"
-    else if(type === 'CONTACT') return "Datos Personales"
+    else if(type === 'CONTACTPERSON') return "Datos Personales Persona"
+    else if(type === 'CONTACTENTIY') return "Datos Personales Empresa"
+    else if(type === 'DATA') return "Datos Personalizados"
     else if(type === 'TABLE') return "Tabla"
     else if(type === 'DECL') return "Pregunta Tipo Declaración"
     else if(type === 'TABLE') return "Tabla"
@@ -95,7 +96,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
   const editSection = (s) => {
     s.formId = formId
     setSection(s)
-    refreshBreadCrumbs(s.title + ' - ' + getTypeSection(s.type), null)
+    refreshBreadCrumbs(getTypeSection(s.type), null)
   }
 
   const getRandomId = () => {
@@ -107,8 +108,10 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
       if (index == i && section.type === null) {
         if(value === 'TABLE' || value === 'DECL') {
           return { ...section, type: value, components: [{ id: getRandomId(), type: value, records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: false, fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: true, tableVisible: true}] }}]};
-        }else if(value === 'HEADER' || value === 'CONTACT') {
+        }else if(value === 'CONTACTPERSON' || value === 'CONTACTENTITY') {
           return { ...section, type: value, components: []};
+        }else if(value === 'DATA') {
+          return { ...section, type: value, components: [{id: getRandomId(), type: 'PARAGRAPH'}, { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: false, fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: true}] }]};
         }else if(value === 'INTRO') {
           return { ...section, type: value, components: [{ id: getRandomId(), type: 'PARAGRAPH', fieldSet: {id: getRandomId(), type: 'FIELDSET', hasTitle: false, fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: false}]} }]};
         }else if(value === 'TEXT') {
@@ -207,8 +210,9 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
                   <Col span={6}>
                     <Select value={section.type} onChange={(value) => changeTypeSection(index, value)} disabled={section.type !== null}>
                       <Select.Option value="INTRO">Introducción</Select.Option>
-                      <Select.Option value="HEADER">Encabezado</Select.Option>
-                      <Select.Option value="CONTACT">Datos Personales</Select.Option>
+                      <Select.Option value="CONTACTPERSON">Datos Personales Persona</Select.Option>
+                      <Select.Option value="CONTACTENTIY">Datos Personales Empresa</Select.Option>
+                      <Select.Option value="DATA">Datos Personalizados</Select.Option>
                       <Select.Option value="DECL">Pregunta Tipo Declaración</Select.Option>
                       <Select.Option value="TABLE">Tipo Tabla</Select.Option>
                       <Select.Option value="TEXT">Cuadro de Texto</Select.Option>

@@ -15,6 +15,7 @@ import { datasourcesContext } from '../../contexts'
 const FormDeclaration = ({ form, mode }) => {
   const { t } = useTranslation()
   const [decl, setDecl] = useState(form)
+  const [ showErrors, setShowErrors ] = useState(false)
   const { loadFormDatasource } = useContext(datasourcesContext)
 
   useEffect(() => {
@@ -26,6 +27,7 @@ const FormDeclaration = ({ form, mode }) => {
   }
 
   const sendForm = () => {
+    setShowErrors(false)
     let hasErrorsForm = false
     decl.sections.map(section => {
       let hasErrorsSection = false
@@ -71,10 +73,15 @@ const FormDeclaration = ({ form, mode }) => {
       }
     })
     if(hasErrorsForm) {
+      setShowErrors(true)
       notification.error({
         className: 'notif-error-required-fields',
         message: 'Hay errores en el formulario',
         description: 'Faltan campos requeridos'
+      })
+    }else {
+      notification.success({
+        message: 'OK'
       })
     }
 }
@@ -92,7 +99,7 @@ const FormDeclaration = ({ form, mode }) => {
       </div>
       <div className="form-content">
         { decl.sections && decl.sections.map(section =>
-          <Section decl={decl} section={section} mode={mode} refreshForm={refreshForm} />
+          <Section decl={decl} section={section} mode={mode} refreshForm={refreshForm} showErrors={showErrors} />
         )}
       </div>
       { mode !== 'pdf' &&

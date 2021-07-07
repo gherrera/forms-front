@@ -124,7 +124,7 @@ const Paragraph = ({ component, mode, handleChangeValues }) => {
   return (
     <div className="paragraph-form">
       { mode !== 'pdf' && changes && hasErrors && <Row className="has-errors-fieldset">Faltan campos requeridos</Row>}
-      <Row>
+      <Row className="paragraph-text">
         { component.text && getText(component.text) }
       </Row>
     </div>

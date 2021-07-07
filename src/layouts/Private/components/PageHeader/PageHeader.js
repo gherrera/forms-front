@@ -3,19 +3,14 @@ import React from 'react'
 import { Icon, Row, Col } from 'antd'
 import { Breadcrumbs } from '../'
 
-export default ({ children, description, title, icon, breadcrumbs }) => (
+export default ({ title, breadcrumbs }) => (
   <Row className="page-header">
-    <Col xs={24} sm={24} md={16} lg={14} xl={10} xxl={8}>
+    <Col xs={24} sm={24} md={breadcrumbs && breadcrumbs.length === 2 ? 18 : 4} lg={breadcrumbs && breadcrumbs.length === 2 ? 19 : 4}>
       { breadcrumbs &&
           <Breadcrumbs items={ breadcrumbs } />
       }
     </Col>
-    <Col xs={24} sm={24} md={8} lg={10} xl={6} className="center">
-      { icon &&
-        <figure className="page-icon">
-          <Icon type={ icon } />
-        </figure>
-      }
+    <Col xs={24} sm={24} md={breadcrumbs && breadcrumbs.length === 2 ? 6 : 20} lg={breadcrumbs && breadcrumbs.length === 2 ? 5 : 16} style={{textAlign: breadcrumbs && breadcrumbs.length === 2 ? 'right' : 'center'}}>
       <h1 className="page-title">{ title }</h1>
     </Col>
   </Row>

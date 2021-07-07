@@ -25,82 +25,79 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
   const [isVisiblePreview, setIsVisiblePreview] = useState(false)
 
   useEffect(() => {
-    if(section.type === 'HEADER' || section.type === 'CONTACT') {
-      let catHeader = []
+    if(section.type === 'CONTACTPERSON' || section.type === 'CONTACTENTITY') {
       let catContacto = []
+      if(section.type === 'CONTACTPERSON') {
+        let cat0 = {key: 'header', hasTitle: true, title: 'Encabezado', cols: 2, fields: [], active: false}
+        cat0.fields.push({ type: 'INPUT', title: 'Nombre', key: 'nombre', active: false, required: false, prefilled: false})
+        cat0.fields.push({ type: 'INPUT', title: 'Ap Paterno', key: 'apPaterno', active: false, required: false, prefilled: false})
+        cat0.fields.push({ type: 'INPUT', title: 'Ap Materno', key: 'apMaterno', active: false, required: false, prefilled: false})
+        cat0.fields.push({ type: 'SELECT', title: 'Tipo de Documento', key: 'tipDoc', active: false, required: false, prefilled: false, source:'CAT:TIPO_DOC'})
+        cat0.fields.push({ type: 'INPUT', title: 'Documento', key: 'documento', active: false, required: false, prefilled: false})
+        catContacto.push(cat0)
 
-      let catH1 = {key: 'header', hasTitle: false, title: 'Encabezado', cols: 2, fields: [], active: true}
-      catH1.fields.push({ type: 'INPUT', title: 'Nombre', key: 'nombre', active: false, required: false, prefilled: false})
-      catH1.fields.push({ type: 'INPUT', title: 'Ap Paterno', key: 'apPaterno', active: false, required: false, prefilled: false})
-      catH1.fields.push({ type: 'INPUT', title: 'Ap Materno', key: 'apMaterno', active: false, required: false, prefilled: false})
-      catH1.fields.push({ type: 'SELECT', title: 'Tipo de Documento', key: 'tipDoc', active: false, required: false, prefilled: false, source:'CAT:TIPO_DOC'})
-      catH1.fields.push({ type: 'INPUT', title: 'Documento', key: 'documento', active: false, required: false, prefilled: false})
-      catHeader.push(catH1)
+        let cat1 = {key: 'lugarOrigen', hasTitle: true, title: 'Lugar de origen', cols: 2, fields: [], active: false}
+        cat1.fields.push({ type: 'SELECT', title: 'Nacionalidad', key: 'nacionalidad', active: false, required: false, prefilled: false, source:'CAT:PAISES'})
+        cat1.fields.push({ type: 'SELECT', title: 'Estado civil', key: 'estadoCivil', active: false, required: false, prefilled: false, source:'CAT:ESTADO_CIVIL'})
+        cat1.fields.push({ type: 'DATE', title: 'Fecha de nacimiento', key: 'fecNac', active: false, required: false, prefilled: false})
+        cat1.fields.push({ type: 'SELECT', title: 'Pais de residencia', key: 'paisResidencia', active: false, required: false, prefilled: false, source:'CAT:PAISES'})
+        cat1.fields.push({ type: 'SELECT', title: 'Pais de nacimiento', key: 'paisNacimiento', active: false, required: false, prefilled: false, source:'CAT:PAISES'})
+        cat1.fields.push({ type: 'SELECT', title: 'Parentesco', key: 'parentesco', active: false, required: false, prefilled: false, source:'CAT:PARENTESCO'})
+        catContacto.push(cat1)
 
-      let cat1 = {key: 'lugarOrigen', hasTitle: true, title: 'Lugar de origen', cols: 2, fields: [], active: false}
-      cat1.fields.push({ type: 'SELECT', title: 'Nacionalidad', key: 'nacionalidad', active: false, required: false, prefilled: false, source:'CAT:PAISES'})
-      cat1.fields.push({ type: 'SELECT', title: 'Estado civil', key: 'estadoCivil', active: false, required: false, prefilled: false, source:'CAT:ESTADO_CIVIL'})
-      cat1.fields.push({ type: 'DATE', title: 'Fecha de nacimiento', key: 'fecNac', active: false, required: false, prefilled: false})
-      cat1.fields.push({ type: 'SELECT', title: 'Pais de residencia', key: 'paisResidencia', active: false, required: false, prefilled: false, source:'CAT:PAISES'})
-      cat1.fields.push({ type: 'SELECT', title: 'Pais de nacimiento', key: 'paisNacimiento', active: false, required: false, prefilled: false, source:'CAT:PAISES'})
-      cat1.fields.push({ type: 'SELECT', title: 'Parentesco', key: 'parentesco', active: false, required: false, prefilled: false, source:'CAT:PARENTESCO'})
-      catContacto.push(cat1)
+        let cat2 = {key: 'contactoPersonal', hasTitle: true, title: 'Contacto personal', cols: 2, fields: [], active: false}
+        cat2.fields.push({ type: 'INPUT', title: 'Correo electronico', key: 'email', active: false, required: false, prefilled: false, validation: {type: 'email'}})
+        cat2.fields.push({ type: 'INPUT', title: 'Telefono Fijo', key: 'telefono', active: false, required: false, prefilled: false, validation: {maxLength: 12}})
+        cat2.fields.push({ type: 'INPUT', title: 'Telefono Celular', key: 'celular', active: false, required: false, prefilled: false, validation: {maxLength: 12}})
+        catContacto.push(cat2)
 
-      let cat2 = {key: 'contactoPersonal', hasTitle: true, title: 'Contacto personal', cols: 2, fields: [], active: false}
-      cat2.fields.push({ type: 'INPUT', title: 'Correo electronico', key: 'email', active: false, required: false, prefilled: false, validation: {type: 'email'}})
-      cat2.fields.push({ type: 'INPUT', title: 'Telefono Fijo', key: 'telefono', active: false, required: false, prefilled: false, validation: {maxLength: 12}})
-      cat2.fields.push({ type: 'INPUT', title: 'Telefono Celular', key: 'celular', active: false, required: false, prefilled: false, validation: {maxLength: 12}})
-      catContacto.push(cat2)
+        let cat3 = {key: 'direccionPersonal', hasTitle: true, title: 'Direccion personal', cols: 2, fields: [], active: false}
+        cat3.fields.push({ type: 'SELECT', title: 'Region', key: 'region', active: false, required: false, prefilled: false, source:'CAT:REGIONES'})
+        cat3.fields.push({ type: 'SELECT', title: 'Comuna', key: 'comuna', active: false, required: false, prefilled: false, source:'CAT:COMUNAS'})
+        cat3.fields.push({ type: 'INPUT', title: 'Dirección', key: 'direccion', active: false, required: false, prefilled: false, validation: {maxLength: 200}})
+        cat3.fields.push({ type: 'INPUT', title: 'Numero de calle', key: 'numCalle', active: false, required: false, prefilled: false, validation: {maxLength: 20}})
+        cat3.fields.push({ type: 'INPUT', title: 'Numero de puerta', key: 'numPuerta', active: false, required: false, prefilled: false})
+        cat3.fields.push({ type: 'INPUT', title: 'Codigo postal', key: 'codPostal', active: false, required: false, prefilled: false, validation: {maxLength: 10}})
+        cat3.fields.push({ type: 'SELECT', title: 'Tipo de vivienda', key: 'tipVivienda', active: false, required: false, prefilled: false, source:'CAT:TIPO_VIVIENDA'})
+        catContacto.push(cat3)
 
-      let cat3 = {key: 'direccionPersonal', hasTitle: true, title: 'Direccion personal', cols: 2, fields: [], active: false}
-      cat3.fields.push({ type: 'SELECT', title: 'Region', key: 'region', active: false, required: false, prefilled: false, source:'CAT:REGIONES'})
-      cat3.fields.push({ type: 'SELECT', title: 'Comuna', key: 'comuna', active: false, required: false, prefilled: false, source:'CAT:COMUNAS'})
-      cat3.fields.push({ type: 'INPUT', title: 'Dirección', key: 'direccion', active: false, required: false, prefilled: false, validation: {maxLength: 200}})
-      cat3.fields.push({ type: 'INPUT', title: 'Numero de calle', key: 'numCalle', active: false, required: false, prefilled: false, validation: {maxLength: 20}})
-      cat3.fields.push({ type: 'INPUT', title: 'Numero de puerta', key: 'numPuerta', active: false, required: false, prefilled: false})
-      cat3.fields.push({ type: 'INPUT', title: 'Codigo postal', key: 'codPostal', active: false, required: false, prefilled: false, validation: {maxLength: 10}})
-      cat3.fields.push({ type: 'SELECT', title: 'Tipo de vivienda', key: 'tipVivienda', active: false, required: false, prefilled: false, source:'CAT:TIPO_VIVIENDA'})
-      catContacto.push(cat3)
+        let cat4 = {key: 'ocupacion', hasTitle: true, title: 'Ocupación', cols: 2, fields: [], active: false}
+        cat4.fields.push({ type: 'SELECT', title: 'Profesión', key: 'profesion', active: false, required: false, prefilled: false, source:'CAT:PROFESIONES'})
+        cat4.fields.push({ type: 'SELECT', title: 'Condición de Trabajo', key: 'condTrabajo', active: false, required: false, prefilled: false, source:'CAT:COND_TRABAJO'})
+        cat4.fields.push({ type: 'INPUT', title: 'Ocupación Actual', key: 'ocupacion', active: false, required: false, prefilled: false})
+        cat4.fields.push({ type: 'SELECT', title: 'Actividad Economica', key: 'actEconomica', active: false, required: false, prefilled: false, source: 'CAT:ACTECO'})
+        cat4.fields.push({ type: 'INPUT', title: 'Cargo que desempeña', key: 'cargo', active: false, required: false, prefilled: false})
+        catContacto.push(cat4)
 
-      let cat4 = {key: 'ocupacion', hasTitle: true, title: 'Ocupación', cols: 2, fields: [], active: false}
-      cat4.fields.push({ type: 'SELECT', title: 'Profesión', key: 'profesion', active: false, required: false, prefilled: false, source:'CAT:PROFESIONES'})
-      cat4.fields.push({ type: 'SELECT', title: 'Condición de Trabajo', key: 'condTrabajo', active: false, required: false, prefilled: false, source:'CAT:COND_TRABAJO'})
-      cat4.fields.push({ type: 'INPUT', title: 'Ocupación Actual', key: 'ocupacion', active: false, required: false, prefilled: false})
-      cat4.fields.push({ type: 'SELECT', title: 'Actividad Economica', key: 'actEconomica', active: false, required: false, prefilled: false, source: 'CAT:ACTECO'})
-      cat4.fields.push({ type: 'INPUT', title: 'Cargo que desempeña', key: 'cargo', active: false, required: false, prefilled: false})
-      catContacto.push(cat4)
+        let cat5 = {key: 'infoEmpleador', hasTitle: true, title: 'Información Empleador', cols: 2, fields: [], active: false}
+        cat5.fields.push({ type: 'INPUT', title: 'Nombre de la Empresa', key: 'empresa', active: false, required: false, prefilled: false})
+        cat5.fields.push({ type: 'INPUT', title: 'Antigüedad', key: 'antiguedad', active: false, required: false, prefilled: false})
+        cat5.fields.push({ type: 'SELECT', title: 'Región', key: 'region', active: false, required: false, prefilled: false, source: 'CAT:REGIONES'})
+        cat5.fields.push({ type: 'SELECT', title: 'Comuna', key: 'comuna', active: false, required: false, prefilled: false, source:'CAT:COMUNAS'})
+        cat5.fields.push({ type: 'INPUT', title: 'Dirección', key: 'direccion', active: false, required: false, prefilled: false})
+        cat5.fields.push({ type: 'INPUT', title: 'Numero de calle', key: 'numCalle', active: false, required: false, prefilled: false})
+        cat5.fields.push({ type: 'INPUT', title: 'Numero de puerta', key: 'numPuerta', active: false, required: false, prefilled: false})
+        cat5.fields.push({ type: 'INPUT', title: 'Codigo postal', key: 'codPostal', active: false, required: false, prefilled: false})
+        cat5.fields.push({ type: 'DATE', title: 'Fecha de inicio', key: 'fecInicio', active: false, required: false, prefilled: false})
+        cat5.fields.push({ type: 'DATE', title: 'Fecha de término', key: 'fecTermino', active: false, required: false, prefilled: false})
+        cat5.fields.push({ type: 'INPUT', title: 'Rut de la empresa', key: 'rutEmpresa', active: false, required: false, prefilled: false, validation: {type: 'rutEmp'}})
+        catContacto.push(cat5)
 
-      let cat5 = {key: 'infoEmpleador', hasTitle: true, title: 'Información Empleador', cols: 2, fields: [], active: false}
-      cat5.fields.push({ type: 'INPUT', title: 'Nombre de la Empresa', key: 'empresa', active: false, required: false, prefilled: false})
-      cat5.fields.push({ type: 'INPUT', title: 'Antigüedad', key: 'antiguedad', active: false, required: false, prefilled: false})
-      cat5.fields.push({ type: 'SELECT', title: 'Región', key: 'region', active: false, required: false, prefilled: false, source: 'CAT:REGIONES'})
-      cat5.fields.push({ type: 'SELECT', title: 'Comuna', key: 'comuna', active: false, required: false, prefilled: false, source:'CAT:COMUNAS'})
-      cat5.fields.push({ type: 'INPUT', title: 'Dirección', key: 'direccion', active: false, required: false, prefilled: false})
-      cat5.fields.push({ type: 'INPUT', title: 'Numero de calle', key: 'numCalle', active: false, required: false, prefilled: false})
-      cat5.fields.push({ type: 'INPUT', title: 'Numero de puerta', key: 'numPuerta', active: false, required: false, prefilled: false})
-      cat5.fields.push({ type: 'INPUT', title: 'Codigo postal', key: 'codPostal', active: false, required: false, prefilled: false})
-      cat5.fields.push({ type: 'DATE', title: 'Fecha de inicio', key: 'fecInicio', active: false, required: false, prefilled: false})
-      cat5.fields.push({ type: 'DATE', title: 'Fecha de término', key: 'fecTermino', active: false, required: false, prefilled: false})
-      cat5.fields.push({ type: 'INPUT', title: 'Rut de la empresa', key: 'rutEmpresa', active: false, required: false, prefilled: false, validation: {type: 'rutEmp'}})
-      catContacto.push(cat5)
+        let cat6 = {key: 'infoRemuneraciones', hasTitle: true, title: 'Información de Remuneraciones', cols: 2, fields: [], active: false}
+        cat6.fields.push({ type: 'INPUT', title: 'Remuneración Mensual', key: 'remMensual', active: false, required: false, prefilled: false, validation: {type: 'number', decimals: 0}})
+        cat6.fields.push({ type: 'INPUT', title: 'Otros ingresos mensuales', key: 'otrosIngresosMensuales', active: false, required: false, prefilled: false, validation: {type: 'number', decimals: 0}})
+        catContacto.push(cat6)
 
-      let cat6 = {key: 'infoRemuneraciones', hasTitle: true, title: 'Información de Remuneraciones', cols: 2, fields: [], active: false}
-      cat6.fields.push({ type: 'INPUT', title: 'Remuneración Mensual', key: 'remMensual', active: false, required: false, prefilled: false, validation: {type: 'number', decimals: 0}})
-      cat6.fields.push({ type: 'INPUT', title: 'Otros ingresos mensuales', key: 'otrosIngresosMensuales', active: false, required: false, prefilled: false, validation: {type: 'number', decimals: 0}})
-      catContacto.push(cat6)
+        let cat7 = {key: 'infoPropiedades', hasTitle: true, title: 'Información de Propiedades', cols: 2, fields: [], active: false}
+        cat7.fields.push({ type: 'INPUT', title: 'Nombre de Sociedad', key: 'nombreSociedad', active: false, required: false, prefilled: false})
+        cat7.fields.push({ type: 'SELECT', title: 'Tipo de Documento de Identidad', key: 'tipoDocumento', active: false, required: false, prefilled: false, source: 'CAT:TIPO_DOC'})
+        cat7.fields.push({ type: 'INPUT', title: 'Documento Identidad', key: 'documento', active: false, required: false, prefilled: false})
+        cat7.fields.push({ type: 'INPUT', title: 'Cargo Ejercido', key: 'cargo', active: false, required: false, prefilled: false})
+        cat7.fields.push({ type: 'INPUT', title: 'Porcentaje de Participación', key: 'porcentaje', active: false, required: false, prefilled: false, validation: {type: 'number', decimals: 2}})
+        catContacto.push(cat7)
+      }
 
-      let cat7 = {key: 'infoPropiedades', hasTitle: true, title: 'Información de Propiedades', cols: 2, fields: [], active: false}
-      cat7.fields.push({ type: 'INPUT', title: 'Nombre de Sociedad', key: 'nombreSociedad', active: false, required: false, prefilled: false})
-      cat7.fields.push({ type: 'SELECT', title: 'Tipo de Documento de Identidad', key: 'tipoDocumento', active: false, required: false, prefilled: false, source: 'CAT:TIPO_DOC'})
-      cat7.fields.push({ type: 'INPUT', title: 'Documento Identidad', key: 'documento', active: false, required: false, prefilled: false})
-      cat7.fields.push({ type: 'INPUT', title: 'Cargo Ejercido', key: 'cargo', active: false, required: false, prefilled: false})
-      cat7.fields.push({ type: 'INPUT', title: 'Porcentaje de Participación', key: 'porcentaje', active: false, required: false, prefilled: false, validation: {type: 'number', decimals: 2}})
-      catContacto.push(cat7)
-
-      let cat = catHeader
-      if(section.type === 'CONTACT') cat = catContacto
-
-      cat.map((seccion) => {
+      catContacto.map((seccion) => {
         section.components.map(comp => {
           if(comp.key === seccion.key) {
             seccion.active = true
@@ -116,7 +113,7 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
           }
         })
       })
-      setCatalogo(cat)
+      setCatalogo(catContacto)
     }
   }, [])
 
@@ -251,7 +248,7 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
           <Button onClick={handlePreviewSection} type="primary">Previsualizar</Button>
         </Col>
       </Row>
-      { (section.type === 'HEADER' || section.type === 'CONTACT') &&
+      { section.type === 'CONTACTPERSON' &&
         <div className="catalogos">
           <h4>Catalogo de datos</h4>
           { catalogo.map((cat, index) =>
@@ -261,7 +258,7 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
       }
 
       <div className="section-components">
-        { section.components && (section.type === 'HEADER' || section.type === 'CONTACT') &&
+        { section.components && (section.type === 'CONTACTPERSON') &&
           <Row><h4>Datos seleccionados</h4></Row>
         }
         { section.components && section.components.map((component, index) =>

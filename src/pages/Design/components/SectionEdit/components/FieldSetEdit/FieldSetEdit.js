@@ -137,7 +137,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
                   <Select.Option value={4}>4</Select.Option>
               </Select>
             </Col>
-            { (section.type === 'HEADER' || section.type === 'CONTACT') &&
+            { (section.type === 'CONTACTPERSON') &&
               <>
               <Col span={3} offset={1}>Datos seleccionados</Col>
               <Col span={1}>{fieldset.fields ? fieldset.fields.length : 'NA'}</Col>
@@ -145,7 +145,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
             }
           </Row>
         }
-        { section.type !== 'HEADER' && section.type !== 'CONTACT' && fieldset.fields &&
+        { section.type !== 'CONTACTPERSON' && fieldset.fields &&
           <>
           <Row className="titles-section">
             { component.type === 'PARAGRAPH' ? 
@@ -160,13 +160,13 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
             }
             <Col span={4}>Tipo</Col>
             <Col span={component.type === 'PARAGRAPH' ? 6 : 3} className="center">Requerido</Col>
-            { component.type !== 'PARAGRAPH' && <Col span={3} className="center">Tabla Visible</Col> }
+            { (component.type === 'TABLE' || component.type === 'DECL') && <Col span={3} className="center">Tabla Visible</Col> }
             <Col span={4} className="center">Acciones</Col>
           </Row>
           { fieldset.fields.map((field, index) =>
             <Row className="rows-section">
               <Col span={1}>
-                { section.type !== 'HEADER' && section.type !== 'CONTACT' && index === fieldset.fields.length -1 && 
+                { section.type !== 'CONTACTPERSON' && index === fieldset.fields.length -1 && 
                   <Button icon="plus" size="small" onClick={addField}/> 
                 }
               </Col>
@@ -184,7 +184,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
               <Col span={component.type === 'PARAGRAPH' ? 6 : 3} className="center">
                   <Checkbox checked={field.required === true} onChange={(e) => handleChangeAttribute(index, 'required', e.target.checked)} size="small"/>
               </Col>
-              { component.type !== 'PARAGRAPH' &&
+              { (component.type === 'TABLE' || component.type === 'DECL') &&
                 <Col span={3} className="center">
                     <Checkbox checked={field.tableVisible === true} onChange={(e) => handleChangeAttribute(index, 'tableVisible', e.target.checked)} size="small"/>
                 </Col>

@@ -5,7 +5,6 @@ import authTokenValidator from './authTokenValidator'
 import camelizer from './camelizer'
 import generatePassword from './generatePassword'
 import sessionStorageCleaner from './sessionStorageCleaner'
-import validateRut from './validateRut'
 import validateCompanyRut from './validateCompanyRut'
 
 export const apiRequestorHelper = apiRequestor
@@ -15,6 +14,5 @@ export const authTokenValidatorHelper = authTokenValidator
 export const camelizerHelper = camelizer
 export const generatePasswordHelper = generatePassword
 export const sessionStorageCleanerHelper = sessionStorageCleaner
-export const validateRutHelper = validateRut
 export const validateCompanyRutHelper = validateCompanyRut
 
