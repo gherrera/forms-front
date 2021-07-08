@@ -38,7 +38,7 @@ const Table = ({ form, section, component, mode, handleChangeValues, showErrors 
         }
       })
     }
-    if(mode !== 'pdf') {
+    if(mode !== 'pdf' && handleChangeValues) {
       cols.push({
         title: 'Acción',
         width: '80px',
@@ -89,7 +89,7 @@ const Table = ({ form, section, component, mode, handleChangeValues, showErrors 
   );
 
   const handleChangeDecision = (value) => {
-    refreshSectionKey('decision', value)
+    handleChangeValues && refreshSectionKey('decision', value)
 
     if(value && component.records && component.records.length === 0) {
       setError('Debe Agregar al menos 1 registro')
@@ -104,7 +104,7 @@ const Table = ({ form, section, component, mode, handleChangeValues, showErrors 
   }
 
   const handleChangeValuesFn = (fieldSet) => {
-    refreshSectionKey('fieldSet', fieldSet)
+    handleChangeValues && refreshSectionKey('fieldSet', fieldSet)
   }
 
   function hasErrorsFn(fieldsError) {
@@ -192,13 +192,13 @@ const Table = ({ form, section, component, mode, handleChangeValues, showErrors 
               getFieldsError={getFieldsError}
             />
             <Row className="btns-table">
-              <Button onClick={addRecord}>Añadir</Button>
-              <Button onClick={cleanFields}>Limpiar</Button>
+              <Button onClick={handleChangeValues && addRecord}>Añadir</Button>
+              <Button onClick={handleChangeValues && cleanFields}>Limpiar</Button>
             </Row>
           </>
         }
         {(mode !== 'pdf' || columns.length === component.fieldSet.fields.length) ? 
-          <TableAntd columns={columns} size="small" dataSource={component.records} className="table-rows"/>
+          <TableAntd columns={columns} size="small" dataSource={component.records} pagination={component.records && component.records.size > 10 ? true : false} className="table-rows"/>
           :
           toDescriptionsPdf(component.records)
         }

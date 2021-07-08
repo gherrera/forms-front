@@ -152,18 +152,18 @@ const FieldSet = ({ section, parent, component, mode, showErrors, handleChangeVa
                     field.typeField === 'INPUT' ?
                       <Input
                         autoComplete="off"
-                        onFocus= {(e)=>handleReadOnly(field,false)}
-                        onBlur= {(e)=>handleOnBlur(field,true)}
+                        onFocus= {(e)=>handleChangeValues && handleReadOnly(field,false)}
+                        onBlur= {(e)=>handleChangeValues && handleOnBlur(field,true)}
                         readOnly = {field.readOnly !== false}
                         maxLength={field.validation && field.validation.maxLength ? field.validation && field.validation.maxLength : 500}
-                        onChange={(e) => handleChangeFieldValue(field, e.target.value)}/>
+                        onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.value)}/>
                     : field.typeField === 'SELECT' ?
                       <Select
                         showSearch
-                        onFocus= {(e)=>handleReadOnly(field,false)}
-                        onBlur= {(e)=>handleReadOnly(field,true)}
+                        onFocus= {(e)=>handleChangeValues && handleReadOnly(field,false)}
+                        onBlur= {(e)=>handleChangeValues && handleReadOnly(field,true)}
                         readOnly = {field.readOnly !== false}
-                        onChange={(value) => handleChangeFieldValue(field, value)}>
+                        onChange={(value) => handleChangeValues && handleChangeFieldValue(field, value)}>
                           { getValuesFromDS(field).map(val =>
                             <Select.Option value={val.value}>{val.value}</Select.Option>
                           )}
@@ -171,7 +171,7 @@ const FieldSet = ({ section, parent, component, mode, showErrors, handleChangeVa
                     :
                       <DatePicker placeholder="Ingrese la fecha" 
                         format="DD/MM/YYYY"
-                        onChange={(momentObj) => handleChangeFieldValue(field, momentObj ? moment(momentObj).format( "DD/MM/YYYY" ) : null ) } />
+                        onChange={(momentObj) => handleChangeValues && handleChangeFieldValue(field, momentObj ? moment(momentObj).format( "DD/MM/YYYY" ) : null ) } />
                   )
                 }
               </Form.Item>

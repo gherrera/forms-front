@@ -91,6 +91,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     else if(type === 'TABLE') return "Tabla"
     else if(type === 'TEXT') return "Cuadro de Texto"
     else if(type === 'COMMENTS') return "Comentarios"
+    else if(type === 'CUSTOM') return "Personalizada"
   }
 
   const editSection = (s) => {
@@ -118,8 +119,8 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
           return { ...section, type: value, components: [{id: getRandomId(), type: 'PARAGRAPH'}] };
         }else if(value === 'COMMENTS') {
           return { ...section, type: value, components: [{id: getRandomId(), type: 'PARAGRAPH'}, {id: getRandomId(), type: 'FIELD', required: true}] };
-        }else {
-          return { ...section, type: value };
+        }else if(value === 'CUSTOM') {
+          return { ...section, type: value, components: [] };
         }
       } else {
         return section;
@@ -217,6 +218,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
                       <Select.Option value="TABLE">Tipo Tabla</Select.Option>
                       <Select.Option value="TEXT">Cuadro de Texto</Select.Option>
                       <Select.Option value="COMMENTS">Comentarios</Select.Option>
+                      <Select.Option value="CUSTOM">Personalizada</Select.Option>
                     </Select>
                   </Col>
                   <Col span={3} className="center"><Checkbox checked={section.status === 'ACTIVE'} onChange={(e) => changeActiveSection(index, e.target.checked)}/></Col>

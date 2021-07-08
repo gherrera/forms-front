@@ -4,25 +4,32 @@ import {
   Col,
   Row,
   Button,
-  Input,
+  Tooltip,
   Modal,
   Checkbox,
-  notification
+  notification,
+  Icon,
+  Form,
+  Input,
+  Popconfirm
 } from "antd";
 
 import { useTranslation } from "react-i18next";
 import { TableEdit, FieldSetEdit, Catalogo, ParagraphEdit } from './components'
+import { Paragraph, Table, FieldSet } from "../../../FormDeclaration/components";
 import { saveSectionPromise } from "../FormEdit/promises";
 import { Preview } from '../'
 
 const { TextArea } = Input;
 
-const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
+const SectionEdit = ({ form, s, refreshThisSection, exitSection }) => {
+  const { getFieldDecorator, getFieldsError } = form;
   const { t } = useTranslation()
   const [section, setSection] = useState(s)
   const [catalogo, setCatalogo ] = useState([])
   const [changes, setChanges] = useState(false)
   const [isVisiblePreview, setIsVisiblePreview] = useState(false)
+  const [ newComponentMouse, setNewComponentMouse ] = useState(null)
 
   useEffect(() => {
     if(section.type === 'CONTACTPERSON' || section.type === 'CONTACTENTITY') {
@@ -116,6 +123,14 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
       setCatalogo(catContacto)
     }
   }, [])
+
+  const getComponentByType = (type) => {
+    if(type === "PARAGRAPH") return { id: getRandomId(), type: 'PARAGRAPH', text: 'Aqui va el texto de ejemplo', fieldSet: { id: getRandomId(), type: 'FIELDSET', hasTitle: false, fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: false}]} }
+    else if(type === "FIELDSET") return {id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los datos', fields: [{ id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Nombre', required: true}, {id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Apellidos', required: true}]}
+    else if(type === "TABLE") return { id: getRandomId(), type: 'TABLE', text: 'Instrucciones para el llenado de los datos', records:[{fields: {field1: 'Juan', field2: 'Castro'}}], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los campos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', title: 'Nombre', required: true, tableVisible: true}, { id: getRandomId(), key: 'field2', type: 'FIELD', title: 'Apellidos', typeField: 'INPUT', required: true, tableVisible: true}] }}
+    else if(type === "DECL") return { id: getRandomId(), type: 'DECL', decision: true, text: 'Instrucciones para el llenado de los datos', records:[{fields: {field1: 'Juan', field2: 'Castro'}}], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los campos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', title: 'Nombre', required: true, tableVisible: true}, { id: getRandomId(), key: 'field2', type: 'FIELD', title: 'Apellidos', typeField: 'INPUT', required: true, tableVisible: true}] }}
+    else if(type === "FIELD") return {id: getRandomId(), type: 'FIELD', required: false}
+  }
 
   const refreshSection = (s) => {
     setSection(s)
@@ -236,6 +251,49 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
     refreshSection(_s)
   }
 
+  const getTooltipComponen = (c) => {
+    if(c === 'PARAGRAPH') return 'Párrafo'
+    else if(c === 'FIELDSET') return 'Datos'
+    else if(c === 'TABLE') return 'Tabla'
+    else if(c === 'DECL') return 'Pregunta tipo Declaración'
+    else if(c === 'FIELD') return 'Campo de Texto'
+  }
+
+  const handleClickComponent = (c) => {
+    let comp = []
+    section.components.map(c => {
+      comp.push(c)
+    })
+    if(c === 'TABLE' || c === 'DECL') comp.push({ ...getComponentByType(c), records: []})
+    else comp.push(getComponentByType(c))
+
+    let _s = { ...section, components:  comp }
+    refreshSection(_s)
+    setNewComponentMouse(null)
+  }
+
+  const deleteComponent = (index) => {
+    let comp = section.components.filter((c,i) => index !== i)
+    let _s = { ...section, components:  comp }
+    refreshSection(_s)
+  }
+
+  const handleMouseOut = () => {
+    setNewComponentMouse(null)
+  }
+
+  const handleMouseOver = (c) => {
+    setNewComponentMouse(c)
+  }
+
+  const getTextComponent = (comp) => {
+    if(comp === 'PARAGRAPH') return 'Se incluye una caja de texto que permite agregar texto personalizado con campos incrustados opcionales'
+    else if(comp === 'FIELDSET') return 'Se incluye grupo de datos personalizados'
+    else if(comp === 'TABLE') return 'Se incluye grupo de datos personalizados para agregar en registros a una Tabla'
+    else if(comp === 'DECL') return 'Se incluye una deción inicial y grupo de datos personalizados para agregar en registros a una Tabla'
+    else if(comp === 'FIELD') return 'Se incluye un campo de texto para ser completado por el usuario'
+  }
+
   return (
     <div className="section-edit">
       <Row>
@@ -257,12 +315,65 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
         </div>
       }
 
+      { section.type === 'CUSTOM' &&
+        <Row className="custom-tools">
+          <div className="custom-tools-group">
+          {["PARAGRAPH", "FIELDSET", "TABLE", "DECL", "FIELD"].map(c =>
+            <Tooltip title={getTooltipComponen(c)}>
+              <div className={'tool-custom-component tool-custom-component'+c} onMouseOver={() => handleMouseOver(c)} onMouseOut={handleMouseOut} onClick={() => handleClickComponent(c)}>
+                <Icon type="plus"/>
+                <span>
+                { c === "PARAGRAPH" && "P"}
+                { c === "FIELDSET" && "D"}
+                { c === "TABLE" && "T"}
+                { c === "DECL" && "D"}
+                { c === "FIELD" && "C"}
+                </span>
+              </div>
+            </Tooltip>
+          )}
+          { newComponentMouse &&
+            <div className="overlayExample">
+              <Row className="explain-component">{getTextComponent(newComponentMouse)}</Row>
+              <Row className="component-example">
+              { newComponentMouse === 'PARAGRAPH' && 
+                <Paragraph component={getComponentByType(newComponentMouse)} mode="preview" />
+              }
+              { newComponentMouse === 'FIELDSET' && 
+                <FieldSet section={section} parent={section} component={getComponentByType(newComponentMouse)} mode="preview" getFieldDecorator={getFieldDecorator}  />
+              }
+              { (newComponentMouse === 'TABLE' || newComponentMouse === 'DECL') && 
+                <Table section={section} component={getComponentByType(newComponentMouse)} mode="preview" />
+              }
+              { newComponentMouse === 'FIELD' && 
+                <TextArea rows={4} value='' disabled={true} />
+              }
+              </Row>
+            </div>
+          }
+          </div>
+        </Row>
+      }
+
       <div className="section-components">
         { section.components && (section.type === 'CONTACTPERSON') &&
           <Row><h4>Datos seleccionados</h4></Row>
         }
         { section.components && section.components.map((component, index) =>
           <Row className={'row-component-section row-' + component.type}>
+            { section.type === 'CUSTOM' &&
+              <Row className="header-section-component-custom">
+                <Col span={20}><strong>{index+1}. {getTooltipComponen(component.type)}</strong></Col>
+                <Col span={4} className="tools-section-component-custom">
+                  <Tooltip title="Eliminar Componente">
+                    <Popconfirm title="Confirma eliminar el Componente?" onConfirm={(e) => deleteComponent(index)}>
+                      <Button size="small" icon="delete" />
+                    </Popconfirm>
+                  </Tooltip>
+                </Col>
+              </Row>
+            }
+
             { component.type === 'PARAGRAPH' &&
               <ParagraphEdit section={section} component={component} index={index} fieldset={component.fieldSet} refreshSection={refreshSection}/>
             }
@@ -302,4 +413,4 @@ const SectionEdit = ({ s, refreshThisSection, exitSection }) => {
     </div>
   )
 }
-export default SectionEdit;
+export default Form.create()(SectionEdit);
