@@ -13,13 +13,13 @@ import {
 } from "antd";
 
 import { useTranslation } from "react-i18next";
-import { Datasources } from "../";
+import { Datasources, Validation } from "../";
 
 const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSection }) => {
 	const { t } = useTranslation()
   const [ isVisibleModalDS, setIsVisibleModalDS ] = useState(false)
-  const [ indexFieldDS, setIndexFieldDS ] = useState(-1)
-  const [ fieldDS, setFieldDS ] = useState(null)
+  const [ isVisibleModalValidations, setIsVisibleModalValidations ] = useState(false)
+  const [ indexField, setIndexField ] = useState(-1)
 
   useEffect(() => {
 
@@ -95,21 +95,55 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
     refreshSection(_s)
   }
 
-  const showDataSource = (field, index) => {
-    setFieldDS(field)
-    setIndexFieldDS(index)
+  const showDataSource = (index) => {
+    setIndexField(index)
     //if(fieldset.fields[index].source) handleChangeDatasource(fieldset.fields[index].source)
     setIsVisibleModalDS(true)
   }
 
-  const closeModalHandler = () => {
-    setIndexFieldDS(-1)
+  const showValidations = (index) => {
+    setIndexField(index)
+    setIsVisibleModalValidations(true)
+  }
+
+  const closeModalHandlerDS = () => {
+    setIndexField(-1)
     setIsVisibleModalDS(false)
   }
 
   const handleClickSelectDS = (valueDS) => {
-    handleChangeAttribute(indexFieldDS, 'source', valueDS)
-    closeModalHandler()
+    handleChangeAttribute(indexField, 'source', valueDS)
+    closeModalHandlerDS()
+  }
+
+  const closeModalHandlerValidations = () => {
+    setIndexField(-1)
+    setIsVisibleModalValidations(false)
+  }
+
+  const handleClickSelectValidation = (validation) => {
+    handleChangeAttribute(indexField, 'validation', validation)
+    closeModalHandlerValidations()
+  }
+
+  const getValidationTitle = (validation) => {
+    if(validation) {
+      let text = 'Validaciones: '
+      if(validation.type === 'email') {
+        text += 'Email'
+      }else if(validation.type === 'rut') {
+        text += 'Rut'
+      }else if(validation.type === 'rutEmp') {
+        text += 'Rut Persona Jurídica'
+      }else if(validation.type === 'rutNat') {
+        text += 'Rut Persona Naturla'
+      }else if(validation.type === 'number') {
+        text += 'Número'
+      }
+      return text
+    }else {
+      return 'Validaciones'
+    }
   }
 
   return (
@@ -190,10 +224,16 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
                 </Col>
               }
               <Col span={4} className="tools-fieldset">
-                { field.typeField === 'SELECT' && 
+                { field.typeField === 'SELECT' ?
                   <Tooltip title="Fuente de Datos">
-                    <Button icon="unordered-list" size="small" onClick={() => showDataSource(field, index)}/>
+                    <Button icon="unordered-list" size="small" onClick={() => showDataSource(index)}/>
                   </Tooltip>
+                  : field.typeField === 'INPUT' ?
+                  <Tooltip title={ getValidationTitle(field.validation)}>
+                    <Button icon="check" size="small" onClick={() => showValidations(index)}/>
+                  </Tooltip>
+                  :
+                  <></>
                 }
                 <Tooltip title="Eliminar">
                     <Button icon="delete" size="small" disabled={fieldset.fields.length === 1} onClick={() => deleteField(index)}/>
@@ -204,17 +244,29 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
           </>
         }
       </div>
-
       { isVisibleModalDS &&
         <Modal
           className="modal-datasources"
           title="Fuente de datos"
           footer={ null }
           visible={ true }
-          onOk={ closeModalHandler  }
-          onCancel={ closeModalHandler }
+          onOk={ closeModalHandlerDS  }
+          onCancel={ closeModalHandlerDS }
           >
-            <Datasources formId={section.formId} field={fieldDS} handleClickSelectDS={handleClickSelectDS} closeModalHandler={closeModalHandler} />
+            <Datasources formId={section.formId} field={fieldset.fields[indexField]} handleClickSelect={handleClickSelectDS} closeModalHandler={closeModalHandlerDS} />
+        </Modal>
+      }
+
+      { isVisibleModalValidations &&
+        <Modal
+          className="modal-validations"
+          title="Validaciones"
+          footer={ null }
+          visible={ true }
+          onOk={ closeModalHandlerValidations  }
+          onCancel={ closeModalHandlerValidations }
+          >
+            <Validation field={fieldset.fields[indexField]} handleClickSelect={handleClickSelectValidation} closeModalHandler={closeModalHandlerValidations}/>
         </Modal>
       }
     </div>

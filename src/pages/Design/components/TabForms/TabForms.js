@@ -42,7 +42,6 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
   }
 
   const handleClickForm = () => {
-    debugger
     setKey(Math.random())
     let b = []
     b.push(breadcrumbs[0])
@@ -54,7 +53,6 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
   }
 
   const handleEditForm = async (f) => {
-    debugger
     setForm(f)
     let b = []
     b.push(breadcrumbs[0])
@@ -63,7 +61,6 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
   }
 
   const _refreshBreadCrumbs = (title, nav) => {
-    debugger
     let b = []
     b.push(breadcrumbs[0])
     if(breadcrumbs.length === 2) {

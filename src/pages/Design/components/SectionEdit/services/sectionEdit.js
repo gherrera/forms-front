@@ -1,8 +1,8 @@
-import apiConfig from '../../../../../../../config/api'
-import { apiRequestorHelper } from '../../../../../../../helpers'
+import apiConfig from '../../../../../config/api'
+import { apiRequestorHelper } from '../../../../../helpers'
 
 export default {
-	save: (formId, origin, datasource) => {
+	saveDS: (formId, origin, datasource) => {
 		return apiRequestorHelper({
 			url: apiConfig.url + '/saveDatasource/'+origin+'/'+(formId ? formId : '-1'),
 			method: 'post',

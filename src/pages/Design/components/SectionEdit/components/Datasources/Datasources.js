@@ -14,12 +14,12 @@ import {
 
 import { useTranslation } from "react-i18next";
 import { datasourcesContext } from '../../../../../../contexts'
-import { saveDataSourcePromise } from "./promises";
+import { saveDataSourcePromise } from "../../promises";
 
 const { Option, OptGroup } = Select;
 const { TextArea } = Input;
 
-const Datasources = ({ formId, field, handleClickSelectDS, closeModalHandler }) => {
+const Datasources = ({ formId, field, handleClickSelect, closeModalHandler }) => {
 	const { t } = useTranslation()
 	const { datasources } = useContext(datasourcesContext)
     const { loadFormDatasource } = useContext(datasourcesContext)
@@ -181,7 +181,7 @@ const Datasources = ({ formId, field, handleClickSelectDS, closeModalHandler }) 
                 }
                 <Row className="tools-datasource">
                     <Button onClick={closeModalHandler}>Cerrar</Button>
-                    <Button type="primary" onClick={() => handleClickSelectDS(selectedValueDS)} disabled={editDS || !selectedDS || selectedValueDS === 'FORM:NEW'}>Aplicar</Button>
+                    <Button type="primary" onClick={() => handleClickSelect(selectedValueDS)} disabled={editDS || !selectedDS || selectedValueDS === 'FORM:NEW'}>Aplicar</Button>
                 </Row>
               </>
               }

@@ -82,6 +82,7 @@ const FieldSet = ({ section, parent, component, mode, showErrors, handleChangeVa
     if(value === null || value === '') callback()
     else {
       if(validation.type === 'number') {
+        value = value.replaceAll(',','.')
         let re = new RegExp('^\\s*(\\d+(\\.\\d{0,' + (validation.decimals ? validation.decimals : 0) + '})?)\\s*$')
         if(re.test(value)) {
           callback()
