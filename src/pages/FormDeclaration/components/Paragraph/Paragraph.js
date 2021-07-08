@@ -39,7 +39,7 @@ const Paragraph = ({ component, mode, handleChangeValues }) => {
 
   const handleReadOnly = (field,readOnly)=>{
     field.readOnly = readOnly
-    handleChangeValues(component)
+    handleChangeValues(component, false)
   }
 
   const getValuesFromDS = (field) => {

@@ -98,13 +98,13 @@ const Table = ({ form, section, component, mode, handleChangeValues, showErrors 
     }
   }
 
-  const refreshSectionKey = (key, value) => {
+  const refreshSectionKey = (key, value, updateValues=true) => {
     component[key] = value
-    handleChangeValues(component)
+    handleChangeValues(component, updateValues)
   }
 
   const handleChangeValuesFn = (fieldSet) => {
-    handleChangeValues && refreshSectionKey('fieldSet', fieldSet)
+    handleChangeValues && refreshSectionKey('fieldSet', fieldSet, false)
   }
 
   function hasErrorsFn(fieldsError) {
@@ -155,7 +155,7 @@ const Table = ({ form, section, component, mode, handleChangeValues, showErrors 
     <div className="table-form">
       { component.type === 'TABLE' &&
       <Row className="header-table">
-        <Col span={21}>
+        <Col span={24} style={{textAlign: 'justify'}}>
             {component.text}
         </Col>
       </Row>
@@ -163,11 +163,11 @@ const Table = ({ form, section, component, mode, handleChangeValues, showErrors 
       { component.type === 'DECL' &&
       <Row className="header-table">
         { mode !== 'pdf' && error !== null && showErrors && <Row className="has-errors-fieldset">{error}</Row>}
-        <Col span={21}>
+        <Col span={22} style={{textAlign: 'justify'}}>
             {component.text}
         </Col>
-        <Col span={2} offset={1}>
-            <Radio.Group value={component.decision} disabled={mode === 'pdf'} onChange={(e) => handleChangeDecision(e.target.value)}>
+        <Col span={2}>
+            <Radio.Group value={component.decision} disabled={mode === 'pdf'} onChange={(e) => handleChangeDecision(e.target.value)} style={{float:'right'}}>
               <Radio className="radio-switch" value={true}>
                 Sí
               </Radio>

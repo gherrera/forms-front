@@ -124,12 +124,18 @@ const SectionEdit = ({ form, s, refreshThisSection, exitSection }) => {
     }
   }, [])
 
-  const getComponentByType = (type) => {
-    if(type === "PARAGRAPH") return { id: getRandomId(), type: 'PARAGRAPH', text: 'Aqui va el texto de ejemplo', fieldSet: { id: getRandomId(), type: 'FIELDSET', hasTitle: false, fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: false}]} }
-    else if(type === "FIELDSET") return {id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los datos', fields: [{ id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Nombre', required: true}, {id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Apellidos', required: true}]}
-    else if(type === "TABLE") return { id: getRandomId(), type: 'TABLE', text: 'Instrucciones para el llenado de los datos', records:[{fields: {field1: 'Juan', field2: 'Castro'}}], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los campos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', title: 'Nombre', required: true, tableVisible: true}, { id: getRandomId(), key: 'field2', type: 'FIELD', title: 'Apellidos', typeField: 'INPUT', required: true, tableVisible: true}] }}
-    else if(type === "DECL") return { id: getRandomId(), type: 'DECL', decision: true, text: 'Instrucciones para el llenado de los datos', records:[{fields: {field1: 'Juan', field2: 'Castro'}}], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los campos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', title: 'Nombre', required: true, tableVisible: true}, { id: getRandomId(), key: 'field2', type: 'FIELD', title: 'Apellidos', typeField: 'INPUT', required: true, tableVisible: true}] }}
-    else if(type === "FIELD") return {id: getRandomId(), type: 'FIELD', required: false}
+  const getComponentByType = (type, add) => {
+    if(type === "PARAGRAPH") return { id: getRandomId(), type: 'PARAGRAPH', text: add ? null:'Aqui va el texto de ejemplo', fieldSet: { id: getRandomId(), type: 'FIELDSET', hasTitle: false, fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: false}]} }
+    else if(type === "FIELDSET")  {
+      if(add) return {id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los datos', fields: [{ id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: '', required: true}]}
+      else return {id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los datos', fields: [{ id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true}, {id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Dato2', required: true}]}
+    }else if(type === "TABLE") {
+      if(add) return { id: getRandomId(), type: 'TABLE', records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: false, fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', required: true, tableVisible: true}] }}
+      else return { id: getRandomId(), type: 'TABLE', text: 'Instrucciones para el llenado de los datos', records:[{fields: {}}], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los campos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true, tableVisible: true}, { id: getRandomId(), key: 'field2', type: 'FIELD', title: 'Dato2', typeField: 'INPUT', required: true, tableVisible: true}] }}
+    }else if(type === "DECL") {
+      if(add) return { id: getRandomId(), type: 'DECL', records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: false, fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', required: true, tableVisible: true}] }}
+      else return { id: getRandomId(), type: 'DECL', decision: true, text: 'Instrucciones para el llenado de los datos', records:[{fields: {}}], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los campos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true, tableVisible: true}, { id: getRandomId(), key: 'field2', type: 'FIELD', title: 'Dato2', typeField: 'INPUT', required: true, tableVisible: true}] }}
+    }else if(type === "FIELD") return {id: getRandomId(), type: 'FIELD', required: false}
   }
 
   const refreshSection = (s) => {
@@ -264,8 +270,7 @@ const SectionEdit = ({ form, s, refreshThisSection, exitSection }) => {
     section.components.map(c => {
       comp.push(c)
     })
-    if(c === 'TABLE' || c === 'DECL') comp.push({ ...getComponentByType(c), records: []})
-    else comp.push(getComponentByType(c))
+    comp.push(getComponentByType(c, true))
 
     let _s = { ...section, components:  comp }
     refreshSection(_s)
@@ -365,7 +370,7 @@ const SectionEdit = ({ form, s, refreshThisSection, exitSection }) => {
               <Row className="header-section-component-custom">
                 <Col span={20}><strong>{index+1}. {getTooltipComponen(component.type)}</strong></Col>
                 <Col span={4} className="tools-section-component-custom">
-                  <Tooltip title="Eliminar Componente">
+                  <Tooltip title="Eliminar Componente" placement="bottom">
                     <Popconfirm title="Confirma eliminar el Componente?" onConfirm={(e) => deleteComponent(index)}>
                       <Button size="small" icon="delete" />
                     </Popconfirm>

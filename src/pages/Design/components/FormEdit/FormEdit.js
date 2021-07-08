@@ -16,7 +16,7 @@ import { SectionEdit, Preview } from '../'
 import { datasourcesContext } from '../../../../contexts'
 
 import { useTranslation } from "react-i18next";
-import { getFormByIdPromise, saveFormPromise } from "./promises";
+import { getFormByIdPromise, saveFormPromise, generateFormPromise } from "./promises";
 
 const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
 	const { t } = useTranslation()
@@ -91,7 +91,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     else if(type === 'TABLE') return "Tabla"
     else if(type === 'TEXT') return "Cuadro de Texto"
     else if(type === 'COMMENTS') return "Comentarios"
-    else if(type === 'CUSTOM') return "Personalizada"
+    else if(type === 'CUSTOM') return "Seccion Personalizada"
   }
 
   const editSection = (s) => {
@@ -167,6 +167,12 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     setIsVisiblePreview(false)
   }
 
+  const handleGenerateForm = async () => {
+    debugger
+    let fId = await generateFormPromise(formId)
+    window.open("forms/"+fId)
+  }
+
   const handleMoveSection = (index, moveTo) => {
     let sec = sections
     let tmp = sec[moveTo]
@@ -187,6 +193,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
             <>
               <Row className="tools-btn">
                 <Col span={6} offset={18}>
+                  <Button onClick={handleGenerateForm}>Generar Formulario</Button>
                   <Button onClick={handlePreviewSection} type="primary">Previsualizar</Button>
                 </Col>
               </Row>
@@ -218,7 +225,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
                       <Select.Option value="TABLE">Tipo Tabla</Select.Option>
                       <Select.Option value="TEXT">Cuadro de Texto</Select.Option>
                       <Select.Option value="COMMENTS">Comentarios</Select.Option>
-                      <Select.Option value="CUSTOM">Personalizada</Select.Option>
+                      <Select.Option value="CUSTOM">Seccion Personalizada</Select.Option>
                     </Select>
                   </Col>
                   <Col span={3} className="center"><Checkbox checked={section.status === 'ACTIVE'} onChange={(e) => changeActiveSection(index, e.target.checked)}/></Col>

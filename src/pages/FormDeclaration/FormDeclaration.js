@@ -84,7 +84,7 @@ const FormDeclaration = ({ form, mode }) => {
         message: 'OK'
       })
     }
-}
+  }
 
   return (
     <div className="form-declaration">

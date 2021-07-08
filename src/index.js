@@ -9,7 +9,7 @@ import { datasourcesContext } from './contexts'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { LayoutPrivate, LayoutPublic } from './layouts'
 import { Loading, ModalChangePassword } from './layouts/Private/components'
-import { AdminPage,HomePage, LoginPage, NotAuthorizedPage, NotFoundPage,DesignPage } from './pages'
+import { AdminPage,HomePage, LoginPage, NotAuthorizedPage, NotFoundPage,DesignPage, Form } from './pages'
 import { LocalStorageService } from './services'
 import { authTokenValidatorHelper, sessionStorageCleanerHelper, authTokenRenewerHelper } from './helpers'
 import { animateLogoutPromise, changePasswordPromise, getCurrentUserPromise, logoutPromise, removeLoginAnimationsPromise } from './promises'
@@ -50,38 +50,37 @@ class App extends Component {
   async componentDidMount() {
     const language = LocalStorageService.read('i18nextLng')
     moment.locale(language.substring(0,2))
+    console.log(this.props)
 
-    //if(!window.location.pathname.startsWith("/form") && !window.location.pathname.startsWith("/cdi")) {
-      this.handleThemeCheck()
+    this.handleThemeCheck()
+    if(!window.location.pathname.startsWith("/forms")) {
+        const isValidAuthToken = await authTokenValidatorHelper()
 
-      const isValidAuthToken = await authTokenValidatorHelper()
-
-      if (isValidAuthToken) {
-        const currentUser = await this.getCurrentUser()
-
-        const isActivated = currentUser.feActivacion !== null
-        if(isActivated) {
-          this.setState({
-            currentUser,
-            isLoggedIn: true
-          })
-
-          removeLoginAnimationsPromise()
+        if (isValidAuthToken) {
+          const currentUser = await this.getCurrentUser()
 
           const isActivated = currentUser.feActivacion !== null
+          if(isActivated) {
+            this.setState({
+              currentUser,
+              isLoggedIn: true
+            })
 
-          if (!isActivated) {
-            this.handleOpenModalChangePassword()
+            removeLoginAnimationsPromise()
+
+            const isActivated = currentUser.feActivacion !== null
+
+            if (!isActivated) {
+              this.handleOpenModalChangePassword()
+            }
+
+            if (currentUser.client.pais !== 'CHI') {
+              i18nextConfig.changeLanguage(language.substring(0,2) + currentUser.client.pais)
+            }
           }
-
-          if (currentUser.client.pais !== 'CHI') {
-            i18nextConfig.changeLanguage(language.substring(0,2) + currentUser.client.pais)
-          }
-
-          this.loadDatasourcesCatalogo()
         }
-      }
-    //}
+    }
+    this.loadDatasourcesCatalogo()
     await this.setState({ isLoading: false })
     
   }
@@ -110,8 +109,6 @@ class App extends Component {
           isLoggedIn: true
         })
         new authTokenRenewerHelper(this.handleLogout.bind(this))
-
-        this.loadDatasourcesCatalogo()
       }
     }
   }
@@ -181,6 +178,7 @@ class App extends Component {
                   <Route path="/" exact render={ () => this.renderComponent(HomePage) } />
                   <Route path="/administracion" exact render={ () => this.renderComponent(AdminPage) } />
                   <Route path="/design" exact render={ () => this.renderComponent(DesignPage, 'design') } />
+                  <Route path="/forms/:id/:view?" exact render={ () => <Form /> } />
 
                   <Route render={ () => <NotFoundPage /> } />
                 </Switch>

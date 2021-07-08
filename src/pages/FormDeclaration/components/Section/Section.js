@@ -39,7 +39,7 @@ const Section = ({ form, decl, section, mode, refreshForm, showErrors }) => {
      }
   }
 
-  const handleChangeValues = (component) => {
+  const handleChangeValues = (component, updateValues=true) => {
     let _s = { ...section }
     let comp = []
     _s.components.map((c, i) => {
@@ -52,7 +52,7 @@ const Section = ({ form, decl, section, mode, refreshForm, showErrors }) => {
       }
     })
     _s.components = comp
-    refreshSection(_s)
+    refreshSection(_s, updateValues)
   }
   
   const handleChangeFieldValue = (component, value) => {
