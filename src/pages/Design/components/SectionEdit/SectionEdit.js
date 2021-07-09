@@ -30,7 +30,6 @@ const SectionEdit = ({ form, s, refreshThisSection, exitSection }) => {
   const [catalogo, setCatalogo ] = useState([])
   const [changes, setChanges] = useState(false)
   const [isVisiblePreview, setIsVisiblePreview] = useState(false)
-  const [ newComponentMouse, setNewComponentMouse ] = useState(null)
 
   useEffect(() => {
     if(section.type === 'CONTACTPERSON' || section.type === 'CONTACTENTITY') {
@@ -275,21 +274,12 @@ const SectionEdit = ({ form, s, refreshThisSection, exitSection }) => {
 
     let _s = { ...section, components:  comp }
     refreshSection(_s)
-    setNewComponentMouse(null)
   }
 
   const deleteComponent = (index) => {
     let comp = section.components.filter((c,i) => index !== i)
     let _s = { ...section, components:  comp }
     refreshSection(_s)
-  }
-
-  const handleMouseOut = () => {
-    setNewComponentMouse(null)
-  }
-
-  const handleMouseOver = (c) => {
-    setNewComponentMouse(c)
   }
 
   const getTextComponent = (comp) => {
@@ -342,22 +332,28 @@ const SectionEdit = ({ form, s, refreshThisSection, exitSection }) => {
       }
       { section.type === 'CUSTOM' &&
         <Row className="custom-tools">
-          <div className="custom-tools-group">
+          <ul className="custom-tools-group-menu">
           {["PARAGRAPH", "FIELDSET", "TABLE", "DECL", "FIELD"].map(c =>
-            <Popover content={getContentPopOver(newComponentMouse)} title={getTooltipComponent(newComponentMouse)} trigger="hover" placement="bottom">
-              <div className={'tool-custom-component tool-custom-component'+c} onMouseOver={() => handleMouseOver(c)} onMouseOut={handleMouseOut} onClick={() => handleClickComponent(c)}>
-                <Icon type="plus"/>
-                <span>
-                { c === "PARAGRAPH" && "P"}
-                { c === "FIELDSET" && "D"}
-                { c === "TABLE" && "T"}
-                { c === "DECL" && "D"}
-                { c === "FIELD" && "C"}
-                </span>
-              </div>
+            <Popover content={getContentPopOver(c)} title={getTooltipComponent(c)} trigger="hover" placement="bottom">
+              <li>
+                  <a href="#0" onClick={() => handleClickComponent(c)}>
+                    <span>
+                      { c === "PARAGRAPH" && <><Icon type="align-center" />&nbsp;Párrafo</>}
+                      { c === "FIELDSET" && <><Icon type="form" />&nbsp;Datos</>}
+                      { c === "TABLE" && <><Icon type="table" />&nbsp;Tabla</>}
+                      { c === "DECL" && <><Icon type="table" />&nbsp;Declaración</>}
+                      { c === "FIELD" && <><Icon type="edit" />&nbsp;Texto</>}
+                    </span>
+                    <span>
+                      <Tooltip title="Agregar">
+                        <Icon type="plus"/>
+                      </Tooltip>
+                    </span>
+                  </a>
+              </li>
             </Popover>
-          )}
-          </div>
+            )}
+          </ul>
         </Row>
       }
 

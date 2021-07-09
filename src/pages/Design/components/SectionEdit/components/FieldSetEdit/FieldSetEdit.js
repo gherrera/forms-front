@@ -90,6 +90,9 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
       }
     })
 
+    if(attr === 'typeField') {
+      fields[index].validation = null
+    }
     let comp = getComponentsUpdated(fields)    
     let _s = { ...section, components:  comp}
     refreshSection(_s)
@@ -210,9 +213,23 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
               <Col span={component.type === 'PARAGRAPH' ? 8 : 9}><Input value={field.title} placeholder="Ingrese nombre del dato" size="small" onChange={(e) => handleChangeAttribute(index, 'title', e.target.value)}/></Col>
               <Col span={4}>
                 <Select value={field.typeField} onChange={(value) => handleChangeAttribute(index, 'typeField', value)} size="small">
-                  <Select.Option value="INPUT">Texto</Select.Option>
-                  <Select.Option value="DATE">Fecha</Select.Option>
-                  <Select.Option value="SELECT">Desplegable</Select.Option>
+                  <Select.Option value="INPUT">
+                    <Col span={2}><Icon type="edit"/></Col><Col span={21}>&nbsp;&nbsp;Editable</Col>
+                  </Select.Option>
+                  <Select.Option value="DATE">
+                    <Col span={2}><Icon type="calendar"/></Col><Col span={21}>&nbsp;&nbsp;Fecha</Col>
+                  </Select.Option>
+                  <Select.Option value="SELECT">
+                    <Col span={2}><Icon type="unordered-list"/></Col><Col span={21}>&nbsp;&nbsp;Desplegable</Col>
+                  </Select.Option>
+                  <Select.Option value="CHECKBOX">
+                    <Col span={2}><Icon type="check-square"/></Col><Col span={21}>&nbsp;&nbsp;Chebkbox</Col>
+                  </Select.Option>
+                  {component.type !== 'PARAGRAPH' &&
+                    <Select.Option value="RADIO">
+                      <Col span={2}><Icon type="ellipsis"/></Col><Col span={21}>&nbsp;&nbsp;Opciones</Col>
+                    </Select.Option>
+                  }
                 </Select>
               </Col>
               <Col span={component.type === 'PARAGRAPH' ? 6 : 3} className="center">
@@ -224,7 +241,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
                 </Col>
               }
               <Col span={4} className="tools-fieldset">
-                { field.typeField === 'SELECT' ?
+                { (field.typeField === 'SELECT' || field.typeField === 'RADIO') ?
                   <Tooltip title="Fuente de Datos">
                     <Button icon="unordered-list" size="small" onClick={() => showDataSource(index)}/>
                   </Tooltip>

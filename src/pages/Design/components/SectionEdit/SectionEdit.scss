@@ -41,52 +41,65 @@
         margin-bottom: 5px;
         text-align: center;
 
-        .custom-tools-group {
-            display: inline-block;
-            height: 75px;
-    
-            .tool-custom-component {
-                width: 60px;
-                height: 60px;
-                float: left;
-                margin: 10px 10px 5px 10px;
-                border: 3px solid rgba(0,0,200,.1);
-                background-color: rgba(132, 132, 236, 0.1);
-                border-radius: 10px;
-                position: relative;
+        .custom-tools-group-menu {
+          list-style: none;
+          display: flex;
+          justify-content: center;
+          color: #aaaebc;
+          margin-bottom: 5px;
+          font: 22px sans-serif;
+          border-radius: 20px;
 
-                span{ 
-                    display: block;
-                    margin-top: 5px;
-                    font-size: 30px;
-                    font-weight: bold;
-                    color: rgba(54, 59, 54, .7);
+          li {
+            background-color: rgba(26,28,29, .5);
+            margin-top: 5px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            width: 180px;
+            border: 1px solid rgba(255,255,255,.3);
+
+            &:hover {
+                background-color: #6877b1;
+                //border: 10px solid rgba(0,0,0,.1);
+
+                span:first-child {
+                    transform: translateY(100%);
                 }
-
-                .anticon {
-                    display: none;
-                    position: absolute;
-                    top: 15px;
-                    left: 15px;
-                    font-size: 35px;
-                    color: rgba(0,0,0,.1);
-                }
-
-                &:hover {
-                    margin-top: 5px;
-                    width: 70px;
-                    height: 70px;
-                    cursor: pointer;
-
-                    .anticon {
-                        display: block;
-                    }
-
-                    span {
-                        display: none;
-                    }
+                span:last-child, .custom-tools-group-menu[data-animation] a:hover span:last-child {
+                    transform: none;
                 }
             }
+
+            a {
+                color: rgba(255,255,255,.6);
+                display: block;
+                position: relative;
+                overflow: hidden;
+                
+                span {
+                    transition: transform 0.2s ease-out;
+                }
+                span:first-child {
+                    display: inline-block;
+                    padding: 10px;
+                }
+
+                span:last-child {
+                    font-size: 35px;
+                    font-weight: bold;
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transform: translateY(-100%);
+
+                }
+            }
+          }
         }
     }
 }

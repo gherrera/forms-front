@@ -7,7 +7,8 @@ import {
   DatePicker,
   Select,
   Form,
-  notification
+  Radio,
+  Checkbox
 } from "antd";
 
 import { useTranslation } from "react-i18next";
@@ -136,7 +137,7 @@ const FieldSet = ({ section, parent, component, mode, showErrors, handleChangeVa
           { component.fields.map(field =>
             <Col span={24/component.cols}>
               <Form.Item label={field.title}>
-                { mode === 'pdf' ?
+                { mode === 'pdf' && field.typeField !== 'CHECKBOX' ?
                   <Input disabled={true} value={field.value}/>
                   :  
                   getFieldDecorator(field.id, {
@@ -168,6 +169,18 @@ const FieldSet = ({ section, parent, component, mode, showErrors, handleChangeVa
                             <Select.Option value={val.value}>{val.value}</Select.Option>
                           )}
                         </Select>
+                    : field.typeField === 'RADIO' ?
+                      <Radio.Group
+                        onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.value)}>
+                          { getValuesFromDS(field).map(val =>
+                            <Radio value={val.value}>{val.value}</Radio>
+                          )}
+                      </Radio.Group>
+                    : field.typeField === 'CHECKBOX' ?
+                      <Checkbox checked={field.value}
+                        disabled={mode === 'pdf'}
+                        onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.checked)}
+                      />
                     :
                       <DatePicker placeholder="Ingrese la fecha" 
                         format="DD/MM/YYYY"
