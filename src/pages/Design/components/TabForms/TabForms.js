@@ -193,6 +193,7 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
                     <Select.Option value="CLIENTE">Cliente</Select.Option>
                     <Select.Option value="COLABORADOR">Colaborador</Select.Option>
                     <Select.Option value="PROVEEDOR">Proveedor</Select.Option>
+                    <Select.Option value="DIRECTOR">Director</Select.Option>
                   </Select>
                 </Form.Item>
                 <Form.Item label="Formulario">
