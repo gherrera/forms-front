@@ -4,7 +4,8 @@ import {
   Row,
   Input,
   Select,
-  DatePicker
+  DatePicker,
+  Checkbox
 } from "antd";
 
 import moment from "moment";
@@ -60,7 +61,7 @@ const Paragraph = ({ component, mode, handleChangeValues }) => {
   }
 
   const getField = (field) => {
-    if(field.typeField === 'INPUT' || mode === 'pdf') {
+    if(field.typeField === 'INPUT' || (mode === 'pdf' && field.typeField !== 'CHECKBOX')) {
       return <Input size="small" className={'field-paragraph'+(mode !== 'pdf' && field.required ? ' required':'')+(field.value ? ' withval':' noval')} 
         disabled={mode === 'pdf'} 
         placeholder={field.title} 
@@ -83,6 +84,12 @@ const Paragraph = ({ component, mode, handleChangeValues }) => {
               <Select.Option value={val.value}>{val.value}</Select.Option>
             )}
           </Select>
+    }else if(field.typeField === 'CHECKBOX') {
+      return <Checkbox 
+       checked={field.value}
+       disabled={mode === 'pdf'}
+       onChange={(e) => handleChangeFieldValue(field, e.target.checked)}
+      />
     }else {
       return <DatePicker size="small" className={'field-paragraph'+(mode !== 'pdf' && field.required ? ' required':'')+(field.value ? ' withval':' noval')}
       format="DD/MM/YYYY"
