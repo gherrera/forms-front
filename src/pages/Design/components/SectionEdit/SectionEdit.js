@@ -11,7 +11,8 @@ import {
   Icon,
   Form,
   Input,
-  Popconfirm
+  Popconfirm,
+  Popover
 } from "antd";
 
 import { useTranslation } from "react-i18next";
@@ -257,7 +258,7 @@ const SectionEdit = ({ form, s, refreshThisSection, exitSection }) => {
     refreshSection(_s)
   }
 
-  const getTooltipComponen = (c) => {
+  const getTooltipComponent = (c) => {
     if(c === 'PARAGRAPH') return 'Párrafo'
     else if(c === 'FIELDSET') return 'Datos'
     else if(c === 'TABLE') return 'Tabla'
@@ -299,6 +300,26 @@ const SectionEdit = ({ form, s, refreshThisSection, exitSection }) => {
     else if(comp === 'FIELD') return 'Se incluye un campo de texto para ser completado por el usuario'
   }
 
+  const getContentPopOver = (comp) => {
+    return <Row className="overlayExample">
+      <Col className="explain-component" span={24}>{getTextComponent(comp)}</Col>
+      <Col className="component-example"span={24}>
+      { comp === 'PARAGRAPH' && 
+        <Paragraph component={getComponentByType(comp)} mode="preview" />
+      }
+      { comp === 'FIELDSET' && 
+        <FieldSet section={section} parent={section} component={getComponentByType(comp)} mode="preview" getFieldDecorator={getFieldDecorator}  />
+      }
+      { (comp === 'TABLE' || comp === 'DECL') && 
+        <Table section={section} component={getComponentByType(comp)} mode="preview" />
+      }
+      { comp === 'FIELD' && 
+        <TextArea rows={4} value='' disabled={true} />
+      }
+      </Col>
+    </Row>
+  }
+
   return (
     <div className="section-edit">
       <Row>
@@ -319,12 +340,11 @@ const SectionEdit = ({ form, s, refreshThisSection, exitSection }) => {
           )}
         </div>
       }
-
       { section.type === 'CUSTOM' &&
         <Row className="custom-tools">
           <div className="custom-tools-group">
           {["PARAGRAPH", "FIELDSET", "TABLE", "DECL", "FIELD"].map(c =>
-            <Tooltip title={getTooltipComponen(c)}>
+            <Popover content={getContentPopOver(newComponentMouse)} title={getTooltipComponent(newComponentMouse)} trigger="hover" placement="bottom">
               <div className={'tool-custom-component tool-custom-component'+c} onMouseOver={() => handleMouseOver(c)} onMouseOut={handleMouseOut} onClick={() => handleClickComponent(c)}>
                 <Icon type="plus"/>
                 <span>
@@ -335,27 +355,8 @@ const SectionEdit = ({ form, s, refreshThisSection, exitSection }) => {
                 { c === "FIELD" && "C"}
                 </span>
               </div>
-            </Tooltip>
+            </Popover>
           )}
-          { newComponentMouse &&
-            <div className="overlayExample">
-              <Row className="explain-component">{getTextComponent(newComponentMouse)}</Row>
-              <Row className="component-example">
-              { newComponentMouse === 'PARAGRAPH' && 
-                <Paragraph component={getComponentByType(newComponentMouse)} mode="preview" />
-              }
-              { newComponentMouse === 'FIELDSET' && 
-                <FieldSet section={section} parent={section} component={getComponentByType(newComponentMouse)} mode="preview" getFieldDecorator={getFieldDecorator}  />
-              }
-              { (newComponentMouse === 'TABLE' || newComponentMouse === 'DECL') && 
-                <Table section={section} component={getComponentByType(newComponentMouse)} mode="preview" />
-              }
-              { newComponentMouse === 'FIELD' && 
-                <TextArea rows={4} value='' disabled={true} />
-              }
-              </Row>
-            </div>
-          }
           </div>
         </Row>
       }
@@ -368,7 +369,7 @@ const SectionEdit = ({ form, s, refreshThisSection, exitSection }) => {
           <Row className={'row-component-section row-' + component.type}>
             { section.type === 'CUSTOM' &&
               <Row className="header-section-component-custom">
-                <Col span={20}><strong>{index+1}. {getTooltipComponen(component.type)}</strong></Col>
+                <Col span={20}><strong>{index+1}. {getTooltipComponent(component.type)}</strong></Col>
                 <Col span={4} className="tools-section-component-custom">
                   <Tooltip title="Eliminar Componente" placement="bottom">
                     <Popconfirm title="Confirma eliminar el Componente?" onConfirm={(e) => deleteComponent(index)}>

@@ -44,30 +44,6 @@
         .custom-tools-group {
             display: inline-block;
             height: 75px;
-
-            .overlayExample {
-                z-index: 14000;
-                position: absolute;
-                background-color:rgba(255,255,255,.9);
-                width: 600px;
-                min-height: 200px;
-                top: 80px;
-                margin-left: -90px;
-                border-radius: 10px;
-                border: 2px solid rgba(0,0,0,0.1);
-                padding: 5px;
-                text-align: left;
-
-                .explain-component {
-                    padding: 5px;
-                    border: 1px solid rgba(0,0,0,.1);
-                }
-                .component-example {
-                    padding: 5px;
-                    margin-top: 5px;
-                    border: 1px solid rgba(0,0,0,.1);
-                }
-            }
     
             .tool-custom-component {
                 width: 60px;
@@ -84,7 +60,7 @@
                     margin-top: 5px;
                     font-size: 30px;
                     font-weight: bold;
-                    color: rgba(200,0,0,.6);
+                    color: rgba(54, 59, 54, .7);
                 }
 
                 .anticon {
@@ -112,5 +88,17 @@
                 }
             }
         }
+    }
+}
+
+.overlayExample {
+    .explain-component {
+        padding: 5px 0px 5px 10px;
+        border: 1px solid rgba(0,0,0,.1);
+        background-color: rgba(221, 221, 179,.2);
+    }
+    .component-example {
+        padding: 10px;
+        border: 1px solid rgba(0,0,0,.1);
     }
 }
