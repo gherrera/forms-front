@@ -28,7 +28,7 @@ const Catalogo = ({ catalogo, handleChangeCatalogoActive, handlerChangeCatalogo 
 
   return (
     <Row className="catalogo">
-        <Row className="content" gutter={[12, 12]}>
+        <Row className="content">
             <Row>
                 <Col className="title" span={22}>{catalogo.title}</Col>
                 <Col span={2} className="switch-cat">

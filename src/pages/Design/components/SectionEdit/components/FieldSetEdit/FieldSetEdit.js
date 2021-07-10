@@ -9,17 +9,20 @@ import {
   Input,
   Tooltip,
   Modal,
-  Icon
+  Icon,
+  Drawer
 } from "antd";
 
 import { useTranslation } from "react-i18next";
 import { Datasources, Validation } from "../";
+import Catalogos from "../Catalogos/Catalogos";
 
 const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSection }) => {
 	const { t } = useTranslation()
   const [ isVisibleModalDS, setIsVisibleModalDS ] = useState(false)
   const [ isVisibleModalValidations, setIsVisibleModalValidations ] = useState(false)
   const [ indexField, setIndexField ] = useState(-1)
+  const [ showCatalogo, setShowCatalogo ] = useState(false)
 
   useEffect(() => {
 
@@ -149,12 +152,32 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
     }
   }
 
+  const onCloseCatalogo = () => {
+    setShowCatalogo(false)
+  }
+
+  const handleApplyFields = (fields) => {
+    let fs = []
+    fieldset.fields.map(f => {
+      fs.push(f)
+    })
+    fields.map(f => {
+      fs.push({id: getRandomId(), title: f.title, type: 'FIELD', typeField: f.type, required: f.required, tableVisible: true, key: 'field'+(fs.length+1), source: f.source, validation: f.validation})
+    })
+
+    let comp = getComponentsUpdated(fs)    
+    let _s = { ...section, components:  comp}
+    
+    refreshSection(_s)
+    onCloseCatalogo()
+  }
+
   return (
     <div className="fieldset-edit">
       <div className="comp-fieldSet-edit">
         { hasHeader &&
           <Row>
-            <Col md={1} sm={2}>Título</Col>
+            <Col md={3} sm={4}>Título de los Datos</Col>
             <Col span={7}>
               <Input value={fieldset.hasTitle ? fieldset.title : ''} onChange={(e) => handlerChangeAttr('title', e.target.value)} size="small" disabled={!fieldset.hasTitle} />
             </Col>
@@ -166,7 +189,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
                 <Icon size="small" type="info-circle"/>
               </Tooltip> Nro de Columnas
             </Col>
-            <Col span={1}>
+            <Col span={2}>
               <Select value={fieldset.cols} onChange={(value) => handlerChangeAttr('cols', value)} size="small">
                   <Select.Option value={1}>1</Select.Option>
                   <Select.Option value={2}>2</Select.Option>
@@ -174,10 +197,19 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
                   <Select.Option value={4}>4</Select.Option>
               </Select>
             </Col>
-            { (section.type === 'CONTACTPERSON') &&
+            { (section.type === 'CONTACTPERSON') ?
               <>
               <Col span={3} offset={1}>Datos seleccionados</Col>
               <Col span={1}>{fieldset.fields ? fieldset.fields.length : 'NA'}</Col>
+              </>
+              :
+              <>
+              <Col span={3}>
+                Agregar datos del Catálogo
+              </Col>
+              <Col>
+                <Checkbox checked={showCatalogo} onChange={(e) => setShowCatalogo(e.target.checked)}/>
+              </Col>
               </>
             }
           </Row>
@@ -223,7 +255,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
                     <Col span={2}><Icon type="unordered-list"/></Col><Col span={21}>&nbsp;&nbsp;Desplegable</Col>
                   </Select.Option>
                   <Select.Option value="CHECKBOX">
-                    <Col span={2}><Icon type="check-square"/></Col><Col span={21}>&nbsp;&nbsp;Chebkbox</Col>
+                    <Col span={2}><Icon type="check-square"/></Col><Col span={21}>&nbsp;&nbsp;Checkbox</Col>
                   </Select.Option>
                   {component.type !== 'PARAGRAPH' &&
                     <Select.Option value="RADIO">
@@ -285,6 +317,18 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
           >
             <Validation field={fieldset.fields[indexField]} handleClickSelect={handleClickSelectValidation} closeModalHandler={closeModalHandlerValidations}/>
         </Modal>
+      }
+      {showCatalogo && 
+        <Drawer 
+          title="Seleccionar datos de Catálogo"
+          placement="left"
+          closable={true}
+          visible={true}
+          width={1300}
+          onClose={onCloseCatalogo}
+        >
+          <Catalogos section={section} type="CONTACTPERSON" active={true} handleClose={onCloseCatalogo} handleApplyFields={handleApplyFields}/>
+        </Drawer>
       }
     </div>
   )

@@ -8,13 +8,14 @@
         .title {
             text-align: center;
             //border-bottom: 1px solid rgba(0,0,0,.1);
-            padding: 7px;
             font-weight: bold;
+            margin-top: -3px;
         }
 
         .switch-cat {
             text-align: right;
-            padding: 5px 10px 7px 0px;
+            padding: 0px 10px 3px 0px;
+            margin-top: -4px;
         }
         .field-cat {
             padding: 7px;
@@ -36,6 +37,7 @@
             animation-duration: 0.5s;
             animation-fill-mode: forwards;
             position: relative;
+            padding: 2px;
       
             &.show {
               animation-name: show;
