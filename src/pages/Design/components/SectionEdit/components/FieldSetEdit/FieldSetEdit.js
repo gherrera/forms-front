@@ -32,18 +32,22 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
     let comp = []
     section.components.map((c) => {
       if(c.type === 'FIELDSET' && c.id === fieldset.id) {
+        if(attr === 'orientation' && value === 'horizontal') {
+          c.cols = 2
+        }
         comp.push({ ...c, [attr]: value })
       }else if(c.fieldSet && c.fieldSet.id === fieldset.id) {
+        if(attr === 'orientation' && value === 'horizontal') {
+          c.fieldSet.cols = 2
+        }
         comp.push({ ...c, fieldSet: { ...c.fieldSet, [attr]: value }})
       }else {
         comp.push(c)
       }
     })
+    
     let _s = { ...section, components:  comp}
     refreshSection(_s)
-    if(attr === 'orientation' && value === 'horizontal') {
-      handlerChangeAttr('cols',2)
-    }
   }
 
   const getComponentsUpdated = (fields) => {

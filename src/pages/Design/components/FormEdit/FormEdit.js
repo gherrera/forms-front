@@ -216,13 +216,13 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
                   <Col span={8}><Input value={section.title} placeholder="Titulo de la sección" onChange={(e) => handleChangeTitle(index, e.target.value)} onBlur={handleBlurTitle}/></Col>
                   <Col span={6}>
                     <Select value={section.type} onChange={(value) => changeTypeSection(index, value)} disabled={section.type !== null}>
-                      <Select.Option value="INTRO">Introducción</Select.Option>
+                      <Select.Option value="INTRO">Párrafo con Datos</Select.Option>
                       <Select.Option value="CONTACTPERSON">Datos Personales Persona</Select.Option>
                       <Select.Option value="CONTACTENTIY">Datos Personales Empresa</Select.Option>
                       <Select.Option value="DATA">Datos Personalizados</Select.Option>
                       <Select.Option value="DECL">Pregunta Tipo Declaración</Select.Option>
                       <Select.Option value="TABLE">Tipo Tabla</Select.Option>
-                      <Select.Option value="TEXT">Cuadro de Texto</Select.Option>
+                      <Select.Option value="TEXT">Párrafo</Select.Option>
                       <Select.Option value="COMMENTS">Comentarios</Select.Option>
                       <Select.Option value="CUSTOM">Seccion Personalizada</Select.Option>
                     </Select>
