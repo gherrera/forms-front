@@ -41,6 +41,9 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
     })
     let _s = { ...section, components:  comp}
     refreshSection(_s)
+    if(attr === 'orientation' && value === 'horizontal') {
+      handlerChangeAttr('cols',2)
+    }
   }
 
   const getComponentsUpdated = (fields) => {
@@ -187,7 +190,16 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
             <Col span={1} className="chk-title">
               <Checkbox checked={fieldset.hasTitle} onChange={(e) => handlerChangeAttr('hasTitle', e.target.checked)} size="small" />
             </Col>
-            <Col span={3} offset={1}>
+            <Col span={2}>
+               Orientación
+            </Col>
+            <Col span={2}>
+              <Select value={fieldset.orientation ? fieldset.orientation : "vertical"} onChange={(value) => handlerChangeAttr('orientation', value)} size="small">
+                  <Select.Option value="vertical">Vertical</Select.Option>
+                  <Select.Option value="horizontal">Horizontal</Select.Option>
+              </Select>
+            </Col>
+            <Col span={3}>
               <Tooltip title="Seleccione el número de columna en las cuales desea ordenar los datos a solicitar">
                 <Icon size="small" type="info-circle"/>
               </Tooltip> Nro de Columnas
@@ -200,15 +212,6 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
                   <Select.Option value={4}>4</Select.Option>
               </Select>
             </Col>
-            <Col span={2}>
-               Orientación
-            </Col>
-            <Col span={2}>
-              <Select value={fieldset.orientation ? fieldset.orientation : "vertical"} onChange={(value) => handlerChangeAttr('orientation', value)} size="small">
-                  <Select.Option value="vertical">Vertical</Select.Option>
-                  <Select.Option value="horizontal">Horizontal</Select.Option>
-              </Select>
-            </Col>
             { (section.type === 'CONTACTPERSON') ?
               <>
               <Col span={3} offset={1}>Datos seleccionados</Col>
@@ -216,7 +219,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
               </>
               :
               <>
-              <Col span={3}>
+              <Col span={3} offset={1}>
                 Agregar datos del Catálogo
               </Col>
               <Col span={1}>
