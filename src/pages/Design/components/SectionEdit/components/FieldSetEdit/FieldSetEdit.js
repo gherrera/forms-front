@@ -17,26 +17,26 @@ import { useTranslation } from "react-i18next";
 import { Datasources, Validation } from "../";
 import Catalogos from "../Catalogos/Catalogos";
 
+const DragHandle = SortableHandle(() => <Col span={1} className="drag-area"><Icon type="drag"/></Col>);
+
+const SortableItem = SortableElement(({value}) => <Row className="rows-section">{value}<DragHandle /></Row>);
+
+const SortableList = SortableContainer(({items}) => {
+  return (
+    <div className="fields-body">
+      {items.map((value, index) => (
+        <SortableItem index={index} value={value} />
+      ))}
+    </div>
+  );
+});
+
 const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSection }) => {
 	const { t } = useTranslation()
   const [ isVisibleModalDS, setIsVisibleModalDS ] = useState(false)
   const [ isVisibleModalValidations, setIsVisibleModalValidations ] = useState(false)
   const [ indexField, setIndexField ] = useState(-1)
   const [ showCatalogo, setShowCatalogo ] = useState(false)
-
-  const DragHandle = SortableHandle(() => <Col span={1} className="drag-area"><Icon type="drag"/></Col>);
-
-  const SortableItem = SortableElement(({value}) => <Row className="rows-section">{value}<DragHandle /></Row>);
-
-  const SortableList = SortableContainer(({items}) => {
-    return (
-      <div className="fields-body">
-        {items.map((value, index) => (
-          <SortableItem key={`item-${value}`} index={index} value={value} />
-        ))}
-      </div>
-    );
-  });
 
   useEffect(() => {
 
@@ -291,7 +291,9 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
                 { component.type === 'PARAGRAPH' && 
                   <Col span={1}>&lt;{index+1}&gt;</Col>
                 }
-                <Col span={component.type === 'PARAGRAPH' ? 8 : 9}><Input value={field.title} placeholder="Ingrese nombre del dato" size="small" onChange={(e) => handleChangeAttribute(index, 'title', e.target.value)}/></Col>
+                <Col span={component.type === 'PARAGRAPH' ? 8 : 9}>
+                  <Input shouldCancelStart value={field.title} placeholder="Ingrese nombre del dato" size="small" onChange={(e) => handleChangeAttribute(index, 'title', e.target.value)}/>
+                </Col>
                 <Col span={4}>
                   <Select value={field.typeField} onChange={(value) => handleChangeAttribute(index, 'typeField', value)} size="small">
                     <Select.Option value="INPUT">

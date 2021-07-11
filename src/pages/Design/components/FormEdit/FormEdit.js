@@ -20,6 +20,20 @@ import { SortableContainer, SortableElement, SortableHandle } from 'react-sortab
 import { useTranslation } from "react-i18next";
 import { getFormByIdPromise, saveFormPromise, generateFormPromise } from "./promises";
 
+const DragHandle = SortableHandle(() => <Col span={1} className="drag-area"><Icon type="drag"/></Col>);
+
+const SortableItem = SortableElement(({value}) => <Row className="rows-section">{value}<DragHandle /></Row>);
+
+const SortableList = SortableContainer(({items}) => {
+  return (
+    <div className="fields-body">
+      {items.map((value, index) => (
+        <SortableItem key={`item-${value}`} index={index} value={value} />
+      ))}
+    </div>
+  );
+});
+
 const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
 	const { t } = useTranslation()
   const [form, setForm] = useState(null)
@@ -32,20 +46,6 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
 		loadFormdById(formId)
     loadFormDatasource(formId)
 	}, [])
-
-  const DragHandle = SortableHandle(() => <Col span={1} className="drag-area"><Icon type="drag"/></Col>);
-
-  const SortableItem = SortableElement(({value}) => <Row className="rows-section">{value}<DragHandle /></Row>);
-
-  const SortableList = SortableContainer(({items}) => {
-    return (
-      <div className="fields-body">
-        {items.map((value, index) => (
-          <SortableItem key={`item-${value}`} index={index} value={value} />
-        ))}
-      </div>
-    );
-  });
 
   const loadFormdById = (formId) => {
     setForm(null)
