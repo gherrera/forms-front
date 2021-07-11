@@ -95,6 +95,9 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
 
     if(attr === 'typeField') {
       fields[index].validation = null
+      if(value === 'CHECKBOX') {
+        fields[index].required = false
+      }
     }
     let comp = getComponentsUpdated(fields)    
     let _s = { ...section, components:  comp}
@@ -162,7 +165,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
       fs.push(f)
     })
     fields.map(f => {
-      fs.push({id: getRandomId(), title: f.title, type: 'FIELD', typeField: f.type, required: f.required, tableVisible: true, key: 'field'+(fs.length+1), source: f.source, validation: f.validation})
+      fs.push({id: getRandomId(), title: f.title, type: 'FIELD', typeField: f.type, required: f.type !== 'CHECKBOX' && f.required, tableVisible: true, key: 'field'+(fs.length+1), source: f.source, validation: f.validation})
     })
 
     let comp = getComponentsUpdated(fs)    
@@ -189,12 +192,21 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
                 <Icon size="small" type="info-circle"/>
               </Tooltip> Nro de Columnas
             </Col>
-            <Col span={2}>
+            <Col span={1}>
               <Select value={fieldset.cols} onChange={(value) => handlerChangeAttr('cols', value)} size="small">
                   <Select.Option value={1}>1</Select.Option>
                   <Select.Option value={2}>2</Select.Option>
                   <Select.Option value={3}>3</Select.Option>
                   <Select.Option value={4}>4</Select.Option>
+              </Select>
+            </Col>
+            <Col span={2}>
+               Orientación
+            </Col>
+            <Col span={2}>
+              <Select value={fieldset.orientation ? fieldset.orientation : "vertical"} onChange={(value) => handlerChangeAttr('orientation', value)} size="small">
+                  <Select.Option value="vertical">Vertical</Select.Option>
+                  <Select.Option value="horizontal">Horizontal</Select.Option>
               </Select>
             </Col>
             { (section.type === 'CONTACTPERSON') ?
@@ -207,8 +219,8 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
               <Col span={3}>
                 Agregar datos del Catálogo
               </Col>
-              <Col>
-                <Checkbox checked={showCatalogo} onChange={(e) => setShowCatalogo(e.target.checked)}/>
+              <Col span={1}>
+                <Button size="small" icon="unordered-list" onClick={(e) => setShowCatalogo(true)}/>
               </Col>
               </>
             }
@@ -265,7 +277,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
                 </Select>
               </Col>
               <Col span={component.type === 'PARAGRAPH' ? 6 : 3} className="center">
-                  <Checkbox checked={field.required === true} onChange={(e) => handleChangeAttribute(index, 'required', e.target.checked)} size="small"/>
+                  <Checkbox checked={field.required === true} disabled={field.typeField === 'CHECKBOX'} onChange={(e) => handleChangeAttribute(index, 'required', e.target.checked)} size="small"/>
               </Col>
               { (component.type === 'TABLE' || component.type === 'DECL') &&
                 <Col span={3} className="center">

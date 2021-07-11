@@ -2,8 +2,7 @@ import "./Section.scss";
 import React, { useEffect, useState } from "react";
 import {
   Row,
-  Input,
-  Form
+  Input
 } from "antd";
 import { Paragraph, FieldSet, Table } from '../'
 import { saveSectionValuesPromise } from "../../promises";
@@ -12,9 +11,8 @@ import { useTranslation } from "react-i18next";
 
 const { TextArea } = Input;
 
-const Section = ({ form, decl, section, mode, refreshForm, showErrors }) => {
+const Section = ({ decl, section, mode, refreshForm, showErrors }) => {
   const { t } = useTranslation()
-  const { getFieldDecorator, getFieldsError } = form;
   const [ sSection, setSSection ] = useState(section)
 
   const refreshSection = (s, updateValues=true) => {
@@ -73,8 +71,7 @@ const Section = ({ form, decl, section, mode, refreshForm, showErrors }) => {
                     <FieldSet section={sSection} parent={sSection} component={component} mode={mode} 
                       showErrors={showErrors}
                       handleChangeValues={handleChangeValues} 
-                      getFieldDecorator={getFieldDecorator} 
-                      getFieldsError={getFieldsError}
+                      validateForm={showErrors}
                     />
                 }
                 { (component.type === 'TABLE' || component.type === 'DECL') &&
@@ -92,4 +89,4 @@ const Section = ({ form, decl, section, mode, refreshForm, showErrors }) => {
   )
 }
 
-export default Form.create()(Section);
+export default Section;

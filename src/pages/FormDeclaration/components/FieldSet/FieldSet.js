@@ -8,7 +8,8 @@ import {
   Select,
   Form,
   Radio,
-  Checkbox
+  Checkbox,
+  Icon
 } from "antd";
 
 import { useTranslation } from "react-i18next";
@@ -16,19 +17,24 @@ import moment from "moment";
 import { datasourcesContext } from '../../../../contexts'
 import { validateRutHelper } from "../../helpers";
 
-const FieldSet = ({ section, parent, component, mode, showErrors, handleChangeValues, getFieldDecorator, getFieldsError }) => {
+const FieldSet = ({ form, section, parent, component, mode, showErrors, handleChangeValues, validateForm }) => {
   const { t } = useTranslation()
+  const { getFieldDecorator, validateFields, getFieldsError } = form;
   const [ hasErrors, setHasErrors ] = useState(false)
-  const [ showErrorsFS , setShowErrorsFS ] = useState(showErrors)
   const [ changes, setChanges ] = useState(false)
 	const { datasources } = useContext(datasourcesContext)
+  const formLayout = component.orientation ? component.orientation : "vertical"
 
   useEffect(() => {
     if(parent.id === section.id) {
       let errores = component.fields.filter(f => f.required && (f.value === null || f.value === ''));
       setHasErrors(errores.length > 0)
     }
-  }, [])
+    if(validateForm) {
+      let ids = component.fields.map(f => f.id);
+      validateFields(ids)
+    }
+}, [validateForm])
 
   const handleChangeFieldValue = (field, value) => {
     field.value = value
@@ -82,11 +88,15 @@ const FieldSet = ({ section, parent, component, mode, showErrors, handleChangeVa
   const getValidator = (rule, value, callback, validation) => {
     if(value === null || value === '') callback()
     else {
-      if(validation.type === 'number') {
+      if(validation.type === 'number' || validation.type === 'percent') {
         value = value.replaceAll(',','.')
         let re = new RegExp('^\\s*(\\d+(\\.\\d{0,' + (validation.decimals ? validation.decimals : 0) + '})?)\\s*$')
         if(re.test(value)) {
-          callback()
+          if(validation.type === 'percent' && parseFloat(value) > 100) {
+            callback("Numero no puede ser mayor a 100");
+          }else {
+            callback()
+          }
         }else {
           var ren = new RegExp('^\\s*(\\d+(\\.\\d{0,100})?)\\s*$')
           if(validation.decimals === 0 && ren.test(value)) {
@@ -116,6 +126,14 @@ const FieldSet = ({ section, parent, component, mode, showErrors, handleChangeVa
     }
   }
 
+  const formItemLayout =
+      formLayout === 'horizontal'
+        ? {
+            labelCol: { span: 4 },
+            wrapperCol: { span: 14 },
+          }
+        : null;
+
   return (
     <div className={'fieldset '+section.type}>
       { mode !== 'pdf' && showErrors && hasErrors &&
@@ -134,11 +152,14 @@ const FieldSet = ({ section, parent, component, mode, showErrors, handleChangeVa
       }
       { component.fields &&
         <Row className="fields-fieldset" gutter={12}>
+          <Form layout={formLayout === 'horizontal' ? 'horizontal':null} className={'formLayout-'+formLayout}>
           { component.fields.map(field =>
             <Col span={24/component.cols}>
-              <Form.Item label={field.title}>
+              <Form.Item label={field.title} {...formItemLayout}>
                 { mode === 'pdf' && field.typeField !== 'CHECKBOX' ?
-                  <Input disabled={true} value={field.value}/>
+                  <Input disabled={true} value={field.value} 
+                    suffix={field.validation && field.validation.type === 'percent' ? <Icon type="percentage" />: null}
+                  />
                   :  
                   getFieldDecorator(field.id, {
                     initialValue: field.value !== null && field.value !== undefined && field.value !== '' && field.typeField === 'DATE' ? moment(field.value, 'DD/MM/YYYY') : field.value,
@@ -147,7 +168,7 @@ const FieldSet = ({ section, parent, component, mode, showErrors, handleChangeVa
                       [
                         { required: field.required, message: 'Campo requerido' },
                         ... field.validation && field.validation.type === 'email' ? [{type: "email", message: "Email no es válido"}]: [],
-                        ... field.validation && (field.validation.type === 'number' || field.validation.type === 'rut' || field.validation.type === 'rutEmp' || field.validation.type === 'rutNat') ? [{validator: (rule, value, callback) => getValidator(rule, value, callback, field.validation)}]: [],
+                        ... field.validation && (field.validation.type === 'number' || field.validation.type === 'rut' || field.validation.type === 'rutEmp' || field.validation.type === 'rutNat' || field.validation.type === 'percent') ? [{validator: (rule, value, callback) => getValidator(rule, value, callback, field.validation)}]: [],
                       ]
                   })(
                     field.typeField === 'INPUT' ?
@@ -157,7 +178,9 @@ const FieldSet = ({ section, parent, component, mode, showErrors, handleChangeVa
                         onBlur= {(e)=>handleChangeValues && handleOnBlur(field,true)}
                         readOnly = {field.readOnly !== false}
                         maxLength={field.validation && field.validation.maxLength ? field.validation && field.validation.maxLength : 500}
-                        onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.value)}/>
+                        onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.value)}
+                        suffix={field.validation && field.validation.type === 'percent' ? <Icon type="percentage" />: null}
+                      />
                     : field.typeField === 'SELECT' ?
                       <Select
                         showSearch
@@ -168,7 +191,7 @@ const FieldSet = ({ section, parent, component, mode, showErrors, handleChangeVa
                           { getValuesFromDS(field).map(val =>
                             <Select.Option value={val.value}>{val.value}</Select.Option>
                           )}
-                        </Select>
+                      </Select>
                     : field.typeField === 'RADIO' ?
                       <Radio.Group
                         onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.value)}>
@@ -184,17 +207,19 @@ const FieldSet = ({ section, parent, component, mode, showErrors, handleChangeVa
                     :
                       <DatePicker placeholder="Ingrese la fecha" 
                         format="DD/MM/YYYY"
-                        onChange={(momentObj) => handleChangeValues && handleChangeFieldValue(field, momentObj ? moment(momentObj).format( "DD/MM/YYYY" ) : null ) } />
+                        onChange={(momentObj) => handleChangeValues && handleChangeFieldValue(field, momentObj ? moment(momentObj).format( "DD/MM/YYYY" ) : null ) } 
+                      />
                   )
                 }
               </Form.Item>
             </Col>
             )
           }
+          </Form>
         </Row>
       }
     </div>
   )
 }
 
-export default FieldSet;
+export default Form.create()(FieldSet);

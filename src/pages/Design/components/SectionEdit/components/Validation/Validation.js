@@ -21,10 +21,10 @@ const Validation = ({ field, handleClickSelect, closeModalHandler }) => {
 
     const handleChangeValidation = (type) => {
         setSelectedValue(type)
-        if(type && type.startsWith('rut')) {
+        if(type && (type === 'percent' | type.startsWith('rut'))) {
             setMaxLength(null)
             setDecimals(null)
-        }else if(type !== 'number') {
+        }else if(type !== 'number' && type !== 'percent') {
             setDecimals(null)
         }
     }
@@ -76,18 +76,23 @@ const Validation = ({ field, handleClickSelect, closeModalHandler }) => {
                             <Col span={20}>Número</Col>
                             <Col span={2}><Radio value="number" /></Col>
                         </Row>
+                        <Row className="row-validation">
+                            <Col span={2}><Icon size="small" type="percentage" /></Col>
+                            <Col span={20}>Porcentaje</Col>
+                            <Col span={2}><Radio value="percent" /></Col>
+                        </Row>
                     </Radio.Group>
                 </Form.Item>
             </Row>
             <Row>
                 <Col span={12}>
                     <Form.Item label="Largo máximo">
-                        <InputNumber value={maxLength} min={1} max={500} step={1} onChange={handleChangeMaxLength} disabled={selectedValue && selectedValue.startsWith('rut')}/>
+                        <InputNumber value={maxLength} min={1} max={500} step={1} onChange={handleChangeMaxLength} disabled={selectedValue && (selectedValue === 'percent' || selectedValue.startsWith('rut'))}/>
                     </Form.Item>
                 </Col>
                 <Col span={12}>
                     <Form.Item label="Número de decimales">
-                        <InputNumber min={0} max={5} step={1} disabled={selectedValue !== 'number'} value={decimals} onChange={handleChangeDecimals}/>
+                        <InputNumber min={0} max={5} step={1} disabled={selectedValue !== 'number' && selectedValue !== 'percent'} value={decimals} onChange={handleChangeDecimals}/>
                     </Form.Item>
                 </Col>
             </Row>

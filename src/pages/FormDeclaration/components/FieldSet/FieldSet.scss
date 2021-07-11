@@ -1,10 +1,30 @@
 .fieldset {
 
+    .has-error .ant-form-explain {
+        line-height: 14px;
+        font-size: 14px;
+    }
+
     .ant-form-item {
-        //margin-bottom: 5px;
-  
-        .ant-form-item-label {
-          line-height: 16px;
+        padding-bottom: 0px;
+    }
+    .formLayout-vertical {
+        .ant-form-item {
+            padding-bottom: 0px;
+            .ant-form-item-label {
+                line-height: 16px;
+                padding-bottom: 0px;
+            }
+        }
+    }
+    
+    .formLayout-hortizontal {
+        .ant-form-item {
+            padding-bottom: 0px;
+            .ant-form-item-label {
+                line-height: 16px;
+                padding-bottom: 3px;
+            }
         }
     }
 

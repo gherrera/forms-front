@@ -7,19 +7,18 @@ import {
   Table as TableAntd,
   Descriptions,
   Button,
-  Form,
   notification
 } from "antd";
 
 import { useTranslation } from "react-i18next";
 import { FieldSet } from '..'
 
-const Table = ({ form, section, component, mode, handleChangeValues, showErrors }) => {
+const Table = ({ section, component, mode, handleChangeValues, showErrors }) => {
   const { t } = useTranslation()
-  const { getFieldDecorator, validateFields, getFieldsError, setFieldsValue } = form;
   const [columns, setColumns] = useState([])
   const [fieldsPdf, setFieldsPdf] = useState({})
   const [ error, setError ] = useState(null)
+  const [ validateForm, setValidateForm ] = useState(false)
 
   useEffect(() => {
     let cols = []
@@ -104,7 +103,10 @@ const Table = ({ form, section, component, mode, handleChangeValues, showErrors 
   }
 
   const handleChangeValuesFn = (fieldSet) => {
-    handleChangeValues && refreshSectionKey('fieldSet', fieldSet, false)
+    if(handleChangeValues) {
+      refreshSectionKey('fieldSet', fieldSet, false)
+      setValidateForm(false)
+    }
   }
 
   function hasErrorsFn(fieldsError) {
@@ -120,33 +122,46 @@ const Table = ({ form, section, component, mode, handleChangeValues, showErrors 
   }
 
   const addRecord = () => {
-    let ids = component.fieldSet.fields.map(f => f.id);
-    validateFields(ids).then((error, values) => {
-      let t = { ...component }
-      let records = t.records ? t.records : []
-      let fields = {}
-      component.fieldSet.fields.map((f,index) => {
-        fields[f.key] = f.value
-      })
-      records.push({fields})
-
-      refreshSectionKey('records', records)
-      verifyValidations();
-
-      cleanFields()
-    })
-    if(hasErrorsFn(getFieldsError())) {
+    setValidateForm(true)
+    let emptys = component.fieldSet.fields.filter(f => f.required && (f.value===null || f.value===undefined || f.value===''))
+    if(emptys.length > 0) {
       notification.error({
         message: 'Debe ingresar los campos requeridos'
       })
+    }else {
+      let errors = component.fieldSet.fields.filter(f => f.errors && f.errors.length > 0)
+      if(errors.length > 0) {
+        notification.error({
+          message: 'Hay errores en los datos'
+        })
+      }else {
+        let t = { ...component }
+        let records = t.records ? t.records : []
+        let fields = {}
+        component.fieldSet.fields.map((f,index) => {
+          fields[f.key] = f.value
+        })
+        records.push({fields})
+
+        refreshSectionKey('records', records)
+        verifyValidations();
+
+        cleanFields()
+      }
     }
+    /*
+    let ids = component.fieldSet.fields.map(f => f.id);
+    validateFields(ids).then((error, values) => {
+      
+    })
+    */
   }
 
   const cleanFields = () => {
     let fieldSet = { ...component.fieldSet }
     fieldSet.fields && fieldSet.fields.map(field => {
       field.value = null
-      setFieldsValue({[field.id]: null})
+      //setFieldsValue({[field.id]: null})
     })
     handleChangeValuesFn(fieldSet)
   }
@@ -188,8 +203,7 @@ const Table = ({ form, section, component, mode, handleChangeValues, showErrors 
               mode={mode} 
               showErrors={showErrors}
               handleChangeValues={handleChangeValuesFn} 
-              getFieldDecorator={getFieldDecorator}
-              getFieldsError={getFieldsError}
+              validateForm={validateForm}
             />
             <Row className="btns-table">
               <Button onClick={handleChangeValues && addRecord}>Añadir</Button>
@@ -208,4 +222,4 @@ const Table = ({ form, section, component, mode, handleChangeValues, showErrors 
   )
 }
 
-export default Form.create()(Table);
+export default Table;

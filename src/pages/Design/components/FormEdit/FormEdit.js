@@ -168,7 +168,6 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
   }
 
   const handleGenerateForm = async () => {
-    debugger
     let fId = await generateFormPromise(formId)
     window.open("forms/"+fId)
   }
