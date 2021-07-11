@@ -30,6 +30,9 @@
     }
 
     .rows-section {
+      .drag-area {
+        cursor: move;
+      }
 
       .ant-select {
         width: 100%;

@@ -12,7 +12,7 @@ import {
   Icon,
   Drawer
 } from "antd";
-
+import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import { useTranslation } from "react-i18next";
 import { Datasources, Validation } from "../";
 import Catalogos from "../Catalogos/Catalogos";
@@ -23,6 +23,20 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
   const [ isVisibleModalValidations, setIsVisibleModalValidations ] = useState(false)
   const [ indexField, setIndexField ] = useState(-1)
   const [ showCatalogo, setShowCatalogo ] = useState(false)
+
+  const DragHandle = SortableHandle(() => <Col span={1} className="drag-area"><Icon type="drag"/></Col>);
+
+  const SortableItem = SortableElement(({value}) => <Row className="rows-section">{value}<DragHandle /></Row>);
+
+  const SortableList = SortableContainer(({items}) => {
+    return (
+      <div className="fields-body">
+        {items.map((value, index) => (
+          <SortableItem key={`item-${value}`} index={index} value={value} />
+        ))}
+      </div>
+    );
+  });
 
   useEffect(() => {
 
@@ -182,6 +196,19 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
     onCloseCatalogo()
   }
 
+  const onSortEnd = ({oldIndex, newIndex}) => {
+    let fs = { ...fieldset }
+    let fields = fs.fields
+
+    let newItem = fields[newIndex]
+    fields[newIndex] = fields[oldIndex]
+    fields[oldIndex] = newItem
+
+    let comp = getComponentsUpdated(fields) 
+    let _s = { ...section, components:  comp}
+    refreshSection(_s)
+  }
+
   return (
     <div className="fieldset-edit">
       <div className="comp-fieldSet-edit">
@@ -249,66 +276,73 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, refreshSec
             <Col span={4}>Tipo</Col>
             <Col span={component.type === 'PARAGRAPH' ? 6 : 3} className="center">Requerido</Col>
             { (component.type === 'TABLE' || component.type === 'DECL') && <Col span={3} className="center">Tabla Visible</Col> }
-            <Col span={4} className="center">Acciones</Col>
+            <Col span={3} className="center">Acciones</Col>
+            <Col span={1} className="center">Orden</Col>
           </Row>
-          { fieldset.fields.map((field, index) =>
-            <Row className="rows-section">
-              <Col span={1}>
-                { section.type !== 'CONTACTPERSON' && index === fieldset.fields.length -1 && 
-                  <Button icon="plus" size="small" onClick={addField}/> 
-                }
-              </Col>
-              { component.type === 'PARAGRAPH' && 
-                <Col span={1}>&lt;{index+1}&gt;</Col>
-              }
-              <Col span={component.type === 'PARAGRAPH' ? 8 : 9}><Input value={field.title} placeholder="Ingrese nombre del dato" size="small" onChange={(e) => handleChangeAttribute(index, 'title', e.target.value)}/></Col>
-              <Col span={4}>
-                <Select value={field.typeField} onChange={(value) => handleChangeAttribute(index, 'typeField', value)} size="small">
-                  <Select.Option value="INPUT">
-                    <Col span={2}><Icon type="edit"/></Col><Col span={21}>&nbsp;&nbsp;Editable</Col>
-                  </Select.Option>
-                  <Select.Option value="DATE">
-                    <Col span={2}><Icon type="calendar"/></Col><Col span={21}>&nbsp;&nbsp;Fecha</Col>
-                  </Select.Option>
-                  <Select.Option value="SELECT">
-                    <Col span={2}><Icon type="unordered-list"/></Col><Col span={21}>&nbsp;&nbsp;Desplegable</Col>
-                  </Select.Option>
-                  <Select.Option value="CHECKBOX">
-                    <Col span={2}><Icon type="check-square"/></Col><Col span={21}>&nbsp;&nbsp;Checkbox</Col>
-                  </Select.Option>
-                  {component.type !== 'PARAGRAPH' &&
-                    <Select.Option value="RADIO">
-                      <Col span={2}><Icon type="ellipsis"/></Col><Col span={21}>&nbsp;&nbsp;Opciones</Col>
-                    </Select.Option>
+          
+          <SortableList useDragHandle items=
+            { fieldset.fields.map((field, index) =>
+              <>
+                <Col span={1}>
+                  { section.type !== 'CONTACTPERSON' && index === fieldset.fields.length -1 && 
+                    <Button icon="plus" size="small" onClick={addField}/> 
                   }
-                </Select>
-              </Col>
-              <Col span={component.type === 'PARAGRAPH' ? 6 : 3} className="center">
-                  <Checkbox checked={field.required === true} disabled={field.typeField === 'CHECKBOX'} onChange={(e) => handleChangeAttribute(index, 'required', e.target.checked)} size="small"/>
-              </Col>
-              { (component.type === 'TABLE' || component.type === 'DECL') &&
-                <Col span={3} className="center">
-                    <Checkbox checked={field.tableVisible === true} onChange={(e) => handleChangeAttribute(index, 'tableVisible', e.target.checked)} size="small"/>
                 </Col>
-              }
-              <Col span={4} className="tools-fieldset">
-                { (field.typeField === 'SELECT' || field.typeField === 'RADIO') ?
-                  <Tooltip title="Fuente de Datos">
-                    <Button icon="unordered-list" size="small" onClick={() => showDataSource(index)}/>
-                  </Tooltip>
-                  : field.typeField === 'INPUT' ?
-                  <Tooltip title={ getValidationTitle(field.validation)}>
-                    <Button icon="check" size="small" onClick={() => showValidations(index)}/>
-                  </Tooltip>
-                  :
-                  <></>
+                { component.type === 'PARAGRAPH' && 
+                  <Col span={1}>&lt;{index+1}&gt;</Col>
                 }
-                <Tooltip title="Eliminar">
-                    <Button icon="delete" size="small" disabled={fieldset.fields.length === 1} onClick={() => deleteField(index)}/>
-                </Tooltip>
-              </Col>
-            </Row>
-          )}
+                <Col span={component.type === 'PARAGRAPH' ? 8 : 9}><Input value={field.title} placeholder="Ingrese nombre del dato" size="small" onChange={(e) => handleChangeAttribute(index, 'title', e.target.value)}/></Col>
+                <Col span={4}>
+                  <Select value={field.typeField} onChange={(value) => handleChangeAttribute(index, 'typeField', value)} size="small">
+                    <Select.Option value="INPUT">
+                      <Col span={2}><Icon type="edit"/></Col><Col span={21}>&nbsp;&nbsp;Editable</Col>
+                    </Select.Option>
+                    <Select.Option value="DATE">
+                      <Col span={2}><Icon type="calendar"/></Col><Col span={21}>&nbsp;&nbsp;Fecha</Col>
+                    </Select.Option>
+                    <Select.Option value="SELECT">
+                      <Col span={2}><Icon type="unordered-list"/></Col><Col span={21}>&nbsp;&nbsp;Desplegable</Col>
+                    </Select.Option>
+                    <Select.Option value="CHECKBOX">
+                      <Col span={2}><Icon type="check-square"/></Col><Col span={21}>&nbsp;&nbsp;Checkbox</Col>
+                    </Select.Option>
+                    {component.type !== 'PARAGRAPH' &&
+                      <Select.Option value="RADIO">
+                        <Col span={2}><Icon type="ellipsis"/></Col><Col span={21}>&nbsp;&nbsp;Opciones</Col>
+                      </Select.Option>
+                    }
+                  </Select>
+                </Col>
+                <Col span={component.type === 'PARAGRAPH' ? 6 : 3} className="center">
+                    <Checkbox checked={field.required === true} disabled={field.typeField === 'CHECKBOX'} onChange={(e) => handleChangeAttribute(index, 'required', e.target.checked)} size="small"/>
+                </Col>
+                { (component.type === 'TABLE' || component.type === 'DECL') &&
+                  <Col span={3} className="center">
+                      <Checkbox checked={field.tableVisible === true} onChange={(e) => handleChangeAttribute(index, 'tableVisible', e.target.checked)} size="small"/>
+                  </Col>
+                }
+                <Col span={3} className="center">
+                  <div className="tools-fieldset">
+                  { (field.typeField === 'SELECT' || field.typeField === 'RADIO') ?
+                    <Tooltip title="Fuente de Datos">
+                      <Button icon="unordered-list" size="small" onClick={() => showDataSource(index)}/>
+                    </Tooltip>
+                    : field.typeField === 'INPUT' ?
+                    <Tooltip title={ getValidationTitle(field.validation)}>
+                      <Button icon="check" size="small" onClick={() => showValidations(index)}/>
+                    </Tooltip>
+                    :
+                    <></>
+                  }
+                  <Tooltip title="Eliminar">
+                      <Button icon="delete" size="small" disabled={fieldset.fields.length === 1} onClick={() => deleteField(index)}/>
+                  </Tooltip>
+                  </div>
+                </Col>
+              </>
+            )}
+            onSortEnd={onSortEnd}
+          />
           </>
         }
       </div>

@@ -10,10 +10,12 @@ import {
   Input,
   Spin,
   Popconfirm,
-  Tooltip
+  Tooltip,
+  Icon
 } from "antd";
 import { SectionEdit, Preview } from '../'
 import { datasourcesContext } from '../../../../contexts'
+import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 
 import { useTranslation } from "react-i18next";
 import { getFormByIdPromise, saveFormPromise, generateFormPromise } from "./promises";
@@ -30,6 +32,20 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
 		loadFormdById(formId)
     loadFormDatasource(formId)
 	}, [])
+
+  const DragHandle = SortableHandle(() => <Col span={1} className="drag-area"><Icon type="drag"/></Col>);
+
+  const SortableItem = SortableElement(({value}) => <Row className="rows-section">{value}<DragHandle /></Row>);
+
+  const SortableList = SortableContainer(({items}) => {
+    return (
+      <div className="fields-body">
+        {items.map((value, index) => (
+          <SortableItem key={`item-${value}`} index={index} value={value} />
+        ))}
+      </div>
+    );
+  });
 
   const loadFormdById = (formId) => {
     setForm(null)
@@ -180,6 +196,14 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     saveForm(sec)
   }
 
+  const onSortEnd = ({oldIndex, newIndex}) => {
+    let sec = sections
+    let tmp = sec[newIndex]
+    sec[newIndex] = sec[oldIndex]
+    sec[oldIndex] = tmp
+    saveForm(sec)
+  }
+
   return (
     <div className="form-edit">
       { form === null ? <Spin/>
@@ -201,50 +225,48 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
                 <Col span={6}>Tipo de Sección</Col>
                 <Col span={3} className="center">Activar</Col>
                 <Col span={3} className="center">Prellenado</Col>
-                <Col span={3}>Edición</Col>
+                <Col span={2}>Edición</Col>
+                <Col span={1}>Orden</Col>
               </Row>
 
-              { sections.map((section, index) =>
-                <Row className="rows-section">
-                  <Col span={1}>
-                    { index === sections.length -1 && 
-                      <Tooltip title="Nueva Sección">
-                        <Button icon="plus" size="small" onClick={addSection}/>
+              <SortableList useDragHandle items=
+                { sections.map((section, index) =>
+                  <>
+                    <Col span={1}>
+                      { index === sections.length -1 && 
+                        <Tooltip title="Nueva Sección">
+                          <Button icon="plus" size="small" onClick={addSection}/>
+                        </Tooltip>
+                      }
+                    </Col>
+                    <Col span={8}><Input value={section.title} placeholder="Titulo de la sección" onChange={(e) => handleChangeTitle(index, e.target.value)} onBlur={handleBlurTitle}/></Col>
+                    <Col span={6}>
+                      <Select value={section.type} onChange={(value) => changeTypeSection(index, value)} disabled={section.type !== null}>
+                        <Select.Option value="INTRO">Párrafo con Datos</Select.Option>
+                        <Select.Option value="CONTACTPERSON">Datos Personales Persona</Select.Option>
+                        <Select.Option value="CONTACTENTIY">Datos Personales Empresa</Select.Option>
+                        <Select.Option value="DATA">Datos Personalizados</Select.Option>
+                        <Select.Option value="DECL">Pregunta Tipo Declaración</Select.Option>
+                        <Select.Option value="TABLE">Tipo Tabla</Select.Option>
+                        <Select.Option value="TEXT">Párrafo</Select.Option>
+                        <Select.Option value="COMMENTS">Comentarios</Select.Option>
+                        <Select.Option value="CUSTOM">Seccion Personalizada</Select.Option>
+                      </Select>
+                    </Col>
+                    <Col span={3} className="center"><Checkbox checked={section.status === 'ACTIVE'} onChange={(e) => changeActiveSection(index, e.target.checked)}/></Col>
+                    <Col span={3} className="center"><Checkbox checked={section.prefilled === true} onChange={(e) => changePrefillSection(index, e.target.checked)}/></Col>
+                    <Col span={2} className="tools">
+                      <Tooltip title="Modificar">
+                        <Button icon="edit" size="small" disabled={section.type === null || section.type === undefined} onClick={(e) => editSection(section)}/>
                       </Tooltip>
-                    }
-                  </Col>
-                  <Col span={8}><Input value={section.title} placeholder="Titulo de la sección" onChange={(e) => handleChangeTitle(index, e.target.value)} onBlur={handleBlurTitle}/></Col>
-                  <Col span={6}>
-                    <Select value={section.type} onChange={(value) => changeTypeSection(index, value)} disabled={section.type !== null}>
-                      <Select.Option value="INTRO">Párrafo con Datos</Select.Option>
-                      <Select.Option value="CONTACTPERSON">Datos Personales Persona</Select.Option>
-                      <Select.Option value="CONTACTENTIY">Datos Personales Empresa</Select.Option>
-                      <Select.Option value="DATA">Datos Personalizados</Select.Option>
-                      <Select.Option value="DECL">Pregunta Tipo Declaración</Select.Option>
-                      <Select.Option value="TABLE">Tipo Tabla</Select.Option>
-                      <Select.Option value="TEXT">Párrafo</Select.Option>
-                      <Select.Option value="COMMENTS">Comentarios</Select.Option>
-                      <Select.Option value="CUSTOM">Seccion Personalizada</Select.Option>
-                    </Select>
-                  </Col>
-                  <Col span={3} className="center"><Checkbox checked={section.status === 'ACTIVE'} onChange={(e) => changeActiveSection(index, e.target.checked)}/></Col>
-                  <Col span={3} className="center"><Checkbox checked={section.prefilled === true} onChange={(e) => changePrefillSection(index, e.target.checked)}/></Col>
-                  <Col span={3} className="tools">
-                    <Tooltip title="Modificar">
-                      <Button icon="edit" size="small" disabled={section.type === null || section.type === undefined} onClick={(e) => editSection(section)}/>
-                    </Tooltip>
-                    <Popconfirm title="Confirma eliminar la Sección?" onConfirm={(e) => deleteSection(index)}>
-                      <Button icon="delete" size="small" />
-                    </Popconfirm>
-                    <Tooltip title="Mover hacia abajo">
-                      <Button icon="arrow-down" size="small" disabled={index === sections.length-1} onClick={() => handleMoveSection(index, index+1)} />
-                    </Tooltip>
-                    <Tooltip title="Mover hacia arriba">
-                      <Button icon="arrow-up" size="small" disabled={index === 0} onClick={() => handleMoveSection(index, index-1)} />
-                    </Tooltip>
-                  </Col>
-                </Row>
-              )}
+                      <Popconfirm title="Confirma eliminar la Sección?" onConfirm={(e) => deleteSection(index)}>
+                        <Button icon="delete" size="small" />
+                      </Popconfirm>
+                    </Col>
+                  </>
+                )}
+                onSortEnd={onSortEnd}
+              />
             </>
             :
             <>
