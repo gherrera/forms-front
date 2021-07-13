@@ -9,23 +9,15 @@ import { FieldSetEdit } from '../'
 
 const { TextArea } = Input;
 
-const ParagraphEdit = ({ section, component, index, fieldset, refreshSection }) => {
+const ParagraphEdit = ({ section, component, fieldset, handleChangeValuesSection }) => {
   const { t } = useTranslation()
 
   useEffect(() => {
   }, [])
 
   const handleChangeText = (value) => {
-    let comp = []
-    section.components.map((component, i) => {
-      if(i === index) {
-        comp.push({ ...component, text: value })
-      }else {
-        comp.push(component)
-      }
-    })
-    let _s = { ...section, components: comp }
-    refreshSection(_s)
+    component.text = value
+    handleChangeValuesSection(section)
   }
 
   return (
@@ -34,7 +26,7 @@ const ParagraphEdit = ({ section, component, index, fieldset, refreshSection }) 
         { fieldset && 
           <>
             <h3>Agregar datos opcionales (Deben ser incluidos con el número del campo entre &lt;&gt;, Ej. &lt;1&gt; )</h3>
-            <FieldSetEdit hasHeader={false} section={section} component={component} fieldset={fieldset} refreshSection={refreshSection} />
+            <FieldSetEdit hasHeader={false} section={section} component={component} fieldset={fieldset} />
           </>
         }
     </div>

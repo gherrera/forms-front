@@ -13,24 +13,15 @@ import { FieldSetEdit } from '..'
 
 const { TextArea } = Input;
 
-const Table = ({ section, component, index, fieldset, refreshSection }) => {
+const Table = ({ section, component, fieldset, handleChangeValuesSection }) => {
 	const { t } = useTranslation()
 
   useEffect(() => {
   }, [])
 
   const handleChangeText = (value) => {
-    let _s = { ...section }
-    let comp = []
-    _s.components.map((c, i) => {
-      if(i === index) {
-        comp.push({ ...c, text: value })
-      }else {
-        comp.push(c)
-      }
-    })
-    _s.components = comp
-    refreshSection(_s)
+    component.text = value
+    handleChangeValuesSection(section)
   }
 
   return (
@@ -65,7 +56,7 @@ const Table = ({ section, component, index, fieldset, refreshSection }) => {
         </Col>
       </Row>
     }
-    { fieldset && <FieldSetEdit section={section} component={component} fieldset={fieldset} refreshSection={refreshSection} /> }
+    { fieldset && <FieldSetEdit section={section} component={component} fieldset={fieldset} handleChangeValuesSection={handleChangeValuesSection} /> }
     </div>
   )
 }

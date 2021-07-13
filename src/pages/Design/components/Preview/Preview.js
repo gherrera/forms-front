@@ -15,7 +15,7 @@ const Preview = ({ form, section }) => {
   const [ json, setJson ] = useState({})
   const [ formPreview, setFormPreview ] = useState(null)
 
-  useEffect(() => {
+  useEffect(() => {    
     if(form) {
       let f = { ...form, sections: form.sections.filter(s => s.status === 'ACTIVE')}
       setFormPreview(f)

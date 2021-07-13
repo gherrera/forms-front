@@ -15,23 +15,19 @@ import {
 } from "antd";
 import { SectionEdit, Preview } from '../'
 import { datasourcesContext } from '../../../../contexts'
-import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import { useTranslation } from "react-i18next";
 import { getFormByIdPromise, saveFormPromise, generateFormPromise } from "./promises";
 
-const DragHandle = SortableHandle(() => <Col span={1} className="drag-area"><Icon type="drag"/></Col>);
 
-const SortableItem = SortableElement(({value}) => <Row className="rows-section">{value}<DragHandle /></Row>);
+const getItemStyle = (isDragging, draggableStyle) => ({
+  // some basic styles to make the items look a bit nicer
+  userSelect: "none",
+  cursor: 'auto',
 
-const SortableList = SortableContainer(({items}) => {
-  return (
-    <div className="fields-body">
-      {items.map((value, index) => (
-        <SortableItem key={`item-${value}`} index={index} value={value} />
-      ))}
-    </div>
-  );
+  // styles we need to apply on draggables
+  ...draggableStyle
 });
 
 const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
@@ -188,15 +184,14 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     window.open("forms/"+fId)
   }
 
-  const handleMoveSection = (index, moveTo) => {
-    let sec = sections
-    let tmp = sec[moveTo]
-    sec[moveTo] = sec[index]
-    sec[index] = tmp
-    saveForm(sec)
-  }
+  const onDragEnd = (result) => {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
 
-  const onSortEnd = ({oldIndex, newIndex}) => {
+    const newIndex = result.source.index
+    const oldIndex = result.destination.index
     let sec = sections
     let tmp = sec[newIndex]
     sec[newIndex] = sec[oldIndex]
@@ -229,44 +224,67 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
                 <Col span={1}>Orden</Col>
               </Row>
 
-              <SortableList useDragHandle items=
-                { sections.map((section, index) =>
-                  <>
-                    <Col span={1}>
-                      { index === sections.length -1 && 
-                        <Tooltip title="Nueva Sección">
-                          <Button icon="plus" size="small" onClick={addSection}/>
-                        </Tooltip>
-                      }
-                    </Col>
-                    <Col span={8}><Input value={section.title} placeholder="Titulo de la sección" onChange={(e) => handleChangeTitle(index, e.target.value)} onBlur={handleBlurTitle}/></Col>
-                    <Col span={6}>
-                      <Select value={section.type} onChange={(value) => changeTypeSection(index, value)} disabled={section.type !== null}>
-                        <Select.Option value="INTRO">Párrafo con Datos</Select.Option>
-                        <Select.Option value="CONTACTPERSON">Datos Personales Persona</Select.Option>
-                        <Select.Option value="CONTACTENTIY">Datos Personales Empresa</Select.Option>
-                        <Select.Option value="DATA">Datos Personalizados</Select.Option>
-                        <Select.Option value="DECL">Pregunta Tipo Declaración</Select.Option>
-                        <Select.Option value="TABLE">Tipo Tabla</Select.Option>
-                        <Select.Option value="TEXT">Párrafo</Select.Option>
-                        <Select.Option value="COMMENTS">Comentarios</Select.Option>
-                        <Select.Option value="CUSTOM">Seccion Personalizada</Select.Option>
-                      </Select>
-                    </Col>
-                    <Col span={3} className="center"><Checkbox checked={section.status === 'ACTIVE'} onChange={(e) => changeActiveSection(index, e.target.checked)}/></Col>
-                    <Col span={3} className="center"><Checkbox checked={section.prefilled === true} onChange={(e) => changePrefillSection(index, e.target.checked)}/></Col>
-                    <Col span={2} className="tools">
-                      <Tooltip title="Modificar">
-                        <Button icon="edit" size="small" disabled={section.type === null || section.type === undefined} onClick={(e) => editSection(section)}/>
-                      </Tooltip>
-                      <Popconfirm title="Confirma eliminar la Sección?" onConfirm={(e) => deleteSection(index)}>
-                        <Button icon="delete" size="small" />
-                      </Popconfirm>
-                    </Col>
-                  </>
-                )}
-                onSortEnd={onSortEnd}
-              />
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable">
+                  {(provided, snapshot) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      { sections.map((section, index) =>
+                        <Draggable key={section.id} draggableId={section.id} index={index}>
+                          {(provided, snapshot) =>
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={getItemStyle(
+                                snapshot.isDragging,
+                                provided.draggableProps.style
+                              )}
+                            >
+                              <Row className="rows-section">
+                                <Col span={1}>
+                                  { index === sections.length -1 && 
+                                    <Tooltip title="Nueva Sección">
+                                      <Button icon="plus" size="small" onClick={addSection}/>
+                                    </Tooltip>
+                                  }
+                                </Col>
+                                <Col span={8}><Input value={section.title} placeholder="Titulo de la sección" onChange={(e) => handleChangeTitle(index, e.target.value)} onBlur={handleBlurTitle}/></Col>
+                                <Col span={6}>
+                                  <Select value={section.type} onChange={(value) => changeTypeSection(index, value)} disabled={section.type !== null}>
+                                    <Select.Option value="INTRO">Párrafo con Datos</Select.Option>
+                                    <Select.Option value="CONTACTPERSON">Datos Personales Persona</Select.Option>
+                                    <Select.Option value="CONTACTENTIY">Datos Personales Empresa</Select.Option>
+                                    <Select.Option value="DATA">Datos Personalizados</Select.Option>
+                                    <Select.Option value="DECL">Pregunta Tipo Declaración</Select.Option>
+                                    <Select.Option value="TABLE">Tipo Tabla</Select.Option>
+                                    <Select.Option value="TEXT">Párrafo</Select.Option>
+                                    <Select.Option value="COMMENTS">Comentarios</Select.Option>
+                                    <Select.Option value="CUSTOM">Seccion Personalizada</Select.Option>
+                                  </Select>
+                                </Col>
+                                <Col span={3} className="center"><Checkbox checked={section.status === 'ACTIVE'} onChange={(e) => changeActiveSection(index, e.target.checked)}/></Col>
+                                <Col span={3} className="center"><Checkbox checked={section.prefilled === true} onChange={(e) => changePrefillSection(index, e.target.checked)}/></Col>
+                                <Col span={2} className="tools">
+                                  <Tooltip title="Modificar">
+                                    <Button icon="edit" size="small" disabled={section.type === null || section.type === undefined} onClick={(e) => editSection(section)}/>
+                                  </Tooltip>
+                                  <Popconfirm title="Confirma eliminar la Sección?" onConfirm={(e) => deleteSection(index)}>
+                                    <Button icon="delete" size="small" />
+                                  </Popconfirm>
+                                </Col>
+                                <Col span={1} className="drag-area"><Icon type="drag"/></Col>
+                              </Row>
+                            </div>
+                          }
+                        </Draggable>
+                      )}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </>
             :
             <>

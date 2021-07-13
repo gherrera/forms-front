@@ -5,6 +5,7 @@ import CatalogosComponent from './Catalogos/Catalogos'
 import ParagraphEditComponent from './ParagraphEdit/ParagraphEdit'
 import DatasourcesComponent from './Datasources/Datasources'
 import ValidationComponent from './Validation/Validation'
+import SubsectionEditComponent from './SubsectionEdit/SubsectionEdit'
 
 export const FieldSetEdit = FieldSetEditComponent
 export const TableEdit = TableEditComponent
@@ -13,3 +14,4 @@ export const Catalogos = CatalogosComponent
 export const ParagraphEdit = ParagraphEditComponent
 export const Datasources = DatasourcesComponent
 export const Validation = ValidationComponent
+export const SubsectionEdit = SubsectionEditComponent

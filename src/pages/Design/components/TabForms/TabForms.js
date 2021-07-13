@@ -15,6 +15,7 @@ import {
   Popconfirm
 } from "antd";
 import { FormEdit } from '../'
+import { camelizerHelper } from "../../../../helpers";
 
 import { useTranslation } from "react-i18next";
 import moment from "moment";
@@ -143,23 +144,23 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
             <Button icon="plus" type="primary" onClick={handleOpenNewForm}>Nuevo Formulario</Button>
           </Row>
           <Row className="titles-section">
-            <Col span={4}>Categoria</Col>
-            <Col span={5}>Nombre</Col>
+            <Col span={3}>Categoria</Col>
+            <Col span={7}>Nombre</Col>
             <Col span={3}>Creado por</Col>
             <Col span={3}>Fecha de Creación</Col>
             <Col span={3}>Ultima modificacion</Col>
-            <Col span={3}>Activo</Col>
+            <Col span={2}>Activo</Col>
             <Col span={3}>Edición</Col>
           </Row>
 
           { forms.map((form, index) =>
             <Row className="rows-section">
-              <Col span={4}>{form.category}</Col>
-              <Col span={5}><Input size="small" value={form.name} onChange={(e) => changeNameForm(index, e.target.value)}/></Col>
+              <Col span={3}>{camelizerHelper(form.category)}</Col>
+              <Col span={7}><Input size="small" value={form.name} onChange={(e) => changeNameForm(index, e.target.value)}/></Col>
               <Col span={3}>{form.userCreate}</Col>
               <Col span={3}>{moment(form.creationDate).format('DD/MM/YYYY HH:mm')}</Col>
               <Col span={3}>{form.updateDate && moment(form.updateDate).format('DD/MM/YYYY HH:mm')}</Col>
-              <Col span={3}>
+              <Col span={2}>
                 <Checkbox checked={form.status === 'ACTIVE'} onChange={(e) => changeActiveForm(index, e.target.checked)}/>
               </Col>
               <Col span={3} className="tools-rows-forms">

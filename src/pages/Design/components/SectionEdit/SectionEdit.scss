@@ -1,6 +1,7 @@
 .section-edit {
     .row-component-section {
         margin-bottom: 5px;
+        //transition: transform 250ms;
 
         &.row-FIELD {
             border: 1px solid rgba(0,0,0,.1);
@@ -15,6 +16,18 @@
             .tools-section-component-custom {
                 text-align: right;
             }
+        }
+        .row-component-text {
+            padding: 10px;
+        }
+    }
+    .section-type-CUSTOM {
+        .row-component-section:hover {
+            //transform: scale(1.01);
+            background-color: rgba(0,0,240,.03);
+            border: 2px solid rgba(0,0,120,.1);
+            padding: 2px;
+            border-radius: 5px;
         }
     }
     .tools {

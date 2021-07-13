@@ -87,6 +87,10 @@ const Table = ({ section, component, mode, handleChangeValues, showErrors }) => 
     </>
   );
 
+  const getRandomId = () => {
+    return 'R' + Math.floor(Math.random() * 1000000);
+  }
+
   const handleChangeDecision = (value) => {
     handleChangeValues && refreshSectionKey('decision', value)
 
@@ -107,10 +111,6 @@ const Table = ({ section, component, mode, handleChangeValues, showErrors }) => 
       refreshSectionKey('fieldSet', fieldSet, false)
       setValidateForm(false)
     }
-  }
-
-  function hasErrorsFn(fieldsError) {
-    return Object.keys(fieldsError).some((field) => fieldsError[field]);
   }
 
   const removeRecord = (index) => {

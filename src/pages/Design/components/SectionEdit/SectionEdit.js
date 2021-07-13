@@ -9,22 +9,20 @@ import {
   Checkbox,
   notification,
   Icon,
-  Form,
   Input,
   Popconfirm,
   Popover
 } from "antd";
 
 import { useTranslation } from "react-i18next";
-import { TableEdit, FieldSetEdit, Catalogos, ParagraphEdit } from './components'
+import { TableEdit, FieldSetEdit, Catalogos, ParagraphEdit, SubsectionEdit } from './components'
 import { Paragraph, Table, FieldSet } from "../../../FormDeclaration/components";
 import { saveSectionPromise } from "../FormEdit/promises";
 import { Preview } from '../'
 
 const { TextArea } = Input;
 
-const SectionEdit = ({ form, s, refreshThisSection }) => {
-  const { getFieldDecorator, getFieldsError } = form;
+const SectionEdit = ({ s, refreshThisSection }) => {
   const { t } = useTranslation()
   const [section, setSection] = useState(s)
   const [changes, setChanges] = useState(false)
@@ -34,17 +32,22 @@ const SectionEdit = ({ form, s, refreshThisSection }) => {
   }, [])
 
   const getComponentByType = (type, add) => {
-    if(type === "PARAGRAPH") return { id: getRandomId(), type: 'PARAGRAPH', text: add ? null:'Aqui va el texto de ejemplo', fieldSet: { id: getRandomId(), type: 'FIELDSET', hasTitle: false, fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: false}]} }
+    if(type === "PARAGRAPH") return { id: getRandomId(), type, text: add ? null:'Aqui va el texto de ejemplo', fieldSet: { id: getRandomId(), type: 'FIELDSET', hasTitle: false, fields: [{id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: false}]} }
     else if(type === "FIELDSET")  {
-      if(add) return {id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los datos', fields: [{ id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: '', required: true}]}
-      else return {id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los datos', fields: [{ id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true}, {id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Dato2', required: true}]}
+      if(add) return {id: getRandomId(), type, cols: 2, hasTitle: true, title: 'Titulo de los datos', fields: [{ id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: '', required: true}]}
+      else return {id: getRandomId(), type, cols: 2, hasTitle: true, title: 'Titulo de los datos', fields: [{ id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true}, {id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Dato2', required: true}]}
     }else if(type === "TABLE") {
-      if(add) return { id: getRandomId(), type: 'TABLE', records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: false, fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', required: true, tableVisible: true}] }}
-      else return { id: getRandomId(), type: 'TABLE', text: 'Instrucciones para el llenado de los datos', records:[{fields: {}}], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los campos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true, tableVisible: true}, { id: getRandomId(), key: 'field2', type: 'FIELD', title: 'Dato2', typeField: 'INPUT', required: true, tableVisible: true}] }}
+      if(add) return { id: getRandomId(), type, records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: false, fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', required: true, tableVisible: true}] }}
+      else return { id: getRandomId(), type, text: 'Instrucciones para el llenado de los datos', records:[{fields: {}}], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los campos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true, tableVisible: true}, { id: getRandomId(), key: 'field2', type: 'FIELD', title: 'Dato2', typeField: 'INPUT', required: true, tableVisible: true}] }}
     }else if(type === "DECL") {
-      if(add) return { id: getRandomId(), type: 'DECL', records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: false, fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', required: true, tableVisible: true}] }}
-      else return { id: getRandomId(), type: 'DECL', decision: true, text: 'Instrucciones para el llenado de los datos', records:[{fields: {}}], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los campos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true, tableVisible: true}, { id: getRandomId(), key: 'field2', type: 'FIELD', title: 'Dato2', typeField: 'INPUT', required: true, tableVisible: true}] }}
-    }else if(type === "FIELD") return {id: getRandomId(), type: 'FIELD', required: false}
+      if(add) return { id: getRandomId(), type, records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: false, fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', required: true, tableVisible: true}] }}
+      else return { id: getRandomId(), type, decision: true, text: 'Instrucciones para el llenado de los datos', records:[{fields: {}}], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los campos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true, tableVisible: true}, { id: getRandomId(), key: 'field2', type: 'FIELD', title: 'Dato2', typeField: 'INPUT', required: true, tableVisible: true}] }}
+    }else if(type === "FIELD") {
+      return {id: getRandomId(), type, required: false}
+    }else if(type === "SUBSECTION") {
+      return { id: getRandomId(), type, title: 'Titulo de la subsección', components: []}
+    }
+
   }
 
   const refreshSection = (s) => {
@@ -138,12 +141,29 @@ const SectionEdit = ({ form, s, refreshThisSection }) => {
     refreshSection(_s)
   }
 
+  const handleChangeValuesSection = (component) => {
+    let _s = { ...section }
+    let comp = []
+    _s.components.map((c, i) => {
+      if((c.type === 'FIELD' || c.type === 'FIELDSET') && c.id === component.id) {
+        comp.push(component)
+      }else if(c.fieldSet && c.fieldSet.id === component.id) {
+        comp.push({ ...c, fieldSet: component })
+      }else {
+        comp.push(c)
+      }
+    })
+    _s.components = comp
+    refreshSection(_s)
+  }
+
   const getTooltipComponent = (c) => {
     if(c === 'PARAGRAPH') return 'Párrafo'
     else if(c === 'FIELDSET') return 'Datos'
     else if(c === 'TABLE') return 'Tabla'
     else if(c === 'DECL') return 'Pregunta tipo Declaración'
     else if(c === 'FIELD') return 'Campo de Texto'
+    else if(c === 'SUBSECTION') return 'Sub Seccion'
   }
 
   const handleClickComponent = (c) => {
@@ -169,6 +189,7 @@ const SectionEdit = ({ form, s, refreshThisSection }) => {
     else if(comp === 'TABLE') return 'Se incluye grupo de datos personalizados para agregar en registros a una Tabla'
     else if(comp === 'DECL') return 'Se incluye una deción inicial y grupo de datos personalizados para agregar en registros a una Tabla'
     else if(comp === 'FIELD') return 'Se incluye un campo de texto para ser completado por el usuario'
+    else if(comp === 'SUBSECTION') return 'Se incluye una Subsección que permite agregar otros elementos'
   }
 
   const getContentPopOver = (comp) => {
@@ -179,7 +200,7 @@ const SectionEdit = ({ form, s, refreshThisSection }) => {
         <Paragraph component={getComponentByType(comp)} mode="preview" />
       }
       { comp === 'FIELDSET' && 
-        <FieldSet section={section} parent={section} component={getComponentByType(comp)} mode="preview" getFieldDecorator={getFieldDecorator}  />
+        <FieldSet section={section} parent={section} component={getComponentByType(comp)} mode="preview" />
       }
       { (comp === 'TABLE' || comp === 'DECL') && 
         <Table section={section} component={getComponentByType(comp)} mode="preview" />
@@ -211,7 +232,7 @@ const SectionEdit = ({ form, s, refreshThisSection }) => {
       { section.type === 'CUSTOM' &&
         <Row className="custom-tools">
           <ul className="custom-tools-group-menu">
-          {["PARAGRAPH", "FIELDSET", "TABLE", "DECL", "FIELD"].map(c =>
+          {["PARAGRAPH", "FIELDSET", "TABLE", "DECL", "FIELD", "SUBSECTION"].map(c =>
             <Popover content={getContentPopOver(c)} title={getTooltipComponent(c)} trigger="hover" placement="bottom">
               <li>
                   <a href="#0" onClick={() => handleClickComponent(c)}>
@@ -221,6 +242,7 @@ const SectionEdit = ({ form, s, refreshThisSection }) => {
                       { c === "TABLE" && <><Icon type="table" />&nbsp;Tabla</>}
                       { c === "DECL" && <><Icon type="table" />&nbsp;Declaración</>}
                       { c === "FIELD" && <><Icon type="edit" />&nbsp;Texto</>}
+                      { c === "SUBSECTION" && <><Icon type="edit" />&nbsp;Sub Seccion</>}
                     </span>
                     <span>
                       <Tooltip title="Agregar">
@@ -235,7 +257,7 @@ const SectionEdit = ({ form, s, refreshThisSection }) => {
         </Row>
       }
 
-      <div className="section-components">
+      <div className={'section-components section-type-'+section.type}>
         { section.components && (section.type === 'CONTACTPERSON') &&
           <Row><h4>Datos seleccionados</h4></Row>
         }
@@ -255,21 +277,26 @@ const SectionEdit = ({ form, s, refreshThisSection }) => {
             }
 
             { component.type === 'PARAGRAPH' &&
-              <ParagraphEdit section={section} component={component} index={index} fieldset={component.fieldSet} refreshSection={refreshSection}/>
+              <ParagraphEdit section={section} component={component} fieldset={component.fieldSet} handleChangeValuesSection={handleChangeValuesSection} />
             }
             { component.type === 'FIELDSET' &&
-              <FieldSetEdit section={section} component={component} fieldset={component} refreshSection={refreshSection} />
+              <FieldSetEdit section={section} component={component} fieldset={component} handleChangeValuesSection={handleChangeValuesSection} />
             }
             { (component.type === 'TABLE' || component.type === 'DECL') &&
-              <TableEdit section={section} component={component} index={index} fieldset={component.fieldSet} refreshSection={refreshSection} />
+              <TableEdit section={section} component={component} fieldset={component.fieldSet} handleChangeValuesSection={handleChangeValuesSection} />
             }
             { component.type === 'FIELD' &&
-              <Row>
+              <Row className="row-component-text">
                 <Col span={3}>Texto requerido</Col>
                 <Col>
                   <Checkbox size="small" checked={component.required} onChange={(e) => handleChangeAttribute(index, 'required', e.target.checked)} />
                 </Col>
               </Row>
+            }
+            { component.type === 'SUBSECTION' &&
+              <SubsectionEdit indexSection={index} section={section} subsection={component} 
+                handleChangeValuesSection={handleChangeValuesSection}
+                getComponentByType={getComponentByType} getTooltipComponent={getTooltipComponent} />
             }
           </Row>
         )}
@@ -293,4 +320,4 @@ const SectionEdit = ({ form, s, refreshThisSection }) => {
     </div>
   )
 }
-export default Form.create()(SectionEdit);
+export default SectionEdit;

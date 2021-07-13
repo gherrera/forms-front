@@ -4,7 +4,7 @@ import {
   Row,
   Input
 } from "antd";
-import { Paragraph, FieldSet, Table } from '../'
+import { Paragraph, FieldSet, Table, Subsection } from '../'
 import { saveSectionValuesPromise } from "../../promises";
 
 import { useTranslation } from "react-i18next";
@@ -82,7 +82,10 @@ const Section = ({ decl, section, mode, refreshForm, showErrors }) => {
                      className={'field-section'+(mode !== 'pdf' && component.required ? ' required':'')+(component.value ? ' withval':' noval')}
                     />
                 }
-            </Row>
+                { component.type === 'SUBSECTION' &&
+                  <Subsection section={section} subsection={component} mode={mode} showErrors={showErrors} handleChangeValues={handleChangeValues} />
+                }
+                </Row>
         )}
         </div>
     </div>
