@@ -63,7 +63,7 @@ const Section = ({ decl, section, mode, refreshForm, showErrors }) => {
         <h4 className="section-title">{sSection.title}</h4>
         <div className="section-body">
         { sSection.components && sSection.components.map((component, index) =>
-            <Row className="section-component">
+            <Row className={'section-component section-component-type-'+component.type}>
                 { component.type === 'PARAGRAPH' &&
                     <Paragraph component={component} mode={mode} handleChangeValues={handleChangeValues} />
                 }

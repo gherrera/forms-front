@@ -17,9 +17,9 @@ import moment from "moment";
 import { datasourcesContext } from '../../../../contexts'
 import { validateRutHelper } from "../../helpers";
 
-const FieldSet = ({ form, section, parent, component, mode, showErrors, handleChangeValues, validateForm }) => {
+const FieldSet = ({ form, section, parent, component, mode, showErrors, handleChangeValues, validateForm, cleanFields }) => {
   const { t } = useTranslation()
-  const { getFieldDecorator, validateFields, getFieldsError } = form;
+  const { getFieldDecorator, validateFields, getFieldsError, setFieldsValue } = form;
   const [ hasErrors, setHasErrors ] = useState(false)
   const [ changes, setChanges ] = useState(false)
 	const { datasources } = useContext(datasourcesContext)
@@ -35,6 +35,15 @@ const FieldSet = ({ form, section, parent, component, mode, showErrors, handleCh
       validateFields(ids)
     }
 }, [validateForm])
+
+useEffect(() => {
+  if(cleanFields) {
+    component.fields && component.fields.map(field => {
+      field.value = null
+      setFieldsValue({[field.id]: null})
+    })
+  }
+}, [cleanFields])
 
   const handleChangeFieldValue = (field, value) => {
     field.value = value
@@ -152,7 +161,7 @@ const FieldSet = ({ form, section, parent, component, mode, showErrors, handleCh
       }
       { component.fields &&
         <Row className="fields-fieldset" gutter={12}>
-          <Form layout={formLayout === 'horizontal' ? 'horizontal':null} className={'formLayout-'+formLayout}>
+          <Form layout={formLayout === 'horizontal' ? 'horizontal':null} className={'formLayout-'+formLayout} className={'form-fieldset-'+component.id}>
           { component.fields.map(field =>
             <Col span={24/component.cols}>
               <Form.Item label={field.title} {...formItemLayout}>

@@ -19,6 +19,7 @@ const Table = ({ section, component, mode, handleChangeValues, showErrors }) => 
   const [fieldsPdf, setFieldsPdf] = useState({})
   const [ error, setError ] = useState(null)
   const [ validateForm, setValidateForm ] = useState(false)
+  const [ cleanFieldsV, setCleanFieldsV ] = useState(null)
 
   useEffect(() => {
     let cols = []
@@ -87,10 +88,6 @@ const Table = ({ section, component, mode, handleChangeValues, showErrors }) => 
     </>
   );
 
-  const getRandomId = () => {
-    return 'R' + Math.floor(Math.random() * 1000000);
-  }
-
   const handleChangeDecision = (value) => {
     handleChangeValues && refreshSectionKey('decision', value)
 
@@ -157,12 +154,17 @@ const Table = ({ section, component, mode, handleChangeValues, showErrors }) => 
     */
   }
 
+  const getRandomId = () => {
+    return 'R' + Math.floor(Math.random() * 1000000);
+  }
+
   const cleanFields = () => {
     let fieldSet = { ...component.fieldSet }
     fieldSet.fields && fieldSet.fields.map(field => {
       field.value = null
-      //setFieldsValue({[field.id]: null})
     })
+    setCleanFieldsV(getRandomId())
+
     handleChangeValuesFn(fieldSet)
   }
 
@@ -204,6 +206,7 @@ const Table = ({ section, component, mode, handleChangeValues, showErrors }) => 
               showErrors={showErrors}
               handleChangeValues={handleChangeValuesFn} 
               validateForm={validateForm}
+              cleanFields={cleanFieldsV}
             />
             <Row className="btns-table">
               <Button onClick={handleChangeValues && addRecord}>Añadir</Button>

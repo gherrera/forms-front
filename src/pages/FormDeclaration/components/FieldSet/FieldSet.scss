@@ -1,5 +1,5 @@
 .fieldset {
-
+    
     .has-error .ant-form-explain {
         line-height: 14px;
         font-size: 14px;
@@ -7,6 +7,14 @@
 
     .ant-form-item {
         padding-bottom: 0px;
+
+        input.ant-input:not(.ant-input-disabled), .ant-select .ant-select-selection {
+            border: 1px dashed rgba(0,0,0,.1);
+    
+            &:hover {
+                border: 1px solid rgba(0,0,0,.3);
+            }
+        }    
     }
     .formLayout-vertical {
         .ant-form-item {

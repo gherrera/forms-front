@@ -232,7 +232,7 @@ const SectionEdit = ({ s, refreshThisSection }) => {
       { section.type === 'CUSTOM' &&
         <Row className="custom-tools">
           <ul className="custom-tools-group-menu">
-          {["PARAGRAPH", "FIELDSET", "TABLE", "DECL", "FIELD", "SUBSECTION"].map(c =>
+          {["SUBSECTION", "PARAGRAPH", "FIELDSET", "TABLE", "DECL", "FIELD"].map(c =>
             <Popover content={getContentPopOver(c)} title={getTooltipComponent(c)} trigger="hover" placement="bottom">
               <li>
                   <a href="#0" onClick={() => handleClickComponent(c)}>

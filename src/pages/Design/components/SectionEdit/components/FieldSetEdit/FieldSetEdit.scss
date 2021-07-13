@@ -29,6 +29,15 @@
     }
     .fields-body {
       .rows-section {
+
+        input.ant-input {
+            border: 1px dashed rgba(0,0,0,.1);
+    
+            &:hover {
+                border: 1px solid rgba(0,0,0,.3);
+            }
+        }
+
         .drag-area {
           text-align: center;
           cursor: move;

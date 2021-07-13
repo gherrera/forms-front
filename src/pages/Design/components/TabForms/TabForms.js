@@ -156,7 +156,7 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
           { forms.map((form, index) =>
             <Row className="rows-section">
               <Col span={3}>{camelizerHelper(form.category)}</Col>
-              <Col span={7}><Input size="small" value={form.name} onChange={(e) => changeNameForm(index, e.target.value)}/></Col>
+              <Col span={7}><Input size="small" value={form.name} onChange={(e) => changeNameForm(index, e.target.value)} className="editable"/></Col>
               <Col span={3}>{form.userCreate}</Col>
               <Col span={3}>{moment(form.creationDate).format('DD/MM/YYYY HH:mm')}</Col>
               <Col span={3}>{form.updateDate && moment(form.updateDate).format('DD/MM/YYYY HH:mm')}</Col>

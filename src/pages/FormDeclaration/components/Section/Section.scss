@@ -47,12 +47,15 @@
     }
 
     .section-body {
-        padding: 10px;
 
         .section-component {
+            padding: 5px;
             margin-bottom: 5px;
             border-bottom: 1px solid rgba(0,0,0,.1);
 
+            &:last-child, &.section-component-type-SUBSECTION {
+                border-bottom: none;
+            }
             .field-section {
                 &.required {
                     &.noval {
@@ -65,7 +68,7 @@
     }
 
     &.mode-pdf {
-        input{ 
+        input, textarea{ 
             background-color: white;
         }
     }

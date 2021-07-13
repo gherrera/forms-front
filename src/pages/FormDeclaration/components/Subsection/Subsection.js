@@ -24,7 +24,7 @@ const Subsection = ({ section, subsection, mode, showErrors, handleChangeValues 
         <h4 className="section-title">{subsection.title}</h4>
         <div className="section-body">
         { subsection.components && subsection.components.map((component, index) =>
-            <Row className="section-component">
+            <Row className={'section-component section-component-type-'+component.type}>
                 { component.type === 'PARAGRAPH' &&
                     <Paragraph component={component} mode={mode} handleChangeValues={handleChangeValues} />
                 }

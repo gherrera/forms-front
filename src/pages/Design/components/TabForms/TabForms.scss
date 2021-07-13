@@ -4,6 +4,14 @@
     margin-bottom: 20px;
   }
 
+  .editable {
+    border: 1px dashed rgba(0,0,0,.1);
+
+    &:hover {
+      border: 1px solid rgba(0,0,0,.3);
+    }  
+  }
+
   .titles-section {
     border-bottom: 1px solid rgba(0, 0, 255, .25);
     padding-bottom: 5px;
@@ -36,12 +44,6 @@
           line-height: 28px;
         }
       }
-    }
-
-    input[type='text'] {
-      padding-top: 2px;
-      padding-bottom: 2px;
-      height: 28px;
     }
   }
 }
