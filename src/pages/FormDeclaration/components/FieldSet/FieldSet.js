@@ -161,7 +161,7 @@ useEffect(() => {
       }
       { component.fields &&
         <Row className="fields-fieldset" gutter={12}>
-          <Form layout={formLayout === 'horizontal' ? 'horizontal':null} className={'formLayout-'+formLayout} className={'form-fieldset-'+component.id}>
+          <Form layout={formLayout === 'horizontal' ? 'horizontal':null} className={'formLayout-'+formLayout}>
           { component.fields.map(field =>
             <Col span={24/component.cols}>
               <Form.Item label={field.title} {...formItemLayout}>

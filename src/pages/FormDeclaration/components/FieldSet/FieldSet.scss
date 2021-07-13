@@ -1,3 +1,10 @@
+.section-content {
+    &.mode-pdf {
+        .ant-form-item {
+            margin-bottom: 0px;
+        }
+    }
+}
 .fieldset {
     
     .has-error .ant-form-explain {
