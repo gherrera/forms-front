@@ -17,6 +17,14 @@
       left: 10px;
     }
 
+    input.ant-input {
+      border: 1px dashed rgba(0,0,0,.2);
+
+      &:hover {
+          border: 1px solid rgba(0,0,0,.3);
+      }
+    }
+    
     .titles-section {
       margin-top: 10px;
       .ant-col {
@@ -29,14 +37,6 @@
     }
     .fields-body {
       .rows-section {
-
-        input.ant-input {
-            border: 1px dashed rgba(0,0,0,.2);
-    
-            &:hover {
-                border: 1px solid rgba(0,0,0,.3);
-            }
-        }
 
         .drag-area {
           text-align: center;
