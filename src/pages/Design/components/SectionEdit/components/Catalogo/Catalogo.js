@@ -43,11 +43,11 @@ const Catalogo = ({ catalogo, handleChangeCatalogoActive, handlerChangeCatalogo 
                                 <Icon size="small" type={field.type === 'INPUT' ? 'edit' : field.type === 'SELECT' ? 'unordered-list' : 'calendar'}/>
                             </Tooltip>
                         </Col>
-                        <Col span={14}>{field.title}</Col>
-                        <Col span={4}>
+                        <Col span={16}>{field.title}</Col>
+                        <Col span={3}>
                             <Tooltip title="Activar"><Checkbox checked={field.active} size="small" disabled={!catalogo.active} onChange={(e) => handlerChangeCatalogoField(field, 'active', e.target.checked)} /></Tooltip>
                         </Col>
-                        <Col span={4}>
+                        <Col span={3}>
                             <Tooltip title="Requerido"><Checkbox checked={field.active && field.required} disabled={!catalogo.active || !field.active} size="small" onChange={(e) => handlerChangeCatalogoField(field, 'required', e.target.checked)} /></Tooltip>
                         </Col>
                     </Row>

@@ -83,7 +83,7 @@ const Catalogos = ({ handleChangeCatalogoActive, handlerChangeCatalogo, section,
 
         let cat7 = {key: 'infoPropiedades', hasTitle: true, title: 'Información de Propiedades', cols: 2, fields: [], active}
         cat7.fields.push({ type: 'INPUT', title: 'Nombre de Sociedad', key: 'nombreSociedad', active: false, required: false})
-        cat7.fields.push({ type: 'SELECT', title: 'Tipo de Documento de Identidad', key: 'tipoDocumento', active: false, required: false, source: 'CAT:TIPO_DOC'})
+        cat7.fields.push({ type: 'SELECT', title: 'Tipo de Documento', key: 'tipoDocumento', active: false, required: false, source: 'CAT:TIPO_DOC'})
         cat7.fields.push({ type: 'INPUT', title: 'Documento Identidad', key: 'documento', active: false, required: false})
         cat7.fields.push({ type: 'INPUT', title: 'Cargo Ejercido', key: 'cargo', active: false, required: false})
         cat7.fields.push({ type: 'INPUT', title: 'Porcentaje de Participación', key: 'porcentaje', active: false, required: false, validation: {type: 'number', decimals: 2}})
