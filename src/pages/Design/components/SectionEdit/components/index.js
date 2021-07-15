@@ -6,6 +6,7 @@ import ParagraphEditComponent from './ParagraphEdit/ParagraphEdit'
 import DatasourcesComponent from './Datasources/Datasources'
 import ValidationComponent from './Validation/Validation'
 import SubsectionEditComponent from './SubsectionEdit/SubsectionEdit'
+import TextEditComponent from './TextEdit/TextEdit'
 
 export const FieldSetEdit = FieldSetEditComponent
 export const TableEdit = TableEditComponent
@@ -15,3 +16,4 @@ export const ParagraphEdit = ParagraphEditComponent
 export const Datasources = DatasourcesComponent
 export const Validation = ValidationComponent
 export const SubsectionEdit = SubsectionEditComponent
+export const TextEdit = TextEditComponent

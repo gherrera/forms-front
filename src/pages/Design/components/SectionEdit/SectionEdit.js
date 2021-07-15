@@ -15,7 +15,7 @@ import {
 } from "antd";
 
 import { useTranslation } from "react-i18next";
-import { TableEdit, FieldSetEdit, Catalogos, ParagraphEdit, SubsectionEdit } from './components'
+import { TableEdit, FieldSetEdit, Catalogos, ParagraphEdit, SubsectionEdit, TextEdit } from './components'
 import { Paragraph, Table, FieldSet } from "../../../FormDeclaration/components";
 import { saveSectionPromise } from "../FormEdit/promises";
 import { Preview } from '../'
@@ -42,8 +42,8 @@ const SectionEdit = ({ s, refreshThisSection }) => {
     }else if(type === "DECL") {
       if(add) return { id: getRandomId(), type, records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: false, fields: [] }}
       else return { id: getRandomId(), type, decision: true, text: 'Instrucciones para el llenado de los datos', records:[{fields: {}}], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los campos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true, tableVisible: true}, { id: getRandomId(), key: 'field2', type: 'FIELD', title: 'Dato2', typeField: 'INPUT', required: true, tableVisible: true}] }}
-    }else if(type === "FIELD") {
-      return {id: getRandomId(), type, required: false}
+    }else if(type === "TEXT") {
+      return {id: getRandomId(), type, required: false, hasTitle: false}
     }else if(type === "SUBSECTION") {
       return { id: getRandomId(), type, title: 'Titulo de la subsección', components: []}
     }
@@ -127,20 +127,6 @@ const SectionEdit = ({ s, refreshThisSection }) => {
     setIsVisiblePreview(false)
   }
 
-  const handleChangeAttribute = (index, attr, value) => {
-    let comp = []
-    section.components.map((c,i) => {
-      if(i === index) {
-        comp.push({ ...c, [attr]: value})
-      }else {
-        comp.push(c)
-      }
-    })
-
-    let _s = { ...section, components:  comp}
-    refreshSection(_s)
-  }
-
   const handleChangeValuesSection = (component) => {
     let _s = { ...section }
     let comp = []
@@ -162,7 +148,7 @@ const SectionEdit = ({ s, refreshThisSection }) => {
     else if(c === 'FIELDSET') return 'Datos'
     else if(c === 'TABLE') return 'Tabla'
     else if(c === 'DECL') return 'Pregunta tipo Declaración'
-    else if(c === 'FIELD') return 'Campo de Texto'
+    else if(c === 'TEXT') return 'Campo de Texto'
     else if(c === 'SUBSECTION') return 'Sub Seccion'
   }
 
@@ -205,7 +191,7 @@ const SectionEdit = ({ s, refreshThisSection }) => {
       { (comp === 'TABLE' || comp === 'DECL') && 
         <Table section={section} component={getComponentByType(comp)} mode="preview" />
       }
-      { comp === 'FIELD' && 
+      { comp === 'TEXT' && 
         <TextArea rows={4} value='' disabled={true} />
       }
       </Col>
@@ -232,7 +218,7 @@ const SectionEdit = ({ s, refreshThisSection }) => {
       { section.type === 'CUSTOM' &&
         <Row className="custom-tools">
           <ul className="custom-tools-group-menu">
-          {["SUBSECTION", "PARAGRAPH", "FIELDSET", "TABLE", "DECL", "FIELD"].map(c =>
+          {["SUBSECTION", "PARAGRAPH", "FIELDSET", "TABLE", "DECL", "TEXT"].map(c =>
             <Popover content={getContentPopOver(c)} title={getTooltipComponent(c)} trigger="hover" placement="bottom">
               <li>
                   <a href="#0" onClick={() => handleClickComponent(c)}>
@@ -241,7 +227,7 @@ const SectionEdit = ({ s, refreshThisSection }) => {
                       { c === "FIELDSET" && <><Icon type="form" />&nbsp;Datos</>}
                       { c === "TABLE" && <><Icon type="table" />&nbsp;Tabla</>}
                       { c === "DECL" && <><Icon type="table" />&nbsp;Declaración</>}
-                      { c === "FIELD" && <><Icon type="edit" />&nbsp;Texto</>}
+                      { c === "TEXT" && <><Icon type="edit" />&nbsp;Texto</>}
                       { c === "SUBSECTION" && <><Icon type="profile" />&nbsp;Sub Seccion</>}
                     </span>
                     <span>
@@ -284,13 +270,8 @@ const SectionEdit = ({ s, refreshThisSection }) => {
             { (component.type === 'TABLE' || component.type === 'DECL') &&
               <TableEdit section={section} component={component} fieldset={component.fieldSet} handleChangeValuesSection={handleChangeValuesSection} />
             }
-            { component.type === 'FIELD' &&
-              <Row className="row-component-text">
-                <Col span={3}>Texto requerido</Col>
-                <Col>
-                  <Checkbox size="small" checked={component.required} onChange={(e) => handleChangeAttribute(index, 'required', e.target.checked)} />
-                </Col>
-              </Row>
+            { component.type === 'TEXT' &&
+              <TextEdit section={section} component={component} handleChangeValuesSection={handleChangeValuesSection}/>
             }
             { component.type === 'SUBSECTION' &&
               <SubsectionEdit indexSection={index} section={section} subsection={component} 

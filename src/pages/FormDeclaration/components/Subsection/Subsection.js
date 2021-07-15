@@ -4,7 +4,7 @@ import {
   Row,
   Input
 } from "antd";
-import { Paragraph, FieldSet, Table } from '..'
+import { Paragraph, FieldSet, Table, Text } from '..'
 import { saveSectionValuesPromise } from "../../promises";
 
 import { useTranslation } from "react-i18next";
@@ -39,10 +39,8 @@ const Subsection = ({ section, subsection, mode, showErrors, handleChangeValues 
                   { (component.type === 'TABLE' || component.type === 'DECL') &&
                       <Table section={section} component={component} mode={mode} handleChangeValues={handleChangeValues} showErrors={showErrors} />
                   }
-                  { component.type === 'FIELD' &&
-                      <TextArea rows={4} value={component.value} disabled={mode==='pdf'} onChange={(e) => handleChangeFieldValue(component, e.target.value)}
-                      className={'field-section'+(mode !== 'pdf' && component.required ? ' required':'')+(component.value ? ' withval':' noval')}
-                      />
+                  { component.type === 'TEXT' &&
+                      <Text component={component} mode={mode} handleChangeValues={handleChangeValues} />
                   }
               </Row>
         )}

@@ -4,7 +4,7 @@ import {
   Row,
   Input
 } from "antd";
-import { Paragraph, FieldSet, Table, Subsection } from '../'
+import { Paragraph, FieldSet, Table, Subsection, Text } from '../'
 import { saveSectionValuesPromise } from "../../promises";
 
 import { useTranslation } from "react-i18next";
@@ -52,11 +52,6 @@ const Section = ({ decl, section, mode, refreshForm, showErrors }) => {
     _s.components = comp
     refreshSection(_s, updateValues)
   }
-  
-  const handleChangeFieldValue = (component, value) => {
-    component.value = value
-    handleChangeValues(component)
-  }
 
   return (
     <div className={'section-content mode-'+mode}>
@@ -78,10 +73,8 @@ const Section = ({ decl, section, mode, refreshForm, showErrors }) => {
                   { (component.type === 'TABLE' || component.type === 'DECL') &&
                       <Table section={sSection} component={component} mode={mode} handleChangeValues={handleChangeValues} showErrors={showErrors} />
                   }
-                  { component.type === 'FIELD' &&
-                      <TextArea rows={4} value={component.value} disabled={mode==='pdf'} onChange={(e) => handleChangeFieldValue(component, e.target.value)}
-                      className={'field-section'+(mode !== 'pdf' && component.required ? ' required':'')+(component.value ? ' withval':' noval')}
-                      />
+                  { component.type === 'TEXT' &&
+                      <Text component={component} mode={mode} handleChangeValues={handleChangeValues} />
                   }
                   { component.type === 'SUBSECTION' &&
                     <Subsection section={section} subsection={component} mode={mode} showErrors={showErrors} handleChangeValues={handleChangeValues} />

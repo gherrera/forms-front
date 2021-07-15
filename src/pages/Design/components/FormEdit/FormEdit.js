@@ -130,7 +130,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
         }else if(value === 'TEXT') {
           return { ...section, type: value, components: [{id: getRandomId(), type: 'PARAGRAPH'}] };
         }else if(value === 'COMMENTS') {
-          return { ...section, type: value, components: [{id: getRandomId(), type: 'PARAGRAPH'}, {id: getRandomId(), type: 'FIELD', required: true}] };
+          return { ...section, type: value, components: [{id: getRandomId(), type: 'PARAGRAPH'}, {id: getRandomId(), type: 'TEXT', required: true, hasTitle: false}] };
         }else if(value === 'CUSTOM') {
           return { ...section, type: value, components: [] };
         }

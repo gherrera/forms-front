@@ -10,7 +10,7 @@ import {
   Input,
   Popconfirm,
 } from "antd";
-import { TableEdit, FieldSetEdit, ParagraphEdit } from '../'
+import { TableEdit, FieldSetEdit, ParagraphEdit, TextEdit } from '../'
 
 
 const SubsectionEdit = ({ indexSection, section, subsection, getComponentByType, getTooltipComponent, handleChangeValuesSection }) => {
@@ -49,7 +49,7 @@ const SubsectionEdit = ({ indexSection, section, subsection, getComponentByType,
         </Row>
         <Row className="custom-tools">
           <ul className="custom-tools-group-menu">
-          {["PARAGRAPH", "FIELDSET", "TABLE", "DECL", "FIELD"].map(c =>
+          {["PARAGRAPH", "FIELDSET", "TABLE", "DECL", "TEXT"].map(c =>
             <li>
                 <a href="#0" onClick={() => handleClickComponent(c)}>
                   <span>
@@ -57,7 +57,7 @@ const SubsectionEdit = ({ indexSection, section, subsection, getComponentByType,
                     { c === "FIELDSET" && <><Icon type="form" />&nbsp;Datos</>}
                     { c === "TABLE" && <><Icon type="table" />&nbsp;Tabla</>}
                     { c === "DECL" && <><Icon type="table" />&nbsp;Declaración</>}
-                    { c === "FIELD" && <><Icon type="edit" />&nbsp;Texto</>}
+                    { c === "TEXT" && <><Icon type="edit" />&nbsp;Texto</>}
                   </span>
                   <span>
                     <Tooltip title="Agregar">
@@ -93,14 +93,9 @@ const SubsectionEdit = ({ indexSection, section, subsection, getComponentByType,
               { (component.type === 'TABLE' || component.type === 'DECL') &&
                 <TableEdit section={section} component={component} fieldset={component.fieldSet} handleChangeValuesSection={handleChangeValuesSection} />
               }
-              { component.type === 'FIELD' &&
-                <Row className="row-component-text">
-                  <Col span={3}>Texto requerido</Col>
-                  <Col>
-                    <Checkbox size="small" checked={component.required} onChange={(e) => handleChangeAttribute(component, 'required', e.target.checked)} />
-                  </Col>
-                </Row>
-              }
+              { component.type === 'TEXT' &&
+                <TextEdit section={section} component={component} handleChangeValuesSection={handleChangeValuesSection}/>
+            }
             </Row>
           )}
         </div>
