@@ -6,7 +6,6 @@ import {
   Button,
   Tooltip,
   Modal,
-  Checkbox,
   notification,
   Icon,
   Input,
@@ -174,7 +173,7 @@ const SectionEdit = ({ s, refreshThisSection }) => {
     else if(comp === 'FIELDSET') return 'Se incluye grupo de datos personalizados'
     else if(comp === 'TABLE') return 'Se incluye grupo de datos personalizados para agregar en registros a una Tabla'
     else if(comp === 'DECL') return 'Se incluye una deción inicial y grupo de datos personalizados para agregar en registros a una Tabla'
-    else if(comp === 'FIELD') return 'Se incluye un campo de texto para ser completado por el usuario'
+    else if(comp === 'TEXT') return 'Se incluye un campo de texto para ser completado por el usuario'
     else if(comp === 'SUBSECTION') return 'Se incluye una Subsección que permite agregar otros elementos'
   }
 
