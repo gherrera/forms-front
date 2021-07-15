@@ -95,8 +95,8 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
 
   const getTypeSection = (type) => {
     if(type === 'INTRO') return "Introducción"
-    else if(type === 'CONTACTPERSON') return "Datos Personales Persona"
-    else if(type === 'CONTACTENTIY') return "Datos Personales Empresa"
+    else if(type === 'CONTACTPERSON') return "Catálogo de Datos de Persona Natural"
+    else if(type === 'CONTACTENTIY') return "Catálogo de Datos de Persona Jurídica"
     else if(type === 'DATA') return "Datos Personalizados"
     else if(type === 'TABLE') return "Tabla"
     else if(type === 'DECL') return "Pregunta Tipo Declaración"
@@ -255,8 +255,8 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
                                 <Col span={6}>
                                   <Select value={section.type} onChange={(value) => changeTypeSection(index, value)} disabled={section.type !== null}>
                                     <Select.Option value="INTRO">Párrafo con Datos</Select.Option>
-                                    <Select.Option value="CONTACTPERSON">Datos Personales Persona</Select.Option>
-                                    <Select.Option value="CONTACTENTIY">Datos Personales Empresa</Select.Option>
+                                    <Select.Option value="CONTACTPERSON">Catálogo de Datos de Persona Natural</Select.Option>
+                                    <Select.Option value="CONTACTENTIY">Catálogo de Datos de Persona Jurídica</Select.Option>
                                     <Select.Option value="DATA">Datos Personalizados</Select.Option>
                                     <Select.Option value="DECL">Pregunta Tipo Declaración</Select.Option>
                                     <Select.Option value="TABLE">Tipo Tabla</Select.Option>

@@ -197,7 +197,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, handleChan
               :
               <>
               <Col span={3} offset={1}>
-                Agregar datos del Catálogo
+                Datos del Catálogo
               </Col>
               <Col span={1}>
                 <Button size="small" icon="unordered-list" onClick={(e) => setShowCatalogo(true)}/>
@@ -208,113 +208,120 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, handleChan
         }
         { section.type !== 'CONTACTPERSON' && fieldset.fields &&
           <>
-          <Row className="titles-section">
-            { component.type === 'PARAGRAPH' ? 
-              <>
-                <Col span={1} offset={1}>&lt;#&gt;</Col>
-                <Col span={8}>Nombre del dato</Col>
-              </>
-              :
-              <>
-                <Col span={9} offset={1}>Nombre del dato</Col>
-              </>
+            { fieldset.fields.length === 0 ?
+            <Row style={{marginTop:'20px'}}>
+              <Col span={3} offset={20}>
+                <Button size="small" icon="plus" onClick={addField}>Agregar primer Dato</Button>
+              </Col>
+            </Row>
+            :
+            <Row className="titles-section">
+              { component.type === 'PARAGRAPH' ? 
+                <>
+                  <Col span={1} offset={1}>&lt;#&gt;</Col>
+                  <Col span={8}>Nombre del dato</Col>
+                </>
+                :
+                <>
+                  <Col span={9} offset={1}>Nombre del dato</Col>
+                </>
+              }
+              <Col span={4}>Tipo</Col>
+              <Col span={component.type === 'PARAGRAPH' ? 6 : 3} className="center">Requerido</Col>
+              { (component.type === 'TABLE' || component.type === 'DECL') && <Col span={3} className="center">Tabla Visible</Col> }
+              <Col span={3} className="center">Acciones</Col>
+              <Col span={1} className="center">Orden</Col>
+            </Row>
             }
-            <Col span={4}>Tipo</Col>
-            <Col span={component.type === 'PARAGRAPH' ? 6 : 3} className="center">Requerido</Col>
-            { (component.type === 'TABLE' || component.type === 'DECL') && <Col span={3} className="center">Tabla Visible</Col> }
-            <Col span={3} className="center">Acciones</Col>
-            <Col span={1} className="center">Orden</Col>
-          </Row>
-          
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable">
-              {(provided, snapshot) => (
-                <div
-                  className="fields-body"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  { fieldset.fields.map((field, index) =>
-                    <Draggable key={field.id} draggableId={field.id} index={index}>
-                      {(provided, snapshot) =>
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={getItemStyle(
-                            snapshot.isDragging,
-                            provided.draggableProps.style
-                          )}
-                        >
-                          <Row className="rows-section">
-                            <Col span={1}>
-                              { section.type !== 'CONTACTPERSON' && index === fieldset.fields.length -1 && 
-                                <Button icon="plus" size="small" onClick={addField}/> 
-                              }
-                            </Col>
-                            { component.type === 'PARAGRAPH' && 
-                              <Col span={1}>&lt;{index+1}&gt;</Col>
-                            }
-                            <Col span={component.type === 'PARAGRAPH' ? 8 : 9}>
-                              <Input value={field.title} placeholder="Ingrese nombre del dato" size="small" onChange={(e) => handleChangeAttribute(index, 'title', e.target.value)}/>
-                            </Col>
-                            <Col span={4}>
-                              <Select value={field.typeField} onChange={(value) => handleChangeAttribute(index, 'typeField', value)} size="small">
-                                <Select.Option value="INPUT">
-                                  <Col span={2}><Icon type="edit"/></Col><Col span={21}>&nbsp;&nbsp;Editable</Col>
-                                </Select.Option>
-                                <Select.Option value="DATE">
-                                  <Col span={2}><Icon type="calendar"/></Col><Col span={21}>&nbsp;&nbsp;Fecha</Col>
-                                </Select.Option>
-                                <Select.Option value="SELECT">
-                                  <Col span={2}><Icon type="unordered-list"/></Col><Col span={21}>&nbsp;&nbsp;Desplegable</Col>
-                                </Select.Option>
-                                <Select.Option value="CHECKBOX">
-                                  <Col span={2}><Icon type="check-square"/></Col><Col span={21}>&nbsp;&nbsp;Checkbox</Col>
-                                </Select.Option>
-                                {component.type !== 'PARAGRAPH' &&
-                                  <Select.Option value="RADIO">
-                                    <Col span={2}><Icon type="ellipsis"/></Col><Col span={21}>&nbsp;&nbsp;Opciones</Col>
-                                  </Select.Option>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="droppable">
+                {(provided, snapshot) => (
+                  <div
+                    className="fields-body"
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                  >
+                    { fieldset.fields.map((field, index) =>
+                      <Draggable key={field.id} draggableId={field.id} index={index}>
+                        {(provided, snapshot) =>
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={getItemStyle(
+                              snapshot.isDragging,
+                              provided.draggableProps.style
+                            )}
+                          >
+                            <Row className="rows-section">
+                              <Col span={1}>
+                                { section.type !== 'CONTACTPERSON' && index === fieldset.fields.length -1 && 
+                                  <Button icon="plus" size="small" onClick={addField}/> 
                                 }
-                              </Select>
-                            </Col>
-                            <Col span={component.type === 'PARAGRAPH' ? 6 : 3} className="center">
-                                <Checkbox checked={field.required === true} disabled={field.typeField === 'CHECKBOX'} onChange={(e) => handleChangeAttribute(index, 'required', e.target.checked)} size="small"/>
-                            </Col>
-                            { (component.type === 'TABLE' || component.type === 'DECL') &&
-                              <Col span={3} className="center">
-                                  <Checkbox checked={field.tableVisible === true} onChange={(e) => handleChangeAttribute(index, 'tableVisible', e.target.checked)} size="small"/>
                               </Col>
-                            }
-                            <Col span={3} className="center">
-                              <div className="tools-fieldset">
-                              { (field.typeField === 'SELECT' || field.typeField === 'RADIO') ?
-                                <Tooltip title="Fuente de Datos">
-                                  <Button icon="unordered-list" size="small" onClick={() => showDataSource(index)}/>
-                                </Tooltip>
-                                : field.typeField === 'INPUT' ?
-                                <Tooltip title={ getValidationTitle(field.validation)}>
-                                  <Button icon="check" size="small" onClick={() => showValidations(index)}/>
-                                </Tooltip>
-                                :
-                                <></>
+                              { component.type === 'PARAGRAPH' && 
+                                <Col span={1}>&lt;{index+1}&gt;</Col>
                               }
-                              <Tooltip title="Eliminar">
-                                  <Button icon="delete" size="small" disabled={fieldset.fields.length === 1} onClick={() => deleteField(index)}/>
-                              </Tooltip>
-                              </div>
-                            </Col>
-                            <Col span={1} className="drag-area"><Icon type="drag"/></Col>
-                          </Row>
-                        </div>
-                      }
-                    </Draggable>
-                  )}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+                              <Col span={component.type === 'PARAGRAPH' ? 8 : 9}>
+                                <Input value={field.title} placeholder="Ingrese nombre del dato" size="small" onChange={(e) => handleChangeAttribute(index, 'title', e.target.value)}/>
+                              </Col>
+                              <Col span={4}>
+                                <Select value={field.typeField} onChange={(value) => handleChangeAttribute(index, 'typeField', value)} size="small">
+                                  <Select.Option value="INPUT">
+                                    <Col span={2}><Icon type="edit"/></Col><Col span={21}>&nbsp;&nbsp;Editable</Col>
+                                  </Select.Option>
+                                  <Select.Option value="DATE">
+                                    <Col span={2}><Icon type="calendar"/></Col><Col span={21}>&nbsp;&nbsp;Fecha</Col>
+                                  </Select.Option>
+                                  <Select.Option value="SELECT">
+                                    <Col span={2}><Icon type="unordered-list"/></Col><Col span={21}>&nbsp;&nbsp;Desplegable</Col>
+                                  </Select.Option>
+                                  <Select.Option value="CHECKBOX">
+                                    <Col span={2}><Icon type="check-square"/></Col><Col span={21}>&nbsp;&nbsp;Checkbox</Col>
+                                  </Select.Option>
+                                  {component.type !== 'PARAGRAPH' &&
+                                    <Select.Option value="RADIO">
+                                      <Col span={2}><Icon type="ellipsis"/></Col><Col span={21}>&nbsp;&nbsp;Opciones</Col>
+                                    </Select.Option>
+                                  }
+                                </Select>
+                              </Col>
+                              <Col span={component.type === 'PARAGRAPH' ? 6 : 3} className="center">
+                                  <Checkbox checked={field.required === true} disabled={field.typeField === 'CHECKBOX'} onChange={(e) => handleChangeAttribute(index, 'required', e.target.checked)} size="small"/>
+                              </Col>
+                              { (component.type === 'TABLE' || component.type === 'DECL') &&
+                                <Col span={3} className="center">
+                                    <Checkbox checked={field.tableVisible === true} onChange={(e) => handleChangeAttribute(index, 'tableVisible', e.target.checked)} size="small"/>
+                                </Col>
+                              }
+                              <Col span={3} className="center">
+                                <div className="tools-fieldset">
+                                { (field.typeField === 'SELECT' || field.typeField === 'RADIO') ?
+                                  <Tooltip title="Fuente de Datos">
+                                    <Button icon="unordered-list" size="small" onClick={() => showDataSource(index)}/>
+                                  </Tooltip>
+                                  : field.typeField === 'INPUT' ?
+                                  <Tooltip title={ getValidationTitle(field.validation)}>
+                                    <Button icon="check" size="small" onClick={() => showValidations(index)}/>
+                                  </Tooltip>
+                                  :
+                                  <></>
+                                }
+                                <Tooltip title="Eliminar">
+                                    <Button icon="delete" size="small" disabled={fieldset.fields.length === 1} onClick={() => deleteField(index)}/>
+                                </Tooltip>
+                                </div>
+                              </Col>
+                              <Col span={1} className="drag-area"><Icon type="drag"/></Col>
+                            </Row>
+                          </div>
+                        }
+                      </Draggable>
+                    )}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
           </>
         }
       </div>
@@ -352,7 +359,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, handleChan
           width={1300}
           onClose={onCloseCatalogo}
         >
-          <Catalogos section={section} type="CONTACTPERSON" active={true} handleClose={onCloseCatalogo} handleApplyFields={handleApplyFields}/>
+          <Catalogos section={section} active={true} handleClose={onCloseCatalogo} handleApplyFields={handleApplyFields}/>
         </Drawer>
       }
     </div>

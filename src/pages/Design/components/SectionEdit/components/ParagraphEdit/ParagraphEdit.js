@@ -26,7 +26,7 @@ const ParagraphEdit = ({ section, component, fieldset, handleChangeValuesSection
         { fieldset && 
           <>
             <h3>Agregar datos opcionales (Deben ser incluidos con el número del campo entre &lt;&gt;, Ej. &lt;1&gt; )</h3>
-            <FieldSetEdit hasHeader={false} section={section} component={component} fieldset={fieldset} />
+            <FieldSetEdit hasHeader={false} section={section} component={component} fieldset={fieldset} handleChangeValuesSection={handleChangeValuesSection} />
           </>
         }
     </div>

@@ -63,29 +63,30 @@ const Section = ({ decl, section, mode, refreshForm, showErrors }) => {
         <h4 className="section-title">{sSection.title}</h4>
         <div className="section-body">
         { sSection.components && sSection.components.map((component, index) =>
-            <Row className={'section-component section-component-type-'+component.type}>
-                { component.type === 'PARAGRAPH' &&
-                    <Paragraph component={component} mode={mode} handleChangeValues={handleChangeValues} />
-                }
-                { component.type === 'FIELDSET' &&
-                    <FieldSet section={sSection} parent={sSection} component={component} mode={mode} 
-                      showErrors={showErrors}
-                      handleChangeValues={handleChangeValues} 
-                      validateForm={showErrors}
-                    />
-                }
-                { (component.type === 'TABLE' || component.type === 'DECL') &&
-                    <Table section={sSection} component={component} mode={mode} handleChangeValues={handleChangeValues} showErrors={showErrors} />
-                }
-                { component.type === 'FIELD' &&
-                    <TextArea rows={4} value={component.value} disabled={mode==='pdf'} onChange={(e) => handleChangeFieldValue(component, e.target.value)}
-                     className={'field-section'+(mode !== 'pdf' && component.required ? ' required':'')+(component.value ? ' withval':' noval')}
-                    />
-                }
-                { component.type === 'SUBSECTION' &&
-                  <Subsection section={section} subsection={component} mode={mode} showErrors={showErrors} handleChangeValues={handleChangeValues} />
-                }
-                </Row>
+            ((component.type === 'PARAGRAPH' && component.text) || component.type !== 'PARAGRAPH') &&
+              <Row className={'section-component section-component-type-'+component.type}>
+                  { component.type === 'PARAGRAPH' &&
+                      <Paragraph component={component} mode={mode} handleChangeValues={handleChangeValues} />
+                  }
+                  { component.type === 'FIELDSET' &&
+                      <FieldSet section={sSection} parent={sSection} component={component} mode={mode} 
+                        showErrors={showErrors}
+                        handleChangeValues={handleChangeValues} 
+                        validateForm={showErrors}
+                      />
+                  }
+                  { (component.type === 'TABLE' || component.type === 'DECL') &&
+                      <Table section={sSection} component={component} mode={mode} handleChangeValues={handleChangeValues} showErrors={showErrors} />
+                  }
+                  { component.type === 'FIELD' &&
+                      <TextArea rows={4} value={component.value} disabled={mode==='pdf'} onChange={(e) => handleChangeFieldValue(component, e.target.value)}
+                      className={'field-section'+(mode !== 'pdf' && component.required ? ' required':'')+(component.value ? ' withval':' noval')}
+                      />
+                  }
+                  { component.type === 'SUBSECTION' &&
+                    <Subsection section={section} subsection={component} mode={mode} showErrors={showErrors} handleChangeValues={handleChangeValues} />
+                  }
+              </Row>
         )}
         </div>
     </div>
