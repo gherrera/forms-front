@@ -33,13 +33,13 @@ const SectionEdit = ({ s, refreshThisSection }) => {
   const getComponentByType = (type, add) => {
     if(type === "PARAGRAPH") return { id: getRandomId(), type, text: add ? null:'Aqui va el texto de ejemplo', fieldSet: { id: getRandomId(), type: 'FIELDSET', hasTitle: false, fields: []} }
     else if(type === "FIELDSET")  {
-      if(add) return {id: getRandomId(), type, cols: 2, hasTitle: true, title: 'Titulo de los datos', fields: []}
+      if(add) return {id: getRandomId(), type, cols: 2, hasTitle: true, title: 'Titulo de los datos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', hasTitle: false, typeField: 'INPUT', required: true}]}
       else return {id: getRandomId(), type, cols: 2, hasTitle: true, title: 'Titulo de los datos', fields: [{ id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true}, {id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Dato2', required: true}]}
     }else if(type === "TABLE") {
-      if(add) return { id: getRandomId(), type, records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: false, fields: [] }}
+      if(add) return { id: getRandomId(), type, records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: false, fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', hasTitle: false, typeField: 'INPUT', required: true, tableVisible: true}] }}
       else return { id: getRandomId(), type, text: 'Instrucciones para el llenado de los datos', records:[{fields: {}}], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los campos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true, tableVisible: true}, { id: getRandomId(), key: 'field2', type: 'FIELD', title: 'Dato2', typeField: 'INPUT', required: true, tableVisible: true}] }}
     }else if(type === "DECL") {
-      if(add) return { id: getRandomId(), type, records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: false, fields: [] }}
+      if(add) return { id: getRandomId(), type, records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: false, fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', hasTitle: false, typeField: 'INPUT', required: true, tableVisible: true}] }}
       else return { id: getRandomId(), type, decision: true, text: 'Instrucciones para el llenado de los datos', records:[{fields: {}}], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los campos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true, tableVisible: true}, { id: getRandomId(), key: 'field2', type: 'FIELD', title: 'Dato2', typeField: 'INPUT', required: true, tableVisible: true}] }}
     }else if(type === "TEXT") {
       return {id: getRandomId(), type, required: false, hasTitle: false}

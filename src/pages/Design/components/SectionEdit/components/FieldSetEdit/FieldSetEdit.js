@@ -129,13 +129,18 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, handleChan
 
   const handleApplyFields = (fields) => {
     let fs = []
-    fieldset.fields.map(f => {
-      fs.push(f)
-    })
-    fields.map(f => {
-      fieldset.fields.push({id: getRandomId(), title: f.title, type: 'FIELD', typeField: f.type, required: f.type !== 'CHECKBOX' && f.required, tableVisible: true, key: 'field'+(fieldset.fields.length+1), source: f.source, validation: f.validation})
-    })
-    handleChangeValuesSection(section)
+    if(fields.length > 0) {
+      if(fieldset.fields.length !== 1 || (fieldset.fields[0].title !== null && fieldset.fields[0].title !== undefined && fieldset.fields[0].title !== '')) {
+        fieldset.fields.map(f => {
+          fs.push(f)
+        })
+      }
+      fields.map(f => {
+        fs.push({id: getRandomId(), title: f.title, type: 'FIELD', typeField: f.type, required: f.type !== 'CHECKBOX' && f.required, tableVisible: true, key: 'field'+(fieldset.fields.length+1), source: f.source, validation: f.validation})
+      })
+      fieldset.fields = fs
+      handleChangeValuesSection(section)
+    }
     onCloseCatalogo()
   }
 
@@ -209,8 +214,8 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, handleChan
         { section.type !== 'CONTACTPERSON' && fieldset.fields &&
           <>
             { fieldset.fields.length === 0 ?
-            <Row style={{marginTop:'20px'}}>
-              <Col span={3} offset={20}>
+            <Row style={{marginTop:'20px',}}>
+              <Col span={3} offset={1}>
                 <Button size="small" icon="plus" onClick={addField}>Agregar primer Dato</Button>
               </Col>
             </Row>

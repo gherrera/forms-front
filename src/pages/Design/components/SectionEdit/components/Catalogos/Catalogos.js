@@ -21,15 +21,12 @@ const Catalogos = ({ handleChangeCatalogoActive, handlerChangeCatalogo, section,
   useEffect(() => {
       let catContacto = []
       if(catType === 'CONTACTPERSON') {
-        let cat0 = {key: 'header', hasTitle: true, title: 'Encabezado', cols: 2, fields: [], active}
-        cat0.fields.push({ type: 'INPUT', title: 'Nombre', key: 'nombre', active: false, required: false})
-        cat0.fields.push({ type: 'INPUT', title: 'Ap Paterno', key: 'apPaterno', active: false, required: false})
-        cat0.fields.push({ type: 'INPUT', title: 'Ap Materno', key: 'apMaterno', active: false, required: false})
-        cat0.fields.push({ type: 'SELECT', title: 'Tipo de Documento', key: 'tipDoc', active: false, required: false, source:'CAT:TIPO_DOC'})
-        cat0.fields.push({ type: 'INPUT', title: 'Documento', key: 'documento', active: false, required: false})
-        catContacto.push(cat0)
-
-        let cat1 = {key: 'lugarOrigen', hasTitle: true, title: 'Lugar de origen', cols: 2, fields: [], active}
+        let cat1 = {key: 'datosPersonales', hasTitle: true, title: 'Datos Personales', cols: 2, fields: [], active}
+        cat1.fields.push({ type: 'INPUT', title: 'Nombre', key: 'nombre', active: false, required: false})
+        cat1.fields.push({ type: 'INPUT', title: 'Ap Paterno', key: 'apPaterno', active: false, required: false})
+        cat1.fields.push({ type: 'INPUT', title: 'Ap Materno', key: 'apMaterno', active: false, required: false})
+        cat1.fields.push({ type: 'SELECT', title: 'Tipo de Documento', key: 'tipDoc', active: false, required: false, source:'CAT:TIPO_DOC'})
+        cat1.fields.push({ type: 'INPUT', title: 'Documento', key: 'documento', active: false, required: false})
         cat1.fields.push({ type: 'SELECT', title: 'Nacionalidad', key: 'nacionalidad', active: false, required: false, source:'CAT:PAISES'})
         cat1.fields.push({ type: 'SELECT', title: 'Estado civil', key: 'estadoCivil', active: false, required: false, source:'CAT:ESTADO_CIVIL'})
         cat1.fields.push({ type: 'DATE', title: 'Fecha de nacimiento', key: 'fecNac', active: false, required: false})
