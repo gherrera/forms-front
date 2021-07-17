@@ -5,6 +5,16 @@
         overflow: hidden;
         padding: 5px;
 
+        .btn-new-field {
+          .btns {
+            padding-top: 5px;
+            text-align: center;
+          }
+        }
+        .btn-add-cat {
+          //padding: 5px;
+          text-align: center;
+        }
         .title {
             text-align: center;
             //border-bottom: 1px solid rgba(0,0,0,.1);

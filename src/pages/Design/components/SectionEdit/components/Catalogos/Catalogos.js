@@ -204,6 +204,7 @@ const Catalogos = ({ handleChangeCatalogoActive, handlerChangeCatalogo, section,
     catalogos.map(c => {
         fields.push( ...c.fields.filter(f => f.active))
     })
+    debugger
     handleApplyFields(fields)
   }
 
@@ -237,7 +238,7 @@ const Catalogos = ({ handleChangeCatalogoActive, handlerChangeCatalogo, section,
         </Row>
         <Row style={handleApplyFields && {paddingBottom:'20px'}}>
         { catalogos.map(cat =>
-            <Catalogo catalogo={cat}  handleChangeCatalogoActive={_handleChangeCatalogoActive} handlerChangeCatalogo={_handlerChangeCatalogo} />
+            <Catalogo catalogo={cat} handleChangeCatalogoActive={_handleChangeCatalogoActive} handlerChangeCatalogo={_handlerChangeCatalogo} />
         )}
         </Row>
 

@@ -136,7 +136,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, handleChan
         })
       }
       fields.map(f => {
-        fs.push({id: getRandomId(), title: f.title, type: 'FIELD', typeField: f.type, required: f.type !== 'CHECKBOX' && f.required, tableVisible: true, key: 'field'+(fieldset.fields.length+1), source: f.source, validation: f.validation})
+        fs.push({id: getRandomId(), title: f.title, type: 'FIELD', typeField: f.type, required: f.type !== 'CHECKBOX' && f.required, tableVisible: true, key: 'field'+(fs.length+1), source: f.source, validation: f.validation})
       })
       fieldset.fields = fs
       handleChangeValuesSection(section)
