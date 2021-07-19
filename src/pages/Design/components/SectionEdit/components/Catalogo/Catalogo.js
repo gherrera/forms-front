@@ -15,7 +15,7 @@ import {
 
 import { useTranslation } from "react-i18next";
 
-const Catalogo = ({ catalogo, handleChangeCatalogoActive, handlerChangeCatalogo, handleAddCatalogo }) => {
+const Catalogo = ({ section, catalogo, handleChangeCatalogoActive, handlerChangeCatalogo }) => {
   const { t } = useTranslation()
   const [ visibleAdd, setVisibleAdd ] = useState(false)
   const [ field, setField ] = useState(null)
@@ -82,7 +82,7 @@ const Catalogo = ({ catalogo, handleChangeCatalogoActive, handlerChangeCatalogo,
                     </Row>
                 </Col>
             )}
-            { catalogo.active &&
+            { (section.type === 'CONTACTPERSON' || section.type === 'CONTACTENTIY') && catalogo.active &&
                 <Col span={visibleAdd ? 6: 1} className={!visibleAdd ? 'btn-add-cat':'btn-new-field'}>
                     <Row className="field-cat">
                     { visibleAdd ?

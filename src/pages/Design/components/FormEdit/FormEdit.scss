@@ -1,13 +1,15 @@
 .form-edit {
   .form {
 
+    .btn-add-section {
+      background-color: #e2a11f !important;
+      border-color: #e2a11f !important;
+    }
+
     .tools-btn {
       text-align: right;
       padding-bottom: 10px;
-
-      .ant-col {
-        padding-right: 0px;
-      }
+      padding-right: 0px !important;
 
       button {
         margin-left: 10px;
@@ -59,5 +61,4 @@
       }
     }
   }
-
 }

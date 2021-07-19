@@ -12,7 +12,7 @@ const Text = ({ component, mode, handleChangeValues }) => {
 
     const handleChangeFieldValue = (component, value) => {
         component.value = value
-        handleChangeValues(component)
+        handleChangeValues && handleChangeValues(component)
       }
 
     return (

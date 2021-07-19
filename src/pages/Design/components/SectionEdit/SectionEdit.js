@@ -209,7 +209,7 @@ const SectionEdit = ({ s, refreshThisSection }) => {
           <Button onClick={handlePreviewSection} type="primary">Previsualizar</Button>
         </Col>
       </Row>
-      { section.type === 'CONTACTPERSON' &&
+      { (section.type === 'CONTACTPERSON' || section.type === 'CONTACTENTIY') &&
         <Catalogos handleChangeCatalogoActive={handleChangeCatalogoActive} handlerChangeCatalogo={handlerChangeCatalogo}
           section={section} type={section.type}
         />
@@ -243,7 +243,7 @@ const SectionEdit = ({ s, refreshThisSection }) => {
       }
 
       <div className={'section-components section-type-'+section.type}>
-        { section.components && (section.type === 'CONTACTPERSON') &&
+        { section.components && (section.type === 'CONTACTPERSON' || section.type === 'CONTACTENTIY') &&
           <Row><h4>Datos seleccionados</h4></Row>
         }
         { section.components && section.components.map((component, index) =>
