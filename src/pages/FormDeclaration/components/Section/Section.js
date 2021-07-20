@@ -9,8 +9,6 @@ import { saveSectionValuesPromise } from "../../promises";
 
 import { useTranslation } from "react-i18next";
 
-const { TextArea } = Input;
-
 const Section = ({ decl, section, mode, refreshForm, showErrors }) => {
   const { t } = useTranslation()
   const [ sSection, setSSection ] = useState(section)
@@ -61,20 +59,20 @@ const Section = ({ decl, section, mode, refreshForm, showErrors }) => {
             ((component.type === 'PARAGRAPH' && component.text) || component.type !== 'PARAGRAPH') &&
               <Row className={'section-component section-component-type-'+component.type}>
                   { component.type === 'PARAGRAPH' &&
-                      <Paragraph component={component} mode={mode} handleChangeValues={handleChangeValues} />
+                      <Paragraph component={component} mode={mode} handleChangeValues={mode==="html" || mode==="preview" ? handleChangeValues:null} />
                   }
                   { component.type === 'FIELDSET' &&
                       <FieldSet section={sSection} parent={sSection} component={component} mode={mode} 
                         showErrors={showErrors}
-                        handleChangeValues={handleChangeValues} 
+                        handleChangeValues={mode==="html" || mode==="preview" ? handleChangeValues:null} 
                         validateForm={showErrors}
                       />
                   }
                   { (component.type === 'TABLE' || component.type === 'DECL') &&
-                      <Table section={sSection} component={component} mode={mode} handleChangeValues={handleChangeValues} showErrors={showErrors} />
+                      <Table section={sSection} component={component} mode={mode} handleChangeValues={mode==="html" || mode==="preview" ? handleChangeValues:null} showErrors={showErrors} />
                   }
                   { component.type === 'TEXT' &&
-                      <Text component={component} mode={mode} handleChangeValues={handleChangeValues} />
+                      <Text component={component} mode={mode} handleChangeValues={mode==="html" || mode==="preview" ? handleChangeValues:null} />
                   }
                   { component.type === 'SUBSECTION' &&
                     <Subsection section={section} subsection={component} mode={mode} showErrors={showErrors} handleChangeValues={handleChangeValues} />

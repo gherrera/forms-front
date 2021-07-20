@@ -51,11 +51,9 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
 		})
   }
 
-  const handlerAddSection = (title, type) => {
+  const handlerAddSection = (section) => {
     closeModalSectionHandler()
-    let section = {...getComponentNewSection(type), id: getRandomId(), status: 'ACTIVE', type, title}
 
-    debugger
     let joined = sections.concat(section);
     setSections(joined)
     saveForm(joined)
@@ -100,7 +98,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
   const getTypeSection = (type) => {
     if(type === 'INTRO') return "Párrafo con Datos"
     else if(type === 'CONTACTPERSON') return "Catálogo de Datos de Persona Natural"
-    else if(type === 'CONTACTENTIY') return "Catálogo de Datos de Persona Jurídica"
+    else if(type === 'CONTACTENTITY') return "Catálogo de Datos de Persona Jurídica"
     else if(type === 'DATA') return "Datos Personalizados"
     else if(type === 'TABLE') return "Tabla"
     else if(type === 'DECL') return "Pregunta Tipo Declaración"
@@ -114,28 +112,6 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     s.formId = formId
     setSection(s)
     refreshBreadCrumbs(getTypeSection(s.type), null)
-  }
-
-  const getRandomId = () => {
-    return 'R' + Math.floor(Math.random() * 1000000);
-  }
-
-  const getComponentNewSection = (type) => {
-    if(type === 'TABLE' || type === 'DECL') {
-      return { components: [{ id: getRandomId(), type, records:[], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: false, fields: [{id: getRandomId(), type: 'FIELD', hasTitle: false, typeField: 'INPUT', required: true, tableVisible: true}] }}]};
-    }else if(type === 'CONTACTPERSON' || type === 'CONTACTENTITY') {
-      return { components: []};
-    }else if(type === 'DATA') {
-      return { components: [{id: getRandomId(), type: 'PARAGRAPH'}, { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: false, fields: [{id: getRandomId(), type: 'FIELD', hasTitle: false, typeField: 'INPUT', required: true}] }]};
-    }else if(type === 'INTRO') {
-      return { components: [{ id: getRandomId(), type: 'PARAGRAPH', fieldSet: {id: getRandomId(), type: 'FIELDSET', hasTitle: false, fields: []} }]};
-    }else if(type === 'TEXT') {
-      return { components: [{id: getRandomId(), type: 'PARAGRAPH'}] };
-    }else if(type === 'COMMENTS') {
-      return { components: [{id: getRandomId(), type: 'PARAGRAPH'}, {id: getRandomId(), type: 'TEXT', required: true, hasTitle: false}] };
-    }else if(type === 'CUSTOM') {
-      return { components: [] };
-    }
   }
 
   const refreshSection = (s) => {

@@ -13,7 +13,7 @@ import {
   Popover
 } from "antd";
 
-import { Paragraph, FieldSet, Table, Text } from "../../../FormDeclaration/components";
+import { Paragraph, FieldSet, Table, Text, Section } from "../../../FormDeclaration/components";
 
 import personIcon from './img/person.png'
 import entityIcon from './img/entity.png'
@@ -22,58 +22,56 @@ const { confirm } = Modal;
 
 const ModalNewSection = ({ form, handlerAddSection }) => {
     const { getFieldDecorator, validateFields } = form;
-    const [title, setTitle] = useState(null)
     const [type, setType] = useState(null)
-    const [sectionType, setSectionType] = useState(null)
+    const [section, setSection] = useState({status: 'ACTIVE', type: null})
+
+    useEffect(() => {
+    }, [section])
 
     const onChangeRadio = (value) => {
         setType(value)
-        if(value === 2) setSectionType('CUSTOM')
-        else setSectionType(null)
+        if(value === 2) setSection({...section, type: 'CUSTOM'})
+        else setSection({...section, type: null})
     }
 
     const handleChangeTitle = (value) => {
-        setTitle(value)
+        setSection({...section, title: value})
     }
 
     const handlerBtnAdd = () => {
         validateFields(['title', 'type']).then(() => {
-            if((type === 1 || type === 3) && sectionType === null) {
+            if((type === 1 || type === 3) && section.type === null) {
                 notification.error({
                     message: 'Debe seleccionar un tipo de Sección'
                 })
             }else {
-                confirm({
+                handlerAddSection(section)
+                /*confirm({
                     title: 'Nueva sección',
                     content: 'Confirma la creación de la nueva sección?',
                     onOk() {
-                        handlerAddSection(title, sectionType)
                     },
                     onCancel() {},
                   });
+                */
             }
         })
     }
 
-    const selectTypeFields = (tf) => {
-        setSectionType(tf)
+    const selectTypeFields = (type) => {
+        let c = getComponentNewSection(type, true)
+        setSection({...section, type, components: c.components})
     }
 
     const getContentPopOver = (comp) => {
         return <Row className="overlayExample">
           <Col className="explain-component" span={24}>{getTextComponent(comp)}</Col>
           <Col className="component-example"span={24}>
-          { (comp === 'PARAGRAPH' || comp === 'INTRO') && 
+          { (comp === 'PARAGRAPH') && 
             <Paragraph component={getComponentByType(comp)} mode="preview" />
           }
-          { (comp === 'FIELDSET' || comp === 'CONTACTPERSON' || comp === 'CONTACTENTITY') && 
+          { (comp === 'FIELDSET') && 
             <FieldSet section={{}} parent={{}} component={getComponentByType(comp)} mode="preview" />
-          }
-          { comp === 'DATA' && 
-            <>
-            <Paragraph component={getComponentByType('PARAGRAPH')} mode="preview" />
-            <FieldSet section={{}} parent={{}} component={getComponentByType('FIELDSET')} mode="preview" />
-            </>
           }
           { (comp === 'TABLE' || comp === 'DECL') && 
             <Table section={{}} component={getComponentByType(comp)} mode="preview" />
@@ -81,21 +79,41 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
           { comp === 'TEXT' && 
             <Text component={getComponentByType(comp)} mode="preview" />
           }
-          { comp === 'COMMENTS' && 
-            <>
-                <Paragraph component={getComponentByType('PARAGRAPH')} mode="preview" />
-                <Text component={getComponentByType('TEXT')} mode="preview" />
-            </>
-          }
           </Col>
         </Row>
     }
 
+    const getContentPopOverSection = (s) => {
+        return <Row className="overlayExample">
+          <Col className="explain-component" span={24}>{getTextComponent(s)}</Col>
+          <Col className="component-example"span={24}>
+            <Section key={getRandomId()} section={getComponentNewSection(s)} mode="previewpop" />
+          </Col>
+        </Row>
+    }
+
+    const getComponentNewSection = (type, add) => {
+        if(type === 'TABLE' || type === 'DECL') {
+            if(add) return { components: [getComponentByType(type, add)]}
+            else return { components: [getComponentByType(type, add)], title: section.title?section.title:'Título de la sección'};
+        }else if(type === 'DATA') {
+            if(add) return { components: [getComponentByType('PARAGRAPH', add), getComponentByType('FIELDSET', add, {addField:true})]};
+            else return { title: section.title?section.title:'Título de la sección', components: [getComponentByType('PARAGRAPH', add), getComponentByType('FIELDSET', add)]};
+        }else if(type === 'INTRO') {
+            if(add) return { components: [getComponentByType('PARAGRAPH', add, {addFieldset: true})]};
+            else return { title: section.title?section.title:'Título de la sección', components: [getComponentByType('PARAGRAPH', add, {addFieldset: true})]};
+        }else if(type === 'TEXT') {
+          return { title: section.title?section.title:'Título de la sección', components: [getComponentByType('PARAGRAPH', add)] };
+        }else if(type === 'COMMENTS') {
+          return { title: section.title?section.title:'Título de la sección', components: [getComponentByType('PARAGRAPH', add), getComponentByType('TEXT', add)] };
+        }else {
+          return { components: [] };
+        }
+    }
+
     const getTooltipComponent = (c) => {
         if(c === 'PARAGRAPH') return 'Párrafo'
-        else if(c === 'INTRO') return 'Datos con Datos'
-        else if(c === 'CONTACTPERSON') return 'Catálogo de Datos de persona Natural'
-        else if(c === 'CONTACTENTITY') return 'Catálogo de Datos de persona Jurídica'
+        else if(c === 'INTRO') return 'Párrafo con Datos'
         else if(c === 'DATA') return 'Datos personalizados'
         else if(c === 'FIELDSET') return 'Datos'
         else if(c === 'TABLE') return 'Tabla'
@@ -107,7 +125,7 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
 
     const getTextComponent = (comp) => {
         if(comp === 'PARAGRAPH' || comp === 'INTRO') return 'Se incluye una caja de texto que permite agregar texto personalizado con campos incrustados opcionales'
-        else if(comp === 'FIELDSET' || comp === "CONTACTPERSON" || comp === "CONTACTENTITY" || comp === "DATA") return 'Se incluye grupo de datos personalizados'
+        else if(comp === 'FIELDSET' || comp === "DATA") return 'Se incluye grupo de datos personalizados'
         else if(comp === 'TABLE') return 'Se incluye grupo de datos personalizados para agregar en registros a una Tabla'
         else if(comp === 'DECL') return 'Se incluye una deción inicial y grupo de datos personalizados para agregar en registros a una Tabla'
         else if(comp === 'TEXT') return 'Se incluye un campo de texto para ser completado por el usuario'
@@ -115,18 +133,23 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
         else if(comp === 'SUBSECTION') return 'Se incluye una Subsección que permite agregar otros elementos'
     }
 
-    const getComponentByType = (type) => {
-        if(type === "PARAGRAPH" || type === "INTRO") return { id: getRandomId(), type, text: 'Aqui va el texto de ejemplo', fieldSet: { id: getRandomId(), type: 'FIELDSET', hasTitle: false, fields: []} }
-        else if(type === "FIELDSET" || type === "CONTACTPERSON"  || type === "CONTACTENTITY" )  {
-          return {id: getRandomId(), type, cols: 2, hasTitle: true, title: 'Titulo de los datos', fields: [{ id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true}, {id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Dato2', required: true}]}
+    const getComponentByType = (type, add, params={addFieldset: false}) => {
+        if(type === "PARAGRAPH") {
+            if(add && params.addFieldset) return { id: getRandomId(), type, fieldSet: getComponentByType('FIELDSET', add, params) }
+            else if(add) return { id: getRandomId(), type }
+            else return { id: getRandomId(), type, text: 'Aqui va el texto de ejemplo', fieldSet: getComponentByType('FIELDSET', add) }
+        }else if(type === "FIELDSET")  {
+            if(add && params.addField) return {id: getRandomId(), type, cols: 2, fields: [{ id: getRandomId(), type: 'FIELD', typeField: 'INPUT', required: true, tableVisible: true}]}
+            else if(add) return {id: getRandomId(), type, cols: 2, hasTitle: params.title, title: params.title?'Titulo de los datos':null, fields: []}
+            else return {id: getRandomId(), type, cols: 2, hasTitle: params.title, title: params.title?'Titulo de los datos':null, fields: [{ id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true}, {id: getRandomId(), type: 'FIELD', typeField: 'INPUT', title: 'Dato2', required: true}]}
         }else if(type === "TABLE") {
-          return { id: getRandomId(), type, text: 'Instrucciones para el llenado de los datos', records:[{fields: {}}], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los campos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true, tableVisible: true}, { id: getRandomId(), key: 'field2', type: 'FIELD', title: 'Dato2', typeField: 'INPUT', required: true, tableVisible: true}] }}
+          return { id: getRandomId(), type, text: add?null:'Instrucciones para el llenado de los datos', records:[], fieldSet: getComponentByType('FIELDSET', add, {addField: true, title: false})}
         }else if(type === "DECL") {
-          return { id: getRandomId(), type, decision: true, text: 'Instrucciones para el llenado de los datos', records:[{fields: {}}], fieldSet: { id: getRandomId(), type: 'FIELDSET', cols: 2, hasTitle: true, title: 'Titulo de los campos', fields: [{id: getRandomId(), key: 'field1', type: 'FIELD', typeField: 'INPUT', title: 'Dato1', required: true, tableVisible: true}, { id: getRandomId(), key: 'field2', type: 'FIELD', title: 'Dato2', typeField: 'INPUT', required: true, tableVisible: true}] }}
+          return { id: getRandomId(), type, decision: true, text: add?null:'Instrucciones para el llenado de los datos', records:[], fieldSet: getComponentByType('FIELDSET', add, {addField: true, title: false})}
         }else if(type === "TEXT") {
           return {id: getRandomId(), type, required: false, hasTitle: false}
         }else if(type === 'COMMENTS') {
-          return { id: getRandomId(), type, components: [{id: getRandomId(), type: 'PARAGRAPH'}, {id: getRandomId(), type: 'TEXT', required: true, hasTitle: false}] };
+          return { id: getRandomId(), type, components: [getComponentByType('PARAGRAPH', add), {id: getRandomId(), type: 'TEXT', required: true, hasTitle: false}] };
         }else if(type === "SUBSECTION") {
           return { id: getRandomId(), type, title: 'Titulo de la subsección', components: []}
         }
@@ -143,7 +166,6 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
             <Col className="col-input-name">
                 <Form.Item>
                     {getFieldDecorator('title', {
-                        initialValue: title,
                         validateTrigger: "onChange",
                         rules:
                         [
@@ -157,7 +179,6 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
             <Col><h3>Seleccione el tipo de Sección que requiere</h3></Col>
             <Form.Item className="item-radio-type">
                 {getFieldDecorator('type', {
-                    initialValue: title,
                     validateTrigger: "onChange",
                     rules:
                     [
@@ -180,7 +201,7 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
                             <span className="title">Puedes elegir los campos que necesites agregar a tu sección, selecciona el catalogo de datos de:</span>
                             
                             <Col span={8} offset={4}>
-                                <div className={'section-type-box'+(sectionType==='CONTACTPERSON'?' selected':'')} onClick={() => selectTypeFields('CONTACTPERSON')}>
+                                <div className={'section-type-box'+(section.type==='CONTACTPERSON'?' selected':'')} onClick={() => selectTypeFields('CONTACTPERSON')}>
                                     <Col>
                                         <img src={personIcon} />
                                     </Col>
@@ -188,7 +209,7 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
                                 </div>
                             </Col>
                             <Col span={8}>
-                                <div className={'section-type-box'+(sectionType==='CONTACTENTITY'?' selected':'')} onClick={() => selectTypeFields('CONTACTENTITY')}>
+                                <div className={'section-type-box'+(section.type==='CONTACTENTITY'?' selected':'')} onClick={() => selectTypeFields('CONTACTENTITY')}>
                                     <Col>
                                         <img src={entityIcon} />
                                     </Col>
@@ -229,8 +250,8 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
 
                             <Row className="row-plant-section">
                                 {["INTRO", "DATA", "DECL", "TABLE", "TEXT", "COMMENTS"].map(c =>
-                                    <Popover content={getContentPopOver(c)} title={getTooltipComponent(c)} trigger="hover" placement="bottom">
-                                    <Col span={4} onClick={() => selectTypeFields(c)} className={'section-type-box' + (sectionType === c ? ' selected':'')}>
+                                    <Popover content={getContentPopOverSection(c)} title={getTooltipComponent(c)} trigger="hover" placement="bottom">
+                                    <Col span={4} onClick={() => selectTypeFields(c)} className={'section-type-box' + (section.type === c ? ' selected':'')}>
                                         <Col>
                                             { c === "INTRO" && <Icon type="align-center" /> }
                                             { c === "DATA" && <Icon type="form" /> }
@@ -255,7 +276,7 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
                 </Row>
             }
             <Row className="btn-tools-add-section">
-                <Col><Button type="primary" icon="plus" onClick={handlerBtnAdd} disabled={sectionType===null}>Agregar</Button></Col>
+                <Col><Button type="primary" icon="plus" onClick={handlerBtnAdd} disabled={section.type===null}>Agregar</Button></Col>
             </Row>
         </div>
     )

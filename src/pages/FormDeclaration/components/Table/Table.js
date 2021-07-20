@@ -215,7 +215,11 @@ const Table = ({ section, component, mode, handleChangeValues, showErrors }) => 
           </>
         }
         {(mode !== 'pdf' || columns.length === component.fieldSet.fields.length) ? 
+          <>
+          { component.records.length > 0 &&
           <TableAntd columns={columns} size="small" dataSource={component.records} pagination={component.records && component.records.size > 10 ? true : false} className="table-rows"/>
+          }
+          </>
           :
           toDescriptionsPdf(component.records)
         }
