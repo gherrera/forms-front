@@ -46,7 +46,6 @@ useEffect(() => {
 }, [cleanFields])
 
   const handleChangeFieldValue = (field, value) => {
-    debugger
     field.value = value
     if(parent.id === section.id) {
       let errores = component.fields.filter(f => f.required && (f.value === null || f.value === ''));
