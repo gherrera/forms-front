@@ -16,7 +16,7 @@ const SubsectionEdit = ({ indexSection, section, component, subsection, getCompo
   
   useEffect(() => {
     if(component.type === 'DECISION') {
-      setComponents(["PARAGRAPH", "FIELDSET", "TABLE", "DECL", "TEXT"])
+      setComponents(["PARAGRAPH", "FIELDSET", "TABLE", "TEXT"])
     }
   }, [])
 
