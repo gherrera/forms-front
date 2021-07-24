@@ -4,7 +4,7 @@ import {
   Row,
   Input
 } from "antd";
-import { Paragraph, FieldSet, Table, Subsection, Text } from '../'
+import { Paragraph, FieldSet, Table, Subsection, Text, Decision } from '../'
 import { saveSectionValuesPromise } from "../../promises";
 
 import { useTranslation } from "react-i18next";
@@ -75,7 +75,10 @@ const Section = ({ decl, section, mode, refreshForm, showErrors }) => {
                       <Text component={component} mode={mode} handleChangeValues={mode==="html" || mode==="preview" ? handleChangeValues:null} />
                   }
                   { component.type === 'SUBSECTION' &&
-                    <Subsection section={section} subsection={component} mode={mode} showErrors={showErrors} handleChangeValues={handleChangeValues} />
+                    <Subsection section={section} component={component} subsection={component} mode={mode} showErrors={showErrors} handleChangeValues={handleChangeValues} />
+                  }
+                  { component.type === 'DECISION' &&
+                    <Decision section={section} component={component} mode={mode} showErrors={showErrors} handleChangeValues={mode==="html" || mode==="preview" ? handleChangeValues:null} />
                   }
               </Row>
         )}

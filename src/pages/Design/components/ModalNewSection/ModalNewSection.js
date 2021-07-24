@@ -13,7 +13,7 @@ import {
   Popover
 } from "antd";
 
-import { Paragraph, FieldSet, Table, Text, Section } from "../../../FormDeclaration/components";
+import { Paragraph, FieldSet, Table, Text, Section, Decision } from "../../../FormDeclaration/components";
 
 import personIcon from './img/person.png'
 import entityIcon from './img/entity.png'
@@ -79,6 +79,9 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
           { comp === 'TEXT' && 
             <Text component={getComponentByType(comp)} mode="preview" />
           }
+          { comp === 'DECISION' && 
+            <Decision component={getComponentByType(comp)} mode="preview" />
+          }
           </Col>
         </Row>
     }
@@ -106,6 +109,8 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
           return { title: section.title?section.title:'Título de la sección', components: [getComponentByType('PARAGRAPH', add)] };
         }else if(type === 'COMMENTS') {
           return { title: section.title?section.title:'Título de la sección', components: [getComponentByType('PARAGRAPH', add), getComponentByType('TEXT', add)] };
+        }else if(type === 'DECISION') {
+            return { title: section.title?section.title:'Título de la sección', components: [getComponentByType('DECISION', add)] };
         }else {
           return { components: [] };
         }
@@ -121,6 +126,7 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
         else if(c === 'TEXT') return 'Campo de Texto'
         else if(c === 'COMMENTS') return 'Comentarios'
         else if(c === 'SUBSECTION') return 'Sub Seccion'
+        else if(c === 'DECISION') return 'Decisión'
     }
 
     const getTextComponent = (comp) => {
@@ -131,6 +137,7 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
         else if(comp === 'TEXT') return 'Se incluye un campo de texto para ser completado por el usuario'
         else if(comp === 'COMMENTS') return 'Se incluye un párrafo y un campo de texto para ser completado por el usuario'
         else if(comp === 'SUBSECTION') return 'Se incluye una Subsección que permite agregar otros elementos'
+        else if(comp === 'DECISION') return 'Se incluye un elemento de decisión y elementos asociados a la decisión'
     }
 
     const getComponentByType = (type, add, params={addFieldset: false}) => {
@@ -152,6 +159,8 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
           return { id: getRandomId(), type, components: [getComponentByType('PARAGRAPH', add), {id: getRandomId(), type: 'TEXT', required: true, hasTitle: false}] };
         }else if(type === "SUBSECTION") {
           return { id: getRandomId(), type, title: 'Titulo de la subsección', components: []}
+        }else if(type === "DECISION") {
+            return { id: getRandomId(), type, text: add?null:'Instrucciones para el llenado de los datos', compSi: getComponentByType('SUBSECTION', add), compNo: getComponentByType('SUBSECTION', add)}
         }
     
     }
@@ -224,7 +233,7 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
 
                             <Row className="custom-tools">
                                 <ul className="custom-tools-group-menu">
-                                {["SUBSECTION", "PARAGRAPH", "FIELDSET", "TABLE", "DECL", "TEXT"].map(c =>
+                                {["SUBSECTION", "PARAGRAPH", "FIELDSET", "TABLE", "DECL", "DECISION", "TEXT"].map(c =>
                                     <Popover content={getContentPopOver(c)} title={getTooltipComponent(c)} trigger="hover" placement="bottom">
                                     <li>
                                         <a href="#0">
@@ -235,6 +244,7 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
                                             { c === "DECL" && <><Icon type="table" />&nbsp;Declaración</>}
                                             { c === "TEXT" && <><Icon type="edit" />&nbsp;Texto</>}
                                             { c === "SUBSECTION" && <><Icon type="profile" />&nbsp;Sub Seccion</>}
+                                            { c === "DECISION" && <><Icon type="fork" />&nbsp;Decisión</>}
                                             </span>
                                         </a>
                                     </li>
@@ -249,15 +259,17 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
                             <span className="title">Escoja una de las siguientes plantillas:</span>
 
                             <Row className="row-plant-section">
-                                {["INTRO", "DATA", "DECL", "TABLE", "TEXT", "COMMENTS"].map(c =>
+                                <Col span={1}></Col>
+                                {["INTRO", "DATA", "DECL", "TABLE", "DECISION", "TEXT", "COMMENTS"].map(c =>
                                     <Popover content={getContentPopOverSection(c)} title={getTooltipComponent(c)} trigger="hover" placement="bottom">
-                                    <Col span={4} onClick={() => selectTypeFields(c)} className={'section-type-box' + (section.type === c ? ' selected':'')}>
+                                    <Col span={3} onClick={() => selectTypeFields(c)} className={'section-type-box' + (section.type === c ? ' selected':'')}>
                                         <Col>
                                             { c === "INTRO" && <Icon type="align-center" /> }
                                             { c === "DATA" && <Icon type="form" /> }
                                             { (c === "DECL" || c === 'TABLE') && <Icon type="table" /> }
                                             { c === "TEXT" && <Icon type="edit" /> }
                                             { c === "COMMENTS" && <Icon type="edit" /> }
+                                            { c === "DECISION" && <Icon type="fork" /> }
                                         </Col>
                                         <Col>
                                             { c === "INTRO" && 'Párrafo con Datos' }
@@ -266,6 +278,7 @@ const ModalNewSection = ({ form, handlerAddSection }) => {
                                             { c === "TABLE" && 'Tipo Tabla' }
                                             { c === "TEXT" && 'Cuadro de Texto' }
                                             { c === "COMMENTS" && 'Comentarios' }
+                                            { c === "DECISION" && 'Decisión' }
                                         </Col>
                                     </Col>
                                     </Popover>

@@ -14,8 +14,8 @@ import {
 } from "antd";
 
 import { useTranslation } from "react-i18next";
-import { TableEdit, FieldSetEdit, Catalogos, ParagraphEdit, SubsectionEdit, TextEdit } from './components'
-import { Paragraph, Table, FieldSet } from "../../../FormDeclaration/components";
+import { TableEdit, FieldSetEdit, Catalogos, ParagraphEdit, SubsectionEdit, TextEdit, DecisionEdit } from './components'
+import { Paragraph, Table, FieldSet, Decision } from "../../../FormDeclaration/components";
 import { saveSectionPromise } from "../FormEdit/promises";
 import { Preview } from '../'
 
@@ -45,6 +45,8 @@ const SectionEdit = ({ s, refreshThisSection }) => {
       return {id: getRandomId(), type, required: false, hasTitle: false}
     }else if(type === "SUBSECTION") {
       return { id: getRandomId(), type, title: 'Titulo de la subsección', components: []}
+    }else if(type === "DECISION") {
+      return { id: getRandomId(), type, text: add?null:'Instrucciones para el llenado de los datos', compSi: getComponentByType('SUBSECTION', add), compNo: getComponentByType('SUBSECTION', add)}
     }
 
   }
@@ -149,6 +151,7 @@ const SectionEdit = ({ s, refreshThisSection }) => {
     else if(c === 'DECL') return 'Pregunta tipo Declaración'
     else if(c === 'TEXT') return 'Campo de Texto'
     else if(c === 'SUBSECTION') return 'Sub Seccion'
+    else if(c === 'DECISION') return 'Decisión'
   }
 
   const handleClickComponent = (c) => {
@@ -175,6 +178,7 @@ const SectionEdit = ({ s, refreshThisSection }) => {
     else if(comp === 'DECL') return 'Se incluye una deción inicial y grupo de datos personalizados para agregar en registros a una Tabla'
     else if(comp === 'TEXT') return 'Se incluye un campo de texto para ser completado por el usuario'
     else if(comp === 'SUBSECTION') return 'Se incluye una Subsección que permite agregar otros elementos'
+    else if(comp === 'DECISION') return 'Se incluye un elemento de Decisión y elementos asociados a la decisión'
   }
 
   const getContentPopOver = (comp) => {
@@ -192,6 +196,9 @@ const SectionEdit = ({ s, refreshThisSection }) => {
       }
       { comp === 'TEXT' && 
         <TextArea rows={4} value='' disabled={true} />
+      }
+      { comp === 'DECISION' && 
+        <Decision section={section} component={getComponentByType(comp)} mode="preview" />
       }
       </Col>
     </Row>
@@ -217,7 +224,7 @@ const SectionEdit = ({ s, refreshThisSection }) => {
       { section.type === 'CUSTOM' &&
         <Row className="custom-tools">
           <ul className="custom-tools-group-menu">
-          {["SUBSECTION", "PARAGRAPH", "FIELDSET", "TABLE", "DECL", "TEXT"].map(c =>
+          {["SUBSECTION", "PARAGRAPH", "FIELDSET", "TABLE", "DECL", "DECISION", "TEXT"].map(c =>
             <Popover content={getContentPopOver(c)} title={getTooltipComponent(c)} trigger="hover" placement="bottom">
               <li>
                   <a href="#0" onClick={() => handleClickComponent(c)}>
@@ -228,6 +235,7 @@ const SectionEdit = ({ s, refreshThisSection }) => {
                       { c === "DECL" && <><Icon type="table" />&nbsp;Declaración</>}
                       { c === "TEXT" && <><Icon type="edit" />&nbsp;Texto</>}
                       { c === "SUBSECTION" && <><Icon type="profile" />&nbsp;Sub Seccion</>}
+                      { c === "DECISION" && <><Icon type="fork" />&nbsp;Decisión</>}
                     </span>
                     <span>
                       <Tooltip title="Agregar">
@@ -273,9 +281,15 @@ const SectionEdit = ({ s, refreshThisSection }) => {
               <TextEdit section={section} component={component} handleChangeValuesSection={handleChangeValuesSection}/>
             }
             { component.type === 'SUBSECTION' &&
-              <SubsectionEdit indexSection={index} section={section} subsection={component} 
+              <SubsectionEdit indexSection={index} section={section} component={component} subsection={component} 
                 handleChangeValuesSection={handleChangeValuesSection}
                 getComponentByType={getComponentByType} getTooltipComponent={getTooltipComponent} />
+            }
+            { component.type === 'DECISION' &&
+              <DecisionEdit section={section} component={component}
+                handleChangeValuesSection={handleChangeValuesSection}
+                getComponentByType={getComponentByType} getTooltipComponent={getTooltipComponent}
+              />
             }
           </Row>
         )}

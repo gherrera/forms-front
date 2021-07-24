@@ -106,6 +106,7 @@ const FormEdit = ({ formId, refreshBreadCrumbs, exitSection }) => {
     else if(type === 'TEXT') return "Cuadro de Texto"
     else if(type === 'COMMENTS') return "Comentarios"
     else if(type === 'CUSTOM') return "Seccion Personalizada"
+    else if(type === 'DECISION') return "Decisión"
   }
 
   const editSection = (s) => {
