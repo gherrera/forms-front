@@ -46,6 +46,7 @@ useEffect(() => {
 }, [cleanFields])
 
   const handleChangeFieldValue = (field, value) => {
+    debugger
     field.value = value
     if(parent.id === section.id) {
       let errores = component.fields.filter(f => f.required && (f.value === null || f.value === ''));
@@ -143,6 +144,17 @@ useEffect(() => {
           }
         : null;
 
+  const getDefaultValue = (field) => {
+    if(field.value !== null && field.value !== undefined && field.value !== '') {
+      if(field.typeField === 'DATE') return moment(field.value, 'DD/MM/YYYY')
+      else if(field.typeField === 'CHKOPTS') return field.value.split(',')
+      else if(field.typeField === 'RADIO') {
+        if(field.value.startsWith('OTHER-')) return 'OTHER'
+      }
+    }
+    return field.value
+  }
+
   return (
     <div className={'fieldset '+section.type}>
       { mode !== 'pdf' && showErrors && hasErrors &&
@@ -165,60 +177,85 @@ useEffect(() => {
           { component.fields.map(field =>
             <Col span={24/component.cols}>
               <Form.Item label={field.title} {...formItemLayout}>
-                { mode === 'pdf' && field.typeField !== 'CHECKBOX' ?
+                { mode === 'pdf' && field.typeField !== 'CHECKBOX' && field.typeField !== 'RADIO' && field.typeField !== 'CHKOPTS' ?
                   <Input disabled={true} value={field.value} 
                     suffix={field.validation && field.validation.type === 'percent' ? <Icon type="percentage" />: null}
                   />
-                  :  
-                  getFieldDecorator(field.id, {
-                    initialValue: field.value !== null && field.value !== undefined && field.value !== '' && field.typeField === 'DATE' ? moment(field.value, 'DD/MM/YYYY') : field.value,
-                    validateTrigger: "onChange",
-                    rules:
-                      [
-                        { required: field.required, message: 'Campo requerido' },
-                        ... field.validation && field.validation.type === 'email' ? [{type: "email", message: "Email no es válido"}]: [],
-                        ... field.validation && (field.validation.type === 'number' || field.validation.type === 'rut' || field.validation.type === 'rutEmp' || field.validation.type === 'rutNat' || field.validation.type === 'percent') ? [{validator: (rule, value, callback) => getValidator(rule, value, callback, field.validation)}]: [],
-                      ]
-                  })(
-                    field.typeField === 'INPUT' ?
-                      <Input
-                        autoComplete="off"
-                        onFocus= {(e)=>handleChangeValues && handleReadOnly(field,false)}
-                        onBlur= {(e)=>handleChangeValues && handleOnBlur(field,true)}
-                        readOnly = {field.readOnly !== false}
-                        maxLength={field.validation && field.validation.maxLength ? field.validation && field.validation.maxLength : 500}
-                        onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.value)}
-                        suffix={field.validation && field.validation.type === 'percent' ? <Icon type="percentage" />: null}
-                      />
-                    : field.typeField === 'SELECT' ?
-                      <Select
-                        showSearch
-                        onFocus= {(e)=>handleChangeValues && handleReadOnly(field,false)}
-                        onBlur= {(e)=>handleChangeValues && handleReadOnly(field,true)}
-                        readOnly = {field.readOnly !== false}
-                        onChange={(value) => handleChangeValues && handleChangeFieldValue(field, value)}>
-                          { getValuesFromDS(field).map(val =>
-                            <Select.Option value={val.value}>{val.value}</Select.Option>
-                          )}
-                      </Select>
-                    : field.typeField === 'RADIO' ?
-                      <Radio.Group
-                        onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.value)}>
-                          { getValuesFromDS(field).map(val =>
-                            <Radio value={val.value}>{val.value}</Radio>
-                          )}
-                      </Radio.Group>
-                    : field.typeField === 'CHECKBOX' ?
-                      <Checkbox checked={field.value}
-                        disabled={mode === 'pdf'}
-                        onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.checked)}
-                      />
-                    :
-                      <DatePicker placeholder="Ingrese la fecha" 
-                        format="DD/MM/YYYY"
-                        onChange={(momentObj) => handleChangeValues && handleChangeFieldValue(field, momentObj ? moment(momentObj).format( "DD/MM/YYYY" ) : null ) } 
-                      />
-                  )
+                  :
+                  <>
+                    { getFieldDecorator(field.id, {
+                      initialValue: getDefaultValue(field),
+                      validateTrigger: "onChange",
+                      rules:
+                        [
+                          { required: field.required, message: 'Campo requerido' },
+                          ... field.validation && field.validation.type === 'email' ? [{type: "email", message: "Email no es válido"}]: [],
+                          ... field.validation && (field.validation.type === 'number' || field.validation.type === 'rut' || field.validation.type === 'rutEmp' || field.validation.type === 'rutNat' || field.validation.type === 'percent') ? [{validator: (rule, value, callback) => getValidator(rule, value, callback, field.validation)}]: [],
+                        ]
+                    })(
+                      field.typeField === 'INPUT' ?
+                        <Input
+                          autoComplete="off"
+                          onFocus= {(e)=>handleChangeValues && handleReadOnly(field,false)}
+                          onBlur= {(e)=>handleChangeValues && handleOnBlur(field,true)}
+                          readOnly = {field.readOnly !== false}
+                          maxLength={field.validation && field.validation.maxLength ? field.validation && field.validation.maxLength : 500}
+                          onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.value)}
+                          suffix={field.validation && field.validation.type === 'percent' ? <Icon type="percentage" />: null}
+                        />
+                      : field.typeField === 'SELECT' ?
+                        <Select
+                          showSearch
+                          onFocus= {(e)=>handleChangeValues && handleReadOnly(field,false)}
+                          onBlur= {(e)=>handleChangeValues && handleReadOnly(field,true)}
+                          readOnly = {field.readOnly !== false}
+                          onChange={(value) => handleChangeValues && handleChangeFieldValue(field, value)}>
+                            { getValuesFromDS(field).map(val =>
+                              <Select.Option value={val.value}>{val.value}</Select.Option>
+                            )}
+                        </Select>
+                      : field.typeField === 'RADIO' ?
+                        <Radio.Group
+                          disabled={mode === 'pdf'}
+                          onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.value)}>
+                            { getValuesFromDS(field).map(val =>
+                              <Radio value={val.value}>{val.value}</Radio>
+                            )}
+                            {  mode === 'pdf' && field.value && field.value.startsWith('OTHER') &&
+                              <Radio value="OTHER">{field.value.substring(6)}</Radio>
+                            }
+                            { mode !== 'pdf' &&
+                              <>
+                              { field.value && field.value.startsWith('OTHER') ?
+                                <Radio value="OTHER"/>
+                                :
+                                <Radio value="OTHER">Otro</Radio>
+                              }
+                              </>
+                            }
+                        </Radio.Group>
+                      : field.typeField === 'CHECKBOX' ?
+                        <Checkbox checked={field.value}
+                          disabled={mode === 'pdf'}
+                          onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.checked)}
+                        />
+                      : field.typeField === 'CHKOPTS' ?
+                        <Checkbox.Group
+                          disabled={mode === 'pdf'}
+                          onChange={(values) => handleChangeValues && handleChangeFieldValue(field, values.toString())}
+                          options={getValuesFromDS(field).map(val => {return {label: val.value, value: val.value}})}
+                          />
+                      :
+                        <DatePicker placeholder="Ingrese la fecha" 
+                          format="DD/MM/YYYY"
+                          onChange={(momentObj) => handleChangeValues && handleChangeFieldValue(field, momentObj ? moment(momentObj).format( "DD/MM/YYYY" ) : null ) } 
+                        />
+                    )
+                    }
+                    { mode !== 'pdf' && field.typeField === 'RADIO' && field.value && field.value.startsWith('OTHER') &&
+                        <Input size="small" placeholder="Otro" value={field.value.substring(6)} style={{width:'150px'}} onChange={(e) => handleChangeValues && handleChangeFieldValue(field, 'OTHER-'+e.target.value)}/>
+                    }
+                  </>
                 }
               </Form.Item>
             </Col>
