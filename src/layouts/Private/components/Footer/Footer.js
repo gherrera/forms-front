@@ -128,6 +128,7 @@ export default ({ currentUser }) => {
         </Col>
         <Col xs={ 1 }>&nbsp;</Col>
         */}
+        {/*
         <Col span={ 5 } offset={12}>
             <div className="h3-wrapper">
               <h3>{ t('messages.aml.languageSelector') }</h3>
@@ -145,6 +146,7 @@ export default ({ currentUser }) => {
               </li>
             </ul>
         </Col>
+        */}
       </Row>
     </div>
   )

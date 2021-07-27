@@ -148,10 +148,10 @@ class Login extends Component {
                                     <nav>
                                       <ul id="UL_28">
                                         <li id="LI_29">
-                                          <a href="#SECTION_95" id="A_30">¿Cómo funciona?</a>
+                                          <a href="#como-funciona" id="A_30">¿Cómo funciona?</a>
                                         </li>
                                         <li id="LI_31">
-                                          <a href="#SECTION_181" id="A_32">Inicia sesión</a>
+                                          <a href="#inicio" id="A_32">Inicia sesión</a>
                                         </li>
                                         <li id="LI_33">
                                           <a href="#SECTION_271" id="A_34">Servicio al cliente</a>
@@ -282,7 +282,7 @@ class Login extends Component {
                     </div>
                   </div>
                 </section>
-                <section id="SECTION_95">
+                <section id="como-funciona">
                   <div id="DIV_96">
                     <div id="DIV_97">
                       <div id="DIV_98">
@@ -462,7 +462,7 @@ class Login extends Component {
                     </div>
                   </div>
                 </section>
-                <section id="SECTION_181">
+                <section id="inicio">
                   <Form onSubmit={ isRestore ? this.handleRestorePassword.bind(this) : this.handleSubmit.bind(this) } className="login-form">
                     <div id="DIV_182">
                     </div>
@@ -523,100 +523,44 @@ class Login extends Component {
                                   </div>
                                 </div>
                               </section>
-                              <section id="SECTION_214">
-                                <div id="DIV_215">
-                                  <div id="DIV_216">
-                                    <div id="DIV_217">
-                                      <div id="DIV_218">
-                                        <div id="DIV_219">
-                                          <div id="DIV_220">
-                                            <div id="DIV_221">
-                                            {
-                                              this.renderFormItem({
-                                                name: 'username',
-                                                rules: [{ required: true, message: t('messages.aml.dontForgetUsername') }],
-                                                item: (
-                                                  <Input
-                                                    disabled={ false }
-                                                    onChange={ (e) => this.handleUsernameOnChange.bind(this)(e.target.value) }
-                                                    placeholder={ t('messages.aml.username') }
-                                                    />
-                                                )
-                                              })
-                                            }
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </section>
-                              <div id="DIV_223">
-                                <div id="DIV_224">
-                                  <div id="DIV_225">
-                                    <span id="SPAN_226"></span>
-                                  </div>
-                                </div>
-                              </div>
+                              <Row id="SECTION_214">
+                                  {
+                                    this.renderFormItem({
+                                      name: 'username',
+                                      rules: [{ required: true, message: 'Campo requerido' }],
+                                      item: (
+                                        <Input
+                                          disabled={ false }
+                                          onChange={ (e) => this.handleUsernameOnChange.bind(this)(e.target.value) }
+                                          placeholder={ t('messages.aml.username') }
+                                          />
+                                      )
+                                    })
+                                  }
+                              </Row>
                               { !isRestore &&
-                                <>
-                                <section id="SECTION_227">
-                                  <div id="DIV_228">
-                                    <div id="DIV_229">
-                                      <div id="DIV_230">
-                                        <div id="DIV_231">
-                                          <div id="DIV_232">
-                                            <div id="DIV_233">
-                                              <div id="DIV_234">
-                                              {
-                                                this.renderFormItem({
-                                                  name: 'password',
-                                                  rules: [{ required: true, message: t('messages.aml.dontForgetPassword') }],
-                                                  item: (
-                                                    <Input
-                                                      onChange={ (e) => this.handlePasswordOnChange.bind(this)(e.target.value) }
-                                                      type="password"
-                                                      autoComplete="off"
-                                                      placeholder={ t('messages.aml.password') }
-                                                      />
-                                                  )
-                                                })
-                                              }
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </section>
-                                <section id="SECTION_236">
-                                  <div id="DIV_237">
-                                    <div id="DIV_238">
-                                      <div id="DIV_239">
-                                        <div id="DIV_240">
-                                          <div id="DIV_241">
-                                            <div id="DIV_242">
-                                              <div id="DIV_243">
-                                                <div id="DIV_244">
-                                                  <span id="SPAN_245"></span>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </section>
-                              </>
+                                <Row id="SECTION_227">
+                                      {
+                                        this.renderFormItem({
+                                          name: 'password',
+                                          rules: [{ required: true, message: 'Campo requerido' }],
+                                          item: (
+                                            <Input
+                                              onChange={ (e) => this.handlePasswordOnChange.bind(this)(e.target.value) }
+                                              type="password"
+                                              autoComplete="off"
+                                              placeholder={ t('messages.aml.password') }
+                                              />
+                                          )
+                                        })
+                                      }
+                                  </Row>
                               }
                               
                               <div id="DIV_246">
                                 <div id="DIV_247">
                                   <div id="DIV_248">
-                                    <Button id="A_249" className="login-form-button" htmlType="submit">Ingresar</Button>
+                                    <Button id="A_249" htmlType="submit">Ingresar</Button>
                                   </div>
                                 </div>
                               </div>

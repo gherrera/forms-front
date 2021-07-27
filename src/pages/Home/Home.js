@@ -31,7 +31,6 @@ class Home extends Component {
           <PageContent>
 
           </PageContent>
-          <PageFooter />
         </Page>
       </div>
     )

@@ -14,15 +14,27 @@ export default ({ currentUser }) => {
       mode="horizontal"
       >
       <Menu.Item id="home-button">
-        <Icon type='home' />{ t('messages.aml.homePageTitle') }
+        { t('messages.aml.homePageTitle') }
         <Link to={ '/' } />
       </Menu.Item>
       { currentUser.modules.includes('FORMS') && currentUser.type === 'ADMIN' &&
         <Menu.Item id="design">
-          <Icon type='file-search' />Diseño
+          Diseño
           <Link to={ '/design' } />
         </Menu.Item>
       }
+      <Menu.Item id="afiliation">
+        Afiliación
+      </Menu.Item>
+      <Menu.Item id="request">
+        Solicitud
+      </Menu.Item>
+      <Menu.Item id="manage">
+        Gestion
+      </Menu.Item>
+      <Menu.Item id="report">
+        Informes
+      </Menu.Item>
 
     </Menu>
   )
