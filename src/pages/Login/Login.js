@@ -154,7 +154,7 @@ class Login extends Component {
                                           <a href="#inicio" id="A_32">Inicia sesión</a>
                                         </li>
                                         <li id="LI_33">
-                                          <a href="#SECTION_271" id="A_34">Servicio al cliente</a>
+                                          <a href="#contacto" id="A_34">Servicio al cliente</a>
                                         </li>
                                       </ul>
                                     </nav>
@@ -605,7 +605,7 @@ class Login extends Component {
                     </div>
                   </div>
                 </section>
-                <section id="SECTION_271">
+                <section id="contacto">
                   <div id="DIV_272">
                   </div>
                   <div id="DIV_273">
