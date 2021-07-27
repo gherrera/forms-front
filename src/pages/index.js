@@ -2,14 +2,13 @@ import Admin from './Admin/Admin'
 import AdminAudit from './AdminAudit/AdminAudit'
 import AdminUsers from './AdminUsers/AdminUsers'
 import Home from './Home/Home'
-import Login from './Login/Login2'
-import Login2 from './Login/Login'
+import Login2 from './Login/Login2'
+import Login from './Login/Login'
 import NotAuthorized from './NotAuthorized/NotAuthorized'
 import NotFound from './NotFound/NotFound'
 import Design from './Design/Design'
 import FormDeclarationComponent from './FormDeclaration/FormDeclaration'
 import FormComponent from './Form/Form'
-
 
 export const AdminPage = Admin
 export const AdminAuditPage = AdminAudit
