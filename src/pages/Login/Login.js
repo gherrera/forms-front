@@ -148,13 +148,13 @@ class Login extends Component {
                                     <nav>
                                       <ul id="UL_28">
                                         <li id="LI_29">
-                                          <a href="https://htgsoluciones.com/formularia/#funciona" id="A_30">¿Cómo funciona?</a>
+                                          <a href="#SECTION_95" id="A_30">¿Cómo funciona?</a>
                                         </li>
                                         <li id="LI_31">
                                           <a href="#SECTION_181" id="A_32">Inicia sesión</a>
                                         </li>
                                         <li id="LI_33">
-                                          <a href="https://htgsoluciones.com/formularia/#contacto" id="A_34">Servicio al cliente</a>
+                                          <a href="#SECTION_271" id="A_34">Servicio al cliente</a>
                                         </li>
                                       </ul>
                                     </nav>
