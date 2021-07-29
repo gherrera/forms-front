@@ -87,7 +87,7 @@ useEffect(() => {
         return datasource.values
       }
     }
-    return ["No hay datos"]
+    return [{value: "No hay datos"}]
   }
 
   function hasErrorsFn(fieldsError, fieldId) {
