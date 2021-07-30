@@ -144,7 +144,8 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
             <Button icon="plus" type="primary" onClick={handleOpenNewForm}>Nuevo Formulario</Button>
           </Row>
           <Row className="titles-section">
-            <Col span={3}>Categoria</Col>
+            <Col span={1}>Nro</Col>
+            <Col span={2}>Categoria</Col>
             <Col span={7}>Nombre</Col>
             <Col span={3}>Creado por</Col>
             <Col span={3}>Fecha de Creación</Col>
@@ -155,7 +156,8 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
 
           { forms.map((form, index) =>
             <Row className="rows-section">
-              <Col span={3}>{camelizerHelper(form.category)}</Col>
+              <Col span={1}>{form.nro}</Col>
+              <Col span={2}>{camelizerHelper(form.category)}</Col>
               <Col span={7}><Input size="small" value={form.name} onChange={(e) => changeNameForm(index, e.target.value)} className="editable"/></Col>
               <Col span={3}>{form.userCreate}</Col>
               <Col span={3}>{moment(form.creationDate).format('DD/MM/YYYY HH:mm')}</Col>
