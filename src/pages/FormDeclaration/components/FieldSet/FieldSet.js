@@ -147,9 +147,7 @@ useEffect(() => {
     if(field.value !== null && field.value !== undefined && field.value !== '') {
       if(field.typeField === 'DATE') return moment(field.value, 'DD/MM/YYYY')
       else if(field.typeField === 'CHKOPTS') return field.value.split(',')
-      else if(field.typeField === 'RADIO') {
-        if(field.value.startsWith('OTHER-')) return 'OTHER'
-      }
+      else if(field.typeField === 'RADIOOTHER' && field.value.startsWith('OTHER-')) return 'OTHER'
     }
     return field.value
   }
@@ -176,7 +174,7 @@ useEffect(() => {
           { component.fields.map(field =>
             <Col span={24/component.cols}>
               <Form.Item label={field.title} {...formItemLayout}>
-                { mode === 'pdf' && field.typeField !== 'CHECKBOX' && field.typeField !== 'RADIO' && field.typeField !== 'CHKOPTS' ?
+                { mode === 'pdf' && field.typeField !== 'CHECKBOX' && field.typeField !== 'RADIO' && field.typeField !== 'RADIOOTHER' && field.typeField !== 'CHKOPTS' ?
                   <Input disabled={true} value={field.value} 
                     suffix={field.validation && field.validation.type === 'percent' ? <Icon type="percentage" />: null}
                   />
@@ -213,17 +211,17 @@ useEffect(() => {
                               <Select.Option value={val.value}>{val.value}</Select.Option>
                             )}
                         </Select>
-                      : field.typeField === 'RADIO' ?
+                      : field.typeField === 'RADIO' || field.typeField === 'RADIOOTHER' ?
                         <Radio.Group
                           disabled={mode === 'pdf'}
                           onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.value)}>
                             { getValuesFromDS(field).map(val =>
                               <Radio value={val.value}>{val.value}</Radio>
                             )}
-                            {  mode === 'pdf' && field.value && field.value.startsWith('OTHER') &&
+                            {  field.typeField === 'RADIOOTHER' && mode === 'pdf' && field.value && field.value.startsWith('OTHER') &&
                               <Radio value="OTHER">{field.value.substring(6)}</Radio>
                             }
-                            { mode !== 'pdf' &&
+                            { field.typeField === 'RADIOOTHER' && mode !== 'pdf' &&
                               <>
                               { field.value && field.value.startsWith('OTHER') ?
                                 <Radio value="OTHER"/>
@@ -251,7 +249,7 @@ useEffect(() => {
                         />
                     )
                     }
-                    { mode !== 'pdf' && field.typeField === 'RADIO' && field.value && field.value.startsWith('OTHER') &&
+                    { mode !== 'pdf' && field.typeField === 'RADIOOTHER' && field.value && field.value.startsWith('OTHER') &&
                         <Input size="small" placeholder="Otro" value={field.value.substring(6)} style={{width:'150px'}} onChange={(e) => handleChangeValues && handleChangeFieldValue(field, 'OTHER-'+e.target.value)}/>
                     }
                   </>

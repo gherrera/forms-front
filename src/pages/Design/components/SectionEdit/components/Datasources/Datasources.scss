@@ -1,11 +1,4 @@
 .datasources-edit {
-    .tools-datasources {
-        text-align: right;
-        
-        button {
-            margin-left: 5px;
-        }
-    }
     
     .tools-datasource {
         text-align: right;
@@ -29,12 +22,6 @@
     }
 }
 
-.modal-new-datasource {
-    .tools-datasource {
-        text-align: right;
-        margin-top: 10px;
-        button {
-          margin-left: 5px;
-        }
-    }
+.modal-datasources {
+    width: 750px !important;
 }

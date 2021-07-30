@@ -291,7 +291,12 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, handleChan
                                   }
                                   {component.type !== 'PARAGRAPH' &&
                                     <Select.Option value="RADIO">
-                                      <Col span={2}><Icon type="ellipsis"/></Col><Col span={21}>&nbsp;&nbsp;Opciones</Col>
+                                      <Col span={2}><Icon type="ellipsis"/></Col><Col span={21}>&nbsp;&nbsp;Opciones Cerradas</Col>
+                                    </Select.Option>
+                                  }
+                                  {component.type !== 'PARAGRAPH' &&
+                                    <Select.Option value="RADIOOTHER">
+                                      <Col span={2}><Icon type="ellipsis"/></Col><Col span={21}>&nbsp;&nbsp;Opciones + Otro</Col>
                                     </Select.Option>
                                   }
                                 </Select>
@@ -306,7 +311,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, handleChan
                               }
                               <Col span={3} className="center">
                                 <div className="tools-fieldset">
-                                { (field.typeField === 'SELECT' || field.typeField === 'RADIO' || field.typeField === 'CHKOPTS') ?
+                                { (field.typeField === 'SELECT' || field.typeField === 'RADIO' || field.typeField === 'RADIOOTHER' || field.typeField === 'CHKOPTS') ?
                                   <Tooltip title="Fuente de Datos">
                                     <Button icon="unordered-list" size="small" onClick={() => showDataSource(index)}/>
                                   </Tooltip>

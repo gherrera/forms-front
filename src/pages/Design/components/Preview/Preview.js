@@ -1,7 +1,8 @@
 import "./Preview.scss";
 import React, { useEffect, useState } from "react";
 import {
-  Radio
+  Radio,
+  Spin
 } from "antd";
 import { Section } from '../../../FormDeclaration/components'
 import { FormDeclaration } from '../../../'
@@ -14,6 +15,7 @@ const Preview = ({ form, section }) => {
   const [ mode, setMode ] = useState("preview")
   const [ json, setJson ] = useState({})
   const [ formPreview, setFormPreview ] = useState(null)
+  const [ isLoading, setIsLoading ] = useState(false)
 
   useEffect(() => {    
     if(form) {
@@ -25,13 +27,16 @@ const Preview = ({ form, section }) => {
   const handleChangeMode = (value) => {
     setMode(value)
     if(value === 'json') {
+      setIsLoading(true)
       if(formPreview) {
         getJsonFormPromise(formPreview).then(response => {
           setJson(response)
+          setIsLoading(false)
         })
       }else {
         getJsonSectionPromise(section).then(response => {
           setJson(response)
+          setIsLoading(false)
         })
       }
     }
@@ -51,11 +56,15 @@ const Preview = ({ form, section }) => {
             { formPreview && <FormDeclaration form={formPreview} mode={mode} /> }
             { section && <Section section={section} mode={mode} /> }
         </>
-        : 
+        :
         <pre className="preview-pdf">
-          <code>
-            {JSON.stringify(json, null, 2)}
-          </code>
+          {
+          isLoading ? <Spin size="large" />
+          :
+            <code>
+              {JSON.stringify(json, null, 2)}
+            </code>
+          }
         </pre>
         }
     </div>

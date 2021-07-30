@@ -56,7 +56,7 @@ export default ({ currentUser }) => {
   return (
     <div id="footer">
       <Row className="footer-inner">
-        <Col span={ 7 }>
+        <Col span={ 12 }>
           {
             /*
             <div className="logo-wrapper">
@@ -66,7 +66,9 @@ export default ({ currentUser }) => {
           }
           {/* <img className="logo" src={ logoAml } alt="" /> */}
           <div className="powered">
-            <span>Powered by <a href="https://htgsoluciones.com/" target="_blank">HTG Soluciones</a></span>
+            <span>
+              Copyright &copy; - HTG Soluciones - Todos los derechos reservados
+            </span>
           </div>
         </Col>
         { /*

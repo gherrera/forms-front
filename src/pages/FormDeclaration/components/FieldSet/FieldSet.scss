@@ -21,7 +21,13 @@
             &:hover {
                 border: 1px solid rgba(0,0,0,.3);
             }
-        }    
+        }
+
+        .ant-radio-group .ant-radio-wrapper {
+            span:last-child {
+                white-space: initial;
+            }
+        }
     }
     .formLayout-vertical {
         .ant-form-item {
