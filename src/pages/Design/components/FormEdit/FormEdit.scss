@@ -6,6 +6,7 @@
         padding-top: 10px;
         background-color: #fff;
         padding: 5px 15px;
+        border-bottom: 1px solid rgba(0,0,0,.1);
 
         .inputHeader {
             border: 1px solid rgba(0,0,0,.1);
@@ -14,6 +15,8 @@
         }
 
         .header-logo {
+            margin-bottom: 5px;
+
             .ant-upload-btn {
                 padding: 8px 0px;
             }
