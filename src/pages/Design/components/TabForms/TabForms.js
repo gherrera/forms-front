@@ -14,7 +14,7 @@ import {
   notification,
   Popconfirm
 } from "antd";
-import { FormEdit } from '../'
+import { FormDetail } from '../'
 import { camelizerHelper } from "../../../../helpers";
 
 import { useTranslation } from "react-i18next";
@@ -75,14 +75,6 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
     refreshBreadCrumbs({ breadcrumbs: b, title } )
   }
 
-  const exitSection = () => {
-    let b = []
-    b.push(breadcrumbs[0])
-    b.push(breadcrumbs[1])
-    b[1].link = null
-    refreshBreadCrumbs({ breadcrumbs: b, title: breadcrumbs[1].title } )
-  }
-
   const handleChangeAttrForm = (index, key, value) => {
     let fs = forms.map((f, i) => {
       if (index == i) {
@@ -137,7 +129,7 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
       { isLoading ? <Spin/>
       :
       <>
-        { form !== null ? <FormEdit key={key} formId={form.id} refreshBreadCrumbs={_refreshBreadCrumbs} exitSection={exitSection} />
+        { form !== null ? <FormDetail key={key} formId={form.id} refreshBreadCrumbs={_refreshBreadCrumbs} />
         :
         <>
           <Row className="tools-form">
@@ -167,7 +159,7 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
               </Col>
               <Col span={3} className="tools-rows-forms">
                 <Tooltip title="Modificar">
-                  <Button icon="edit" size="small" onClick={(e) => handleEditForm(form)}/>
+                  <Button icon="form" size="small" onClick={(e) => handleEditForm(form)}/>
                 </Tooltip>
                 <Tooltip title="Historial">
                   <Button icon="folder-open" size="small" />

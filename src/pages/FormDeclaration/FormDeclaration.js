@@ -11,6 +11,7 @@ import moment from "moment";
 
 import { useTranslation } from "react-i18next";
 import { datasourcesContext } from '../../contexts'
+import apiConfig from '../../config/api'
 
 const FormDeclaration = ({ form, mode }) => {
   const { t } = useTranslation()
@@ -89,6 +90,25 @@ const FormDeclaration = ({ form, mode }) => {
   return (
     <div className="form-declaration">
       <div className="form-header">
+        { form.logo !== null &&
+        <Row className="row-logo">
+          <Col span={4} className="LEFT">
+              { form.logo.position === 'LEFT' &&
+                  <img src={apiConfig.url +'/getLogoForm?formId='+(form.formParentId === null ?form.id : form.formParentId)}/>
+              }
+          </Col>
+          <Col span={4} offset={6} className="CENTER">
+              { form.logo.position === 'CENTER' &&
+                  <img src={apiConfig.url +'/getLogoForm?formId='+(form.formParentId === null ?form.id : form.formParentId)}/>
+              }
+          </Col>
+          <Col span={4} offset={6} className="RIGHT">
+              { form.logo.position === 'RIGHT' &&
+                  <img src={apiConfig.url +'/getLogoForm?formId='+(form.formParentId === null ?form.id : form.formParentId)}/>
+              }
+          </Col>
+        </Row>
+        }
         <Row>
           <h2 className="form-title">{form.name}</h2>
         </Row>

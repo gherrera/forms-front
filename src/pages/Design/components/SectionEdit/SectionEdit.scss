@@ -1,4 +1,10 @@
 .section-edit {
+    .section-top {
+        text-align: center;
+        background-color: rgba(255,255,0,.05);
+        margin: 0px -10px 5px -10px;
+        border-bottom: 1px solid rgba(0,0,0,.1);
+    }
     .row-component-section {
         margin-bottom: 5px;
         //transition: transform 250ms;

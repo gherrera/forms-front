@@ -1,7 +1,7 @@
 import "./Form.scss";
 import React, { useEffect, useState, useContext } from "react";
 import { FormDeclaration } from '../'
-import { getFormByIdPromise } from "../Design/components/FormEdit/promises";
+import { getFormByIdPromise } from "../Design/components/FormDetail/promises";
 import { withRouter } from "react-router-dom";
 import { Spin } from "antd";
 

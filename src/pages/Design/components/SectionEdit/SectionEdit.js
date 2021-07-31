@@ -16,12 +16,12 @@ import {
 import { useTranslation } from "react-i18next";
 import { TableEdit, FieldSetEdit, Catalogos, ParagraphEdit, SubsectionEdit, TextEdit, DecisionEdit } from './components'
 import { Paragraph, Table, FieldSet, Decision } from "../../../FormDeclaration/components";
-import { saveSectionPromise } from "../FormEdit/promises";
+import { saveSectionPromise } from "../FormDetail/promises";
 import { Preview } from '../'
 
 const { TextArea } = Input;
 
-const SectionEdit = ({ s, refreshThisSection }) => {
+const SectionEdit = ({ s, refreshThisSection, sectionNro }) => {
   const { t } = useTranslation()
   const [section, setSection] = useState(s)
   const [changes, setChanges] = useState(false)
@@ -207,6 +207,9 @@ const SectionEdit = ({ s, refreshThisSection }) => {
   return (
     <div className="section-edit">
       <Row>
+        {sectionNro &&
+        <Col className="section-top">Sección #{sectionNro}</Col>
+        }
         <Col span={12} md={12} sm={24} xs={24}>
           <h2>{ section.title }</h2>
         </Col>
