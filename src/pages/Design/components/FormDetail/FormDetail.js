@@ -18,8 +18,7 @@ import { datasourcesContext } from '../../../../contexts'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import { useTranslation } from "react-i18next";
-import { getFormByIdPromise, saveFormPromise, generateFormPromise } from "./promises";
-
+import { getFormByIdPromise, saveFormPromise } from "./promises";
 
 const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
@@ -159,11 +158,6 @@ const FormDetail = ({ formId, refreshBreadCrumbs }) => {
     setIsVisibleNewSection(false)
   }
 
-  const handleGenerateForm = async () => {
-    let fId = await generateFormPromise(formId)
-    window.open("forms/"+fId)
-  }
-
   const onDragEnd = (result) => {
     // dropped outside the list
     if (!result.destination) {
@@ -202,8 +196,7 @@ const FormDetail = ({ formId, refreshBreadCrumbs }) => {
                 </Radio.Group>
               </Col>
               <Col span={8} className="tools-btn">
-                <Button onClick={handleGenerateForm}>Generar Formulario</Button>
-                <Button onClick={handlePreviewSection} type="primary">Previsualizar</Button>
+                <Button onClick={handlePreviewSection}>Previsualizar</Button>
               </Col>
             </Row>
             { mode === 'list' ?

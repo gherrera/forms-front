@@ -20,6 +20,7 @@ import { camelizerHelper } from "../../../../helpers";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { getFormByClienteIdPromise, updateFormPromise } from "./promises";
+import { generateFormPromise } from "../FormDetail/promises";
 
 const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
 	const { t } = useTranslation()
@@ -124,6 +125,12 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
     })
   }
 
+  const handleGenerateForm = async (form) => {
+    let fId = await generateFormPromise(form.id)
+    window.open("forms/"+fId)
+  }
+
+
   return (
     <div className="tab-forms">
       { isLoading ? <Spin/>
@@ -159,7 +166,7 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
               </Col>
               <Col span={3} className="tools-rows-forms">
                 <Tooltip title="Modificar">
-                  <Button icon="form" size="small" onClick={(e) => handleEditForm(form)}/>
+                  <Button icon="edit" size="small" onClick={(e) => handleEditForm(form)}/>
                 </Tooltip>
                 <Tooltip title="Historial">
                   <Button icon="folder-open" size="small" />
@@ -169,8 +176,8 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
                     <Button icon="delete" size="small" />
                   </Popconfirm>
                 </Tooltip>
-                <Tooltip title="Enviar por Correo">
-                  <Button icon="mail" size="small" />
+                <Tooltip title="Generar Formulario">
+                  <Button icon="form" size="small" onClick={() => handleGenerateForm(form)} />
                 </Tooltip>
               </Col>
             </Row>
