@@ -10,7 +10,8 @@ import {
   Spin,
   Popconfirm,
   Tooltip,
-  Icon
+  Icon,
+  Radio
 } from "antd";
 import { SectionEdit, Preview, ModalNewSection, FormEdit } from '../'
 import { datasourcesContext } from '../../../../contexts'
@@ -29,6 +30,10 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle
 });
 
+const getRandomId = () => {
+  return 'R' + Math.floor(Math.random() * 1000000);
+}
+
 const FormDetail = ({ formId, refreshBreadCrumbs }) => {
 	const { t } = useTranslation()
   const [form, setForm] = useState(null)
@@ -37,14 +42,15 @@ const FormDetail = ({ formId, refreshBreadCrumbs }) => {
   const [isVisiblePreview, setIsVisiblePreview] = useState(false)
   const { loadFormDatasource } = useContext(datasourcesContext)
   const [isVisibleNewSection, setIsVisibleNewSection] = useState(false)
-  const [isVisibleDesign, setIsVisibleDesign] = useState(false)
+  const [mode, setMode] = useState('list')
+  const [keyForm, setKeyForm] = useState(getRandomId())
 
   useEffect(() => {
-		loadFormdById(formId)
+		loadForm()
     loadFormDatasource(formId)
 	}, [])
 
-  const loadFormdById = (formId) => {
+  const loadForm = () => {
     setForm(null)
 		getFormByIdPromise(formId).then(f=>{
       setForm(f)
@@ -133,6 +139,7 @@ const FormDetail = ({ formId, refreshBreadCrumbs }) => {
     saveFormPromise({ ...form, sections: s}).then(f => {
       setForm(f)
       setSections(f.sections)
+      setKeyForm(getRandomId())
     })
   }
 
@@ -172,12 +179,8 @@ const FormDetail = ({ formId, refreshBreadCrumbs }) => {
     saveForm(sec)
   }
 
-  const handleDesign = () => {
-    setIsVisibleDesign(true)
-  }
-
-  const closeModalDesignHandler = () => {
-    setIsVisibleDesign(false)
+  const onChangeMode = (e) => {
+    setMode(e.target.value)
   }
 
   return (
@@ -189,68 +192,79 @@ const FormDetail = ({ formId, refreshBreadCrumbs }) => {
           :
           <div className="form">
             <Row>
-              <Col span={6}>
+              <Col span={8}>
                 <Button onClick={openModalSectionHandler} type="primary" className="btn-add-section">Nueva Sección</Button>
               </Col>
-              <Col span={6} offset={12} className="tools-btn">
-                <Button onClick={handleDesign}>Diseño</Button>
+              <Col span={8} style={{textAlign:'center'}}>
+                <Radio.Group onChange={onChangeMode} defaultValue={mode}>
+                  <Radio.Button value="list"><Icon type="unordered-list"/>&nbsp;Lista</Radio.Button>
+                  <Radio.Button value="design"><Icon type="form"/>&nbsp;Diseño</Radio.Button>
+                </Radio.Group>
+              </Col>
+              <Col span={8} className="tools-btn">
                 <Button onClick={handleGenerateForm}>Generar Formulario</Button>
                 <Button onClick={handlePreviewSection} type="primary">Previsualizar</Button>
               </Col>
             </Row>
-            <Row className="titles-section">
-              <Col span={9}>Nombre de la Sección</Col>
-              <Col span={6}>Tipo de Sección</Col>
-              <Col span={3} className="center">Activar</Col>
-              <Col span={3} className="center">Prellenado</Col>
-              <Col span={2}>Edición</Col>
-              <Col span={1}>Orden</Col>
-            </Row>
+            { mode === 'list' ?
+            <>
+              <Row className="titles-section">
+                <Col span={9}>Nombre de la Sección</Col>
+                <Col span={6}>Tipo de Sección</Col>
+                <Col span={3} className="center">Activar</Col>
+                <Col span={3} className="center">Prellenado</Col>
+                <Col span={2}>Edición</Col>
+                <Col span={1}>Orden</Col>
+              </Row>
 
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="droppable">
-                {(provided, snapshot) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    { sections.map((section, index) =>
-                      <Draggable key={section.id} draggableId={section.id} index={index}>
-                        {(provided, snapshot) =>
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={getItemStyle(
-                              snapshot.isDragging,
-                              provided.draggableProps.style
-                            )}
-                          >
-                            <Row className="rows-section">
-                              <Col span={9}><Input value={section.title} placeholder="Titulo de la sección" onChange={(e) => handleChangeTitle(index, e.target.value)} onBlur={handleBlurTitle}/></Col>
-                              <Col span={6}>
-                                { getTypeSection(section.type)}
-                              </Col>
-                              <Col span={3} className="center"><Checkbox checked={section.status === 'ACTIVE'} onChange={(e) => changeActiveSection(index, e.target.checked)}/></Col>
-                              <Col span={3} className="center"><Checkbox checked={section.prefilled === true} onChange={(e) => changePrefillSection(index, e.target.checked)}/></Col>
-                              <Col span={2} className="tools">
-                                <Tooltip title="Modificar">
-                                  <Button icon="edit" size="small" disabled={section.type === null || section.type === undefined} onClick={(e) => editSection(section)}/>
-                                </Tooltip>
-                                <Popconfirm title="Confirma eliminar la Sección?" onConfirm={(e) => deleteSection(index)}>
-                                  <Button icon="delete" size="small" />
-                                </Popconfirm>
-                              </Col>
-                              <Col span={1} className="drag-area"><Icon type="drag"/></Col>
-                            </Row>
-                          </div>
-                        }
-                      </Draggable>
-                    )}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable">
+                  {(provided, snapshot) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      { sections.map((section, index) =>
+                        <Draggable key={section.id} draggableId={section.id} index={index}>
+                          {(provided, snapshot) =>
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={getItemStyle(
+                                snapshot.isDragging,
+                                provided.draggableProps.style
+                              )}
+                            >
+                              <Row className="rows-section">
+                                <Col span={9}><Input value={section.title} placeholder="Titulo de la sección" onChange={(e) => handleChangeTitle(index, e.target.value)} onBlur={handleBlurTitle}/></Col>
+                                <Col span={6}>
+                                  { getTypeSection(section.type)}
+                                </Col>
+                                <Col span={3} className="center"><Checkbox checked={section.status === 'ACTIVE'} onChange={(e) => changeActiveSection(index, e.target.checked)}/></Col>
+                                <Col span={3} className="center"><Checkbox checked={section.prefilled === true} onChange={(e) => changePrefillSection(index, e.target.checked)}/></Col>
+                                <Col span={2} className="tools">
+                                  <Tooltip title="Modificar">
+                                    <Button icon="edit" size="small" disabled={section.type === null || section.type === undefined} onClick={(e) => editSection(section)}/>
+                                  </Tooltip>
+                                  <Popconfirm title="Confirma eliminar la Sección?" onConfirm={(e) => deleteSection(index)}>
+                                    <Button icon="delete" size="small" />
+                                  </Popconfirm>
+                                </Col>
+                                <Col span={1} className="drag-area"><Icon type="drag"/></Col>
+                              </Row>
+                            </div>
+                          }
+                        </Draggable>
+                      )}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </>
+            :
+              <FormEdit key={keyForm} form={form} refreshSection={refreshSection} setForm={setForm} />
+            }
 
             { isVisiblePreview &&
               <Modal
@@ -261,6 +275,7 @@ const FormDetail = ({ formId, refreshBreadCrumbs }) => {
                 onOk={ closeModalHandler  }
                 onCancel={ closeModalHandler }
                 style={{ top: 20 }}
+                key={keyForm}
               >
                 <div>
                   <Preview form={form} closeModalHandler={closeModalHandler} />
@@ -276,19 +291,6 @@ const FormDetail = ({ formId, refreshBreadCrumbs }) => {
                 onOk={ closeModalSectionHandler  }
                 onCancel={ closeModalSectionHandler }>
                   <ModalNewSection handlerAddSection={handlerAddSection} />
-              </Modal>
-            }
-            { isVisibleDesign &&
-              <Modal
-                title="Diseño"
-                className="modal-edit-form"
-                footer={ null }
-                visible={ true }
-                onOk={ closeModalDesignHandler  }
-                onCancel={ closeModalDesignHandler }
-                style={{ top: 20 }}
-              >
-                <FormEdit form={form} refreshSection={refreshSection} />
               </Modal>
             }
           </div>

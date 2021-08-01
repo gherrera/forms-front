@@ -10,24 +10,23 @@ import {
 } from "antd";
 import apiConfig from '../../../../config/api'
 import { SectionEdit } from '../'
-import { deleteLogoPromise } from "./promises";
+import { deleteLogoPromise, changePositionLogoPromise } from "./promises";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import moment from "moment";
-
-import { saveFormPromise } from "../FormDetail/promises";
 
 const { Dragger } = Upload;
 
 const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
   userSelect: "none",
-  cursor: 'auto',
+  cursor: 'move',
+  border: isDragging ? '1px solid rgba(0,0,255,.2)':'none',
 
   // styles we need to apply on draggables
   ...draggableStyle
 });
 
-const FormEdit = ({ form, refreshSection }) => {
+const FormEdit = ({ form, refreshSection, setForm }) => {
     const [ frm, setFrm ] = useState(form)
     useEffect(() => {
     }, [])
@@ -52,7 +51,66 @@ const FormEdit = ({ form, refreshSection }) => {
     const removeLogo = () => {
         deleteLogoPromise(form.id).then((f) => {
             setFrm(f)
+            setForm(f)
         })
+    }
+
+    const onDragEnd = (result) => {
+        // dropped outside the list
+        if (!result.destination) {
+          return;
+        }else if(result.destination.droppableId !== result.draggableId){
+            let f = {...frm, logo: {position: result.destination.droppableId}}
+            setFrm(f)
+            changePositionLogoPromise(form.id, result.destination.droppableId).then((f) => {
+                setFrm(f)
+                setForm(f)
+            })
+        }
+    }
+
+    const getDraggable = (form) => {
+            return(<Draggable key={form.id} draggableId={form.logo.position} >
+                {(provided, snapshot) =>
+                    <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={getItemStyle(
+                        snapshot.isDragging,
+                        provided.draggableProps.style
+                        )}
+                    >
+                        <img src={apiConfig.url +'/getLogoForm?formId='+form.id}/>
+                        <Tooltip title="Quitar Logo">
+                            <a className="remove-logo" onClick={removeLogo}>
+                                <Icon size="small" type="close-circle"/>
+                            </a>
+                        </Tooltip>
+                    </div>
+                }
+            </Draggable>)
+    }
+
+    const getDroppableLogo = (form, position) => {
+        return (
+            <Col span={4} offset={position!=='LEFT'?6:0} className={position+(form.logo.position === position?' selected':'')}>
+                <Droppable key={position} droppableId={position}>
+                    {(provided, snapshot) => (
+                        <div
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                        >
+                            { form.logo.position === position ?
+                                getDraggable(frm)
+                                :
+                                <span>Logo</span>
+                            }
+                        </div>
+                    )}
+                </Droppable>
+            </Col>
+        )
     }
 
     return (
@@ -68,42 +126,11 @@ const FormEdit = ({ form, refreshSection }) => {
                         </Dragger>
                         :
                         <Row className="row-logo">
-                            <Col span={4} className="LEFT">
-                                { frm.logo.position === 'LEFT' &&
-                                    <>
-                                        <img src={apiConfig.url +'/getLogoForm?formId='+form.id}/>
-                                        <Tooltip title="Quitar Logo">
-                                            <a className="remove-logo" onClick={removeLogo}>
-                                                <Icon size="small" type="close-circle"/>
-                                            </a>
-                                        </Tooltip>
-                                    </>
-                                }
-                            </Col>
-                            <Col span={4} offset={6} className="CENTER">
-                                { frm.logo.position === 'CENTER' &&
-                                    <>
-                                        <img src={apiConfig.url +'/getLogoForm?formId='+form.id}/>
-                                        <Tooltip title="Quitar Logo">
-                                            <a className="remove-logo" onClick={removeLogo}>
-                                                <Icon size="small" type="close-circle"/>
-                                            </a>
-                                        </Tooltip>
-                                    </>
-                                }
-                            </Col>
-                            <Col span={4} offset={6} className="RIGHT">
-                                { frm.logo.position === 'RIGHT' &&
-                                    <>
-                                        <img src={apiConfig.url +'/getLogoForm?formId='+form.id}/>
-                                        <Tooltip title="Quitar Logo">
-                                            <a className="remove-logo" onClick={removeLogo}>
-                                                <Icon size="small" type="close-circle"/>
-                                            </a>
-                                        </Tooltip>
-                                    </>
-                                }
-                            </Col>
+                            <DragDropContext onDragEnd={onDragEnd}>
+                                {getDroppableLogo(frm,'LEFT')}
+                                {getDroppableLogo(frm,'CENTER')}
+                                {getDroppableLogo(frm,'RIGHT')}
+                            </DragDropContext>
                         </Row>
                     }
                 </Row>

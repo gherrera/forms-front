@@ -7,5 +7,11 @@ export default {
 			url: apiConfig.url + '/deleteLogo/' + id,
 			method: 'post'
 		})
+	},
+	changePositionLogo: (id, position) => {
+		return apiRequestorHelper({
+			url: apiConfig.url + '/changePositionLogo/' + id+'/'+position,
+			method: 'post'
+		})
 	}
 }

@@ -25,6 +25,20 @@
                 .ant-col {
                     border: 1px dashed rgba(0, 0, 0, .15);
                     height: 67px;
+                    
+                    >div {
+                        height: 100%;
+                        padding: 3px;
+                        z-index: 10;
+
+                        span {
+                            position: absolute;
+                            left: 80px;
+                            font-size: 3em;
+                            color: rgba(0,0,0,.1);
+                            top:0px;
+                        }
+                    }
 
                     .remove-logo {
                         position: absolute;
@@ -41,10 +55,8 @@
                     }
 
                     img {
-                        margin: 2px 5px;
-                        padding: 2px;
                         height: 61px;
-                        border: 1px solid rgba(0, 0, 0, .1);
+                        border: 1px solid rgba(0, 0, 0, .06);
                     }
                 }
             }
@@ -87,21 +99,5 @@
               }
             }
         }
-    }
-}
-.modal-edit-form {
-    width: 1300px !important;
-    background: #fff;
-    border-radius: 5px !important;
-    overflow: hidden !important;
-    -webkit-box-shadow: 0px 0px 79px -5px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 0px 79px -5px rgba(0,0,0,0.75);
-    box-shadow: 0px 0px 79px -5px rgba(0,0,0,0.75);
-    position: relative;
-    padding: 0px;
-
-    .ant-modal-body {
-        overflow: hidden;
-        padding: 0px;
     }
 }
