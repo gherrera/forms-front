@@ -194,7 +194,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, handleChan
                   <Select.Option value={4}>4</Select.Option>
               </Select>
             </Col>
-            { (section.type === 'CONTACTPERSON' || section.type === 'CONTACTENTIY') ?
+            { (section.type === 'CONTACTPERSON' || section.type === 'CONTACTENTITY') ?
               <>
               <Col span={3} offset={1}>Datos seleccionados</Col>
               <Col span={1}>{fieldset.fields ? fieldset.fields.length : 'NA'}</Col>
@@ -211,7 +211,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, handleChan
             }
           </Row>
         }
-        { section.type !== 'CONTACTPERSON' && section.type !== 'CONTACTENTIY' && fieldset.fields &&
+        { section.type !== 'CONTACTPERSON' && section.type !== 'CONTACTENTITY' && fieldset.fields &&
           <>
             { fieldset.fields.length === 0 ?
             <Row style={{marginTop:'20px',}}>
@@ -260,7 +260,7 @@ const FieldSetEdit = ({ hasHeader=true, section, component, fieldset, handleChan
                           >
                             <Row className="rows-section">
                               <Col span={1}>
-                                { section.type !== 'CONTACTPERSON' && section.type !== 'CONTACTENTIY' && index === fieldset.fields.length -1 && 
+                                { section.type !== 'CONTACTPERSON' && section.type !== 'CONTACTENTITY' && index === fieldset.fields.length -1 && 
                                   <Button icon="plus" size="small" onClick={addField}/> 
                                 }
                               </Col>

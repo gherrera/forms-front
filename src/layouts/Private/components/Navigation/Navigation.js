@@ -13,10 +13,6 @@ export default ({ currentUser }) => {
       theme="light"
       mode="horizontal"
       >
-      <Menu.Item id="home-button">
-        { t('messages.aml.homePageTitle') }
-        <Link to={ '/' } />
-      </Menu.Item>
       { currentUser.modules.includes('FORMS') && currentUser.type === 'ADMIN' &&
         <Menu.Item id="design">
           Diseño

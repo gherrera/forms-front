@@ -115,7 +115,7 @@ const FormDeclaration = ({ form, mode }) => {
         <Row>
           <Col span={12}>Fecha:&nbsp;&nbsp;<span className="inputHeader">{moment(form.creationDate).format('DD-MM-YYYY')}</span></Col>
           <Col span={12} style={{textAlign:'right', paddingRight:'20px'}}>
-            Folio:&nbsp;&nbsp;<span className="inputHeader">{form.folio?form.folio:'###'}</span>
+            Folio:&nbsp;&nbsp;<span className="inputHeader">{form.folio?form.folio:<>&nbsp;&nbsp;&nbsp;&nbsp;</>}</span>
           </Col>
         </Row>
       </div>

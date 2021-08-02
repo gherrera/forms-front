@@ -213,7 +213,7 @@ const Catalogos = ({ handleChangeCatalogoActive, handlerChangeCatalogo, section,
         <Row>
             { type ? 
             <Col span={18}>
-              <h4>Catalogo de datos{catType === "CONTACTPERSON" ? ' de Persona Natural' : catType === "CONTACTENTIY" ? ' de Persona Jurídica': ''}</h4>
+              <h4>Catalogo de datos{catType === "CONTACTPERSON" ? ' de Persona Natural' : catType === "CONTACTENTITY" ? ' de Persona Jurídica': ''}</h4>
             </Col>
             :
             <>
@@ -223,7 +223,7 @@ const Catalogos = ({ handleChangeCatalogoActive, handlerChangeCatalogo, section,
               <Col span={4}>
                 <Select onChange={(value) => setCatType(value)} size="small" style={{width:'100%'}}>
                   <Select.Option value="CONTACTPERSON">Persona Natural</Select.Option>
-                  <Select.Option value="CONTACTENTIY">Persona Jurídica</Select.Option>
+                  <Select.Option value="CONTACTENTITY">Persona Jurídica</Select.Option>
                 </Select>
               </Col>
               <Col span={10}>
