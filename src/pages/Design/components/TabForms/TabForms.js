@@ -104,12 +104,13 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
   const closeModalHandler = (create) => {
     if(create) {
       validateFields(['category','name']).then((obj) => {
-        debugger
         updateFormPromise({ ...obj, status: 'ACTIVE' }).then(r => {
           loadForms()
         })
         setIsVisibleNewForm(false)
       })
+    }else {
+      setIsVisibleNewForm(false)
     }
   }
 
