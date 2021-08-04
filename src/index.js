@@ -50,7 +50,6 @@ class App extends Component {
   async componentDidMount() {
     const language = LocalStorageService.read('i18nextLng')
     moment.locale(language.substring(0,2))
-    console.log(this.props)
 
     this.handleThemeCheck()
     if(!window.location.pathname.startsWith("/forms")) {
