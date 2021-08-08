@@ -1,8 +1,8 @@
 import { formsService } from '../services'
 
-export default (id, dest) => {
+export default (hash) => {
  	return new Promise(resolve => {
- 		formsService.generateForm(id, dest)
+ 		formsService.getFormHash(hash)
  			.then(response => resolve(response.data))
  	})
 }

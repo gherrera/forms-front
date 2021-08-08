@@ -178,6 +178,7 @@ class App extends Component {
                   <Route path="/administracion" exact render={ () => this.renderComponent(AdminPage) } />
                   <Route path="/design" exact render={ () => this.renderComponent(DesignPage, 'design') } />
                   <Route path="/forms/:id/:view?" exact render={ () => <Form /> } />
+                  <Route path="/form/:hash" exact render={ () => <Form /> } />
 
                   <Route render={ () => <NotFoundPage /> } />
                 </Switch>

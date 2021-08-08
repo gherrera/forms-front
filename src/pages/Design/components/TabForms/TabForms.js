@@ -19,17 +19,19 @@ import { camelizerHelper } from "../../../../helpers";
 
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import { getFormByClienteIdPromise, updateFormPromise } from "./promises";
+import { getFormByClienteIdPromise, updateFormPromise, getFormHashPromise } from "./promises";
 import { generateFormPromise } from "../FormDetail/promises";
 
 const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
 	const { t } = useTranslation()
-  const { getFieldDecorator, validateFields, getFieldsError, setFieldsValue } = form;
+  const { getFieldDecorator, validateFields } = form;
   const [forms, setForms] = useState([])
   const [frm, setFrm] = useState(null)
   const [key, setKey] = useState(Math.random())
   const [ isLoading, setIsLoading ] = useState(true)
   const [ isVisibleNewForm, setIsVisibleNewForm ] = useState(false)
+  const [ isVisibleURL, setIsVisibleURL ] = useState(false)
+  const [ hashURL, setHashURL ] = useState(null)
 
   useEffect(() => {
     loadForms()
@@ -128,6 +130,14 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
     window.open("forms/"+fId)
   }
 
+  const handleVisibleForm = async (visible, formId) => {
+    setHashURL(null)
+    if(visible) {
+      let hash = await getFormHashPromise(formId)
+      setHashURL(hash)
+    }
+    setIsVisibleURL(visible)
+  }
 
   return (
     <div className="tab-forms">
@@ -177,6 +187,9 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
                 <Tooltip title="Generar Formulario">
                   <Button icon="form" size="small" onClick={() => handleGenerateForm(f)} />
                 </Tooltip>
+                <Tooltip title="URL">
+                  <Button icon="link" size="small" onClick={() => handleVisibleForm(true, f.id)} />
+                </Tooltip>
               </Col>
             </Row>
           )}
@@ -218,6 +231,23 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
                 }
                 </Form.Item>
               </Form>
+            </Modal>
+          }
+
+          { isVisibleURL &&
+            <Modal
+              visible={true}
+              title="Link Formulario"
+              onCancel={ () => handleVisibleForm(false) }
+              width={700}
+              footer={ [
+                <Button onClick={ () => handleVisibleForm(false) }>
+                  { t('messages.aml.btnClose') }
+                </Button>
+              ]
+              }
+            >
+              <Input readOnly={true} value={window.location.protocol+'//'+window.location.host+ '/form/' + hashURL} size="small"/>
             </Modal>
           }
         </>
