@@ -19,8 +19,8 @@ export default ({ currentUser }) => {
           <Link to={ '/design' } />
         </Menu.Item>
       }
-      <Menu.Item id="afiliation">
-        Afiliación
+      <Menu.Item id="recipíents">
+        Destinatarios
       </Menu.Item>
       <Menu.Item id="request">
         Solicitud
