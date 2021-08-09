@@ -1,14 +1,15 @@
 import "./Form.scss";
 import React, { useEffect, useState, useContext } from "react";
 import { FormDeclaration } from '../'
-import { getFormByIdPromise } from "../Design/components/FormDetail/promises";
-import { getFormHashPromise } from "../../promises";
+import { getFormByIdPromise, generateFormPromise } from "../Design/components/FormDetail/promises";
+import { getFormHashPromise, getDestinatarioByRutPromise } from "../../promises";
 import { withRouter } from "react-router-dom";
 import { Spin, Row, Col, Form as FormAnt, Input, Button } from "antd";
-import { generateFormPromise } from "../Design/components/FormDetail/promises";
+import InputMask from 'react-input-mask';
+import { validateRutHelper } from "../FormDeclaration/helpers";
 
 const Form = ({ match, form }) => {
-    const { getFieldDecorator, validateFields, getFieldsError, setFieldsValue } = form;
+    const { getFieldDecorator, validateFields, setFieldsValue } = form;
     const [isLoading, setIsloading] = useState(true);
     const [mode, setMode] = useState("html");
     const [frm, setFrm] = useState(null);
@@ -27,21 +28,57 @@ const Form = ({ match, form }) => {
         }else if(match.params.hash) {
             setIsVisibleDest(true)
             let id = await getFormHashPromise(match.params.hash)
-            getFormByIdPromise(id).then(response => {
-                setFrm(response)
+            if(id) {
+                getFormByIdPromise(id).then(response => {
+                    setFrm(response)
+                    setIsloading(false);
+                })
+                setMode("preview");
+            }else {
                 setIsloading(false);
-            })
-            setMode("preview");
+            }
         }
     }, [])
 
     const generateForm = (e) => {
         e.preventDefault()
 
-        validateFields(['name', 'email']).then(async (obj) => {
+        validateFields(['rut','name', 'email']).then(async (obj) => {
             let fId = await generateFormPromise(frm.id, obj)
             window.location = "../forms/"+fId
         })
+    }
+
+    const getValidator = (rule, value, callback, valType) => {
+        if(value === null || value === '') callback()
+        else {
+          if(valType === 'rut' || valType === 'rutEmp' || valType === 'rutNat') {
+            let type = ''
+            value = value.replaceAll('.','').replaceAll('-','').trim()
+            if(valType === 'rutEmp') type = 'Entity'
+            else if(valType === 'rutNat') type = 'Person'
+            if(validateRutHelper(value, type)) {
+              callback()
+            }else {
+              if(valType === 'rut') {
+                callback("Rut no válido");
+              }else if(valType === 'rutEmp' && validateRutHelper(value)) {
+                callback("Rut de Empresa no válido");
+              }else if(valType === 'rutNat' && validateRutHelper(value)) {
+                callback("Rut de Persona no válido");
+              }else {
+                callback("Rut no válido");
+              }
+            }
+          }
+        }
+    }
+
+    const verifyRut = async (rut) => {
+        let dest = await getDestinatarioByRutPromise(frm.clientId, rut)
+        if(dest && dest !== '') {
+            setFieldsValue({name: dest.name, email: dest.email})
+        }
     }
 
     return (
@@ -56,12 +93,25 @@ const Form = ({ match, form }) => {
                             <Row>
                                 <Col span={8} offset={8} className="form-data">
                                     <h3>Datos de Destinatario</h3>
+                                    <FormAnt.Item label="Rut">
+                                    { getFieldDecorator('rut', {
+                                        validateTrigger: "onChange",
+                                        rules:
+                                            [
+                                                { required: true, message: 'Campo requerido' },
+                                                {validator: (rule, value, callback) => getValidator(rule, value, callback, 'rut')}
+                                            ]
+                                        })(
+                                            <Input onBlur={(e) => verifyRut(e.target.value)}/>
+                                        )
+                                    }
+                                    </FormAnt.Item>
                                     <FormAnt.Item label="Nombre">
                                     { getFieldDecorator('name', {
                                         validateTrigger: "onChange",
                                         rules:
                                             [
-                                            { required: true, message: 'Campo requerido' },
+                                                { required: true, message: 'Campo requerido' },
                                             ]
                                         })(
                                             <Input/>
@@ -73,7 +123,8 @@ const Form = ({ match, form }) => {
                                         validateTrigger: "onChange",
                                         rules:
                                             [
-                                            { required: true, message: 'Campo requerido' },
+                                                { required: true, message: 'Campo requerido' },
+                                                {type: "email", message: "Email no es válido"}
                                             ]
                                         })(
                                             <Input/>

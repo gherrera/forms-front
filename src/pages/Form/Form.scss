@@ -20,6 +20,14 @@ body, .theme-metal {
             background-color: rgba(255,255,255,.9);
             padding: 15px;
 
+            .ant-form-item {
+                //margin-bottom: 18px;
+
+                .ant-form-item-label {
+                    line-height: 24px;
+                }
+            }
+
             .ant-btn {
                 float: right;
             }

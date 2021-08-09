@@ -19,6 +19,7 @@
     "react-dom": "^16.9.0",
     "react-ga": "^2.7.0",
     "react-i18next": "^10.12.2",
+    "react-input-mask": "^2.0.4",
     "react-plotly.js": "^2.5.0",
     "react-router-dom": "^5.0.1",
     "react-scripts": "^3.3.0"
