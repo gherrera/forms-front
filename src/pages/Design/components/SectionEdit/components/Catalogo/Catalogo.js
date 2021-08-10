@@ -82,7 +82,7 @@ const Catalogo = ({ section, catalogo, handleChangeCatalogoActive, handlerChange
                     </Row>
                 </Col>
             )}
-            { (section.type === 'CONTACTPERSON' || section.type === 'CONTACTENTIY') && catalogo.active &&
+            { (section.type === 'CONTACTPERSON' || section.type === 'CONTACTENTITY') && catalogo.active &&
                 <Col span={visibleAdd ? 6: 1} className={!visibleAdd ? 'btn-add-cat':'btn-new-field'}>
                     <Row className="field-cat">
                     { visibleAdd ?

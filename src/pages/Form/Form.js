@@ -1,33 +1,147 @@
 import "./Form.scss";
 import React, { useEffect, useState, useContext } from "react";
 import { FormDeclaration } from '../'
-import { getFormByIdPromise } from "../Design/components/FormDetail/promises";
+import { getFormByIdPromise, generateFormPromise } from "../Design/components/FormDetail/promises";
+import { getFormHashPromise, getDestinatarioByRutPromise } from "../../promises";
 import { withRouter } from "react-router-dom";
-import { Spin } from "antd";
+import { Spin, Row, Col, Form as FormAnt, Input, Button } from "antd";
+import InputMask from 'react-input-mask';
+import { validateRutHelper } from "../FormDeclaration/helpers";
 
-const Form = ({ match }) => {
+const Form = ({ match, form }) => {
+    const { getFieldDecorator, validateFields, setFieldsValue } = form;
     const [isLoading, setIsloading] = useState(true);
     const [mode, setMode] = useState("html");
-    const [form, setForm] = useState(null);
+    const [frm, setFrm] = useState(null);
+    const [ isVisibleDest, setIsVisibleDest ] = useState(false)
 
-    useEffect(() => {
-        setIsloading(true);
-        getFormByIdPromise(match.params.id).then(response => {
-            setForm(response)
-            setIsloading(false);
-        })
-        if (match.params.view === "pdf") {
-            setMode("pdf");
+    useEffect(async () => {
+        if(match.params.id) {
+            setIsloading(true);
+            getFormByIdPromise(match.params.id).then(response => {
+                setFrm(response)
+                setIsloading(false);
+            })
+            if (match.params.view === "pdf") {
+                setMode("pdf");
+            }
+        }else if(match.params.hash) {
+            setIsVisibleDest(true)
+            let id = await getFormHashPromise(match.params.hash)
+            if(id) {
+                getFormByIdPromise(id).then(response => {
+                    setFrm(response)
+                    setIsloading(false);
+                })
+                setMode("preview");
+            }else {
+                setIsloading(false);
+            }
         }
     }, [])
 
-    return (
-        <div>
-        {isLoading ? <Spin />
-            :
-            <FormDeclaration form={form} mode={mode} />
+    const generateForm = (e) => {
+        e.preventDefault()
+
+        validateFields(['rut','name', 'email']).then(async (obj) => {
+            let fId = await generateFormPromise(frm.id, obj)
+            window.location = "../forms/"+fId
+        })
+    }
+
+    const getValidator = (rule, value, callback, valType) => {
+        if(value === null || value === '') callback()
+        else {
+          if(valType === 'rut' || valType === 'rutEmp' || valType === 'rutNat') {
+            let type = ''
+            value = value.replaceAll('.','').replaceAll('-','').trim()
+            if(valType === 'rutEmp') type = 'Entity'
+            else if(valType === 'rutNat') type = 'Person'
+            if(validateRutHelper(value, type)) {
+              callback()
+            }else {
+              if(valType === 'rut') {
+                callback("Rut no válido");
+              }else if(valType === 'rutEmp' && validateRutHelper(value)) {
+                callback("Rut de Empresa no válido");
+              }else if(valType === 'rutNat' && validateRutHelper(value)) {
+                callback("Rut de Persona no válido");
+              }else {
+                callback("Rut no válido");
+              }
+            }
+          }
         }
+    }
+
+    const verifyRut = async (rut) => {
+        let dest = await getDestinatarioByRutPromise(frm.clientId, rut)
+        if(dest && dest !== '') {
+            setFieldsValue({name: dest.name, email: dest.email})
+        }
+    }
+
+    return (
+        <div className={"formulario" + (isVisibleDest ? ' visible-dest':'')}>
+            {isLoading ? <Spin />
+                :
+                <>
+                <FormDeclaration form={frm} mode={mode} />
+                { isVisibleDest &&
+                    <div className="form-dest">
+                        <FormAnt onSubmit={generateForm}>
+                            <Row>
+                                <Col span={8} offset={8} className="form-data">
+                                    <h3>Datos de Destinatario</h3>
+                                    <FormAnt.Item label="Rut">
+                                    { getFieldDecorator('rut', {
+                                        validateTrigger: "onChange",
+                                        rules:
+                                            [
+                                                { required: true, message: 'Campo requerido' },
+                                                {validator: (rule, value, callback) => getValidator(rule, value, callback, 'rut')}
+                                            ]
+                                        })(
+                                            <Input onBlur={(e) => verifyRut(e.target.value)}/>
+                                        )
+                                    }
+                                    </FormAnt.Item>
+                                    <FormAnt.Item label="Nombre">
+                                    { getFieldDecorator('name', {
+                                        validateTrigger: "onChange",
+                                        rules:
+                                            [
+                                                { required: true, message: 'Campo requerido' },
+                                            ]
+                                        })(
+                                            <Input/>
+                                        )
+                                    }
+                                    </FormAnt.Item>
+                                    <FormAnt.Item label="Email">
+                                    { getFieldDecorator('email', {
+                                        validateTrigger: "onChange",
+                                        rules:
+                                            [
+                                                { required: true, message: 'Campo requerido' },
+                                                {type: "email", message: "Email no es válido"}
+                                            ]
+                                        })(
+                                            <Input/>
+                                        )
+                                    }
+                                    </FormAnt.Item>
+                                    <Row>
+                                        <Button type="primary" htmlType="submit">Generar</Button>
+                                    </Row>
+                                </Col>
+                            </Row>
+                        </FormAnt>
+                    </div>
+                }
+                </>
+            }
         </div>
     )
 }
-export default withRouter(Form);
+export default FormAnt.create()(withRouter(Form));

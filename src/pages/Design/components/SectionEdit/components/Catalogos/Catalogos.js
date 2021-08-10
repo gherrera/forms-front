@@ -86,18 +86,29 @@ const Catalogos = ({ handleChangeCatalogoActive, handlerChangeCatalogo, section,
         cat7.fields.push({ type: 'INPUT', title: 'Porcentaje de Participación', key: 'porcentaje', active: false, required: false, validation: {type: 'number', decimals: 2}})
         catContacto.push(cat7)
       }
-      if(section) {
+      if(section && (section.type === 'CONTACTPERSON' || section.type === 'CONTACTENTITY')) {
         catContacto.map((seccion) => {
             section.components.map(comp => {
                 if(comp.key === seccion.key) {
                     seccion.active = true
-                    seccion.fields.map(fcat => {
-                        comp.fields.map(f => {
-                            if(fcat.key === f.key) {
-                                fcat.active = true
-                                fcat.required = f.required
-                            }
+                    comp.fields.map(f => {
+                      let existe = false
+                      seccion.fields.map(fcat => {
+                        if(fcat.key === f.key) {
+                            fcat.active = true
+                            fcat.required = f.required
+                            existe = true
+                        }
+                      })
+                      if(!existe) {
+                        seccion.fields.push({
+                          type: f.typeField, 
+                          title: f.title, 
+                          key: f.key, 
+                          active: true, 
+                          required: f.required
                         })
+                      }
                     })
                 }
             })
@@ -213,7 +224,7 @@ const Catalogos = ({ handleChangeCatalogoActive, handlerChangeCatalogo, section,
         <Row>
             { type ? 
             <Col span={18}>
-              <h4>Catalogo de datos{catType === "CONTACTPERSON" ? ' de Persona Natural' : catType === "CONTACTENTIY" ? ' de Persona Jurídica': ''}</h4>
+              <h4>Catalogo de datos{catType === "CONTACTPERSON" ? ' de Persona Natural' : catType === "CONTACTENTITY" ? ' de Persona Jurídica': ''}</h4>
             </Col>
             :
             <>
@@ -223,7 +234,7 @@ const Catalogos = ({ handleChangeCatalogoActive, handlerChangeCatalogo, section,
               <Col span={4}>
                 <Select onChange={(value) => setCatType(value)} size="small" style={{width:'100%'}}>
                   <Select.Option value="CONTACTPERSON">Persona Natural</Select.Option>
-                  <Select.Option value="CONTACTENTIY">Persona Jurídica</Select.Option>
+                  <Select.Option value="CONTACTENTITY">Persona Jurídica</Select.Option>
                 </Select>
               </Col>
               <Col span={10}>

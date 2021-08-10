@@ -20,5 +20,11 @@ export default {
 			method: 'post',
 			body: form
 		})
+	},
+	getFormHash: (id) => {
+		return apiRequestorHelper({
+			url: apiConfig.url + '/getFormHash/' + id,
+			method: 'post'
+		})
 	}
 }

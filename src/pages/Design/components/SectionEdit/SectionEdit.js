@@ -213,90 +213,96 @@ const SectionEdit = ({ s, refreshThisSection, sectionNro }) => {
         <Col span={12} md={12} sm={24} xs={24}>
           <h2>{ section.title }</h2>
         </Col>
-        <Col span={12} md={12} sm={24} xs={24} className="tools">
-          <Button disabled={!changes} onClick={saveThisSection} type="primary">Guardar Cambios</Button>
-          {/*<Button onClick={exitSection}>Salir sin Guardar</Button>*/}
-          <Button onClick={handlePreviewSection} type="primary">Previsualizar</Button>
-        </Col>
-      </Row>
-      { (section.type === 'CONTACTPERSON' || section.type === 'CONTACTENTIY') &&
-        <Catalogos handleChangeCatalogoActive={handleChangeCatalogoActive} handlerChangeCatalogo={handlerChangeCatalogo}
-          section={section} type={section.type}
-        />
-      }
-      { section.type === 'CUSTOM' &&
-        <Row className="custom-tools">
-          <ul className="custom-tools-group-menu">
-          {["SUBSECTION", "PARAGRAPH", "FIELDSET", "TABLE", "DECL", "DECISION", "TEXT"].map(c =>
-            <Popover content={getContentPopOver(c)} title={getTooltipComponent(c)} trigger="hover" placement="bottom">
-              <li>
-                  <a href="#0" onClick={() => handleClickComponent(c)}>
-                    <span>
-                      { c === "PARAGRAPH" && <><Icon type="align-center" />&nbsp;Párrafo</>}
-                      { c === "FIELDSET" && <><Icon type="form" />&nbsp;Datos</>}
-                      { c === "TABLE" && <><Icon type="table" />&nbsp;Tabla</>}
-                      { c === "DECL" && <><Icon type="table" />&nbsp;Declaración</>}
-                      { c === "TEXT" && <><Icon type="edit" />&nbsp;Texto</>}
-                      { c === "SUBSECTION" && <><Icon type="profile" />&nbsp;Sub Seccion</>}
-                      { c === "DECISION" && <><Icon type="fork" />&nbsp;Decisión</>}
-                    </span>
-                    <span>
-                      <Tooltip title="Agregar">
-                        <Icon type="plus"/>
-                      </Tooltip>
-                    </span>
-                  </a>
-              </li>
-            </Popover>
-            )}
-          </ul>
-        </Row>
-      }
-
-      <div className={'section-components section-type-'+section.type}>
-        { section.components && (section.type === 'CONTACTPERSON' || section.type === 'CONTACTENTIY') &&
-          <Row><h4>Datos seleccionados</h4></Row>
+        { !sectionNro &&
+          <Col span={12} md={12} sm={24} xs={24} className="tools">
+            <Button disabled={!changes} onClick={saveThisSection} type="primary">Guardar Cambios</Button>
+            {/*<Button onClick={exitSection}>Salir sin Guardar</Button>*/}
+            <Button onClick={handlePreviewSection} type="primary">Previsualizar</Button>
+          </Col>
         }
-        { section.components && section.components.map((component, index) =>
-          <Row className={'row-component-section row-' + component.type}>
-            { section.type === 'CUSTOM' &&
-              <Row className="header-section-component-custom">
-                <Col span={20}><strong>{index+1}. {getTooltipComponent(component.type)}</strong></Col>
-                <Col span={4} className="tools-section-component-custom">
-                  <Tooltip title="Eliminar Componente" placement="bottom">
-                    <Popconfirm title="Confirma eliminar el Componente?" onConfirm={(e) => deleteComponent(index)}>
-                      <Button size="small" icon="delete" />
-                    </Popconfirm>
-                  </Tooltip>
-                </Col>
-              </Row>
-            }
-            { component.type === 'PARAGRAPH' &&
-              <ParagraphEdit section={section} component={component} fieldset={component.fieldSet} handleChangeValuesSection={handleChangeValuesSection} />
-            }
-            { component.type === 'FIELDSET' &&
-              <FieldSetEdit section={section} component={component} fieldset={component} handleChangeValuesSection={handleChangeValuesSection} />
-            }
-            { (component.type === 'TABLE' || component.type === 'DECL') &&
-              <TableEdit section={section} component={component} fieldset={component.fieldSet} handleChangeValuesSection={handleChangeValuesSection} />
-            }
-            { component.type === 'TEXT' &&
-              <TextEdit section={section} component={component} handleChangeValuesSection={handleChangeValuesSection}/>
-            }
-            { component.type === 'SUBSECTION' &&
-              <SubsectionEdit indexSection={index} section={section} component={component} subsection={component} 
-                handleChangeValuesSection={handleChangeValuesSection}
-                getComponentByType={getComponentByType} getTooltipComponent={getTooltipComponent} />
-            }
-            { component.type === 'DECISION' &&
-              <DecisionEdit section={section} component={component}
-                handleChangeValuesSection={handleChangeValuesSection}
-                getComponentByType={getComponentByType} getTooltipComponent={getTooltipComponent}
-              />
-            }
+      </Row>
+      { !sectionNro &&
+      <>
+        { (section.type === 'CONTACTPERSON' || section.type === 'CONTACTENTITY') &&
+          <Catalogos handleChangeCatalogoActive={handleChangeCatalogoActive} handlerChangeCatalogo={handlerChangeCatalogo}
+            section={section} type={section.type}
+          />
+        }
+        { section.type === 'CUSTOM' &&
+          <Row className="custom-tools">
+            <ul className="custom-tools-group-menu">
+            {["SUBSECTION", "PARAGRAPH", "FIELDSET", "TABLE", "DECL", "DECISION", "TEXT"].map(c =>
+              <Popover content={getContentPopOver(c)} title={getTooltipComponent(c)} trigger="hover" placement="bottom">
+                <li>
+                    <a href="#0" onClick={() => handleClickComponent(c)}>
+                      <span>
+                        { c === "PARAGRAPH" && <><Icon type="align-center" />&nbsp;Párrafo</>}
+                        { c === "FIELDSET" && <><Icon type="form" />&nbsp;Datos</>}
+                        { c === "TABLE" && <><Icon type="table" />&nbsp;Tabla</>}
+                        { c === "DECL" && <><Icon type="table" />&nbsp;Declaración</>}
+                        { c === "TEXT" && <><Icon type="edit" />&nbsp;Texto</>}
+                        { c === "SUBSECTION" && <><Icon type="profile" />&nbsp;Sub Seccion</>}
+                        { c === "DECISION" && <><Icon type="fork" />&nbsp;Decisión</>}
+                      </span>
+                      <span>
+                        <Tooltip title="Agregar">
+                          <Icon type="plus"/>
+                        </Tooltip>
+                      </span>
+                    </a>
+                </li>
+              </Popover>
+              )}
+            </ul>
           </Row>
-        )}
-      </div>
+        }
+
+        <div className={'section-components section-type-'+section.type}>
+          { section.components && (section.type === 'CONTACTPERSON' || section.type === 'CONTACTENTITY') &&
+            <Row><h4>Datos seleccionados</h4></Row>
+          }
+          { section.components && section.components.map((component, index) =>
+            <Row className={'row-component-section row-' + component.type}>
+              { section.type === 'CUSTOM' &&
+                <Row className="header-section-component-custom">
+                  <Col span={20}><strong>{index+1}. {getTooltipComponent(component.type)}</strong></Col>
+                  <Col span={4} className="tools-section-component-custom">
+                    <Tooltip title="Eliminar Componente" placement="bottom">
+                      <Popconfirm title="Confirma eliminar el Componente?" onConfirm={(e) => deleteComponent(index)}>
+                        <Button size="small" icon="delete" />
+                      </Popconfirm>
+                    </Tooltip>
+                  </Col>
+                </Row>
+              }
+              { component.type === 'PARAGRAPH' &&
+                <ParagraphEdit section={section} component={component} fieldset={component.fieldSet} handleChangeValuesSection={handleChangeValuesSection} />
+              }
+              { component.type === 'FIELDSET' &&
+                <FieldSetEdit section={section} component={component} fieldset={component} handleChangeValuesSection={handleChangeValuesSection} />
+              }
+              { (component.type === 'TABLE' || component.type === 'DECL') &&
+                <TableEdit section={section} component={component} fieldset={component.fieldSet} handleChangeValuesSection={handleChangeValuesSection} />
+              }
+              { component.type === 'TEXT' &&
+                <TextEdit section={section} component={component} handleChangeValuesSection={handleChangeValuesSection}/>
+              }
+              { component.type === 'SUBSECTION' &&
+                <SubsectionEdit indexSection={index} section={section} component={component} subsection={component} 
+                  handleChangeValuesSection={handleChangeValuesSection}
+                  getComponentByType={getComponentByType} getTooltipComponent={getTooltipComponent} />
+              }
+              { component.type === 'DECISION' &&
+                <DecisionEdit section={section} component={component}
+                  handleChangeValuesSection={handleChangeValuesSection}
+                  getComponentByType={getComponentByType} getTooltipComponent={getTooltipComponent}
+                />
+              }
+            </Row>
+          )}
+        </div>
+      </>
+      }
       { isVisiblePreview &&
         <Modal
           className="preview-modal"

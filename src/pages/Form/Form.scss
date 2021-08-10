@@ -2,3 +2,35 @@ body, .theme-metal {
     background-image: unset !important;
     padding: 20px;
 }
+
+.formulario {
+    &.visible-dest .form-declaration {
+        filter: blur(3px);
+    }
+
+    .form-dest {
+        position: absolute;
+        width: 100%;
+        top: 0px;
+        height: 100%;
+        padding-top: 100px;
+
+        .form-data {
+            border: 2px solid rgba(0,0,0,.05);
+            background-color: rgba(255,255,255,.9);
+            padding: 15px;
+
+            .ant-form-item {
+                //margin-bottom: 18px;
+
+                .ant-form-item-label {
+                    line-height: 24px;
+                }
+            }
+
+            .ant-btn {
+                float: right;
+            }
+        }
+    }
+}

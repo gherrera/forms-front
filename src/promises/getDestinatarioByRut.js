@@ -1,8 +1,8 @@
 import { formsService } from '../services'
 
-export default (id, dest) => {
+export default (clienteId, rut) => {
  	return new Promise(resolve => {
- 		formsService.generateForm(id, dest)
+ 		formsService.getDestinatarioByRut(clienteId, rut)
  			.then(response => resolve(response.data))
  	})
 }

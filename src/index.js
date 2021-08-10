@@ -50,7 +50,6 @@ class App extends Component {
   async componentDidMount() {
     const language = LocalStorageService.read('i18nextLng')
     moment.locale(language.substring(0,2))
-    console.log(this.props)
 
     this.handleThemeCheck()
     if(!window.location.pathname.startsWith("/forms")) {
@@ -179,6 +178,7 @@ class App extends Component {
                   <Route path="/administracion" exact render={ () => this.renderComponent(AdminPage) } />
                   <Route path="/design" exact render={ () => this.renderComponent(DesignPage, 'design') } />
                   <Route path="/forms/:id/:view?" exact render={ () => <Form /> } />
+                  <Route path="/form/:hash" exact render={ () => <Form /> } />
 
                   <Route render={ () => <NotFoundPage /> } />
                 </Switch>

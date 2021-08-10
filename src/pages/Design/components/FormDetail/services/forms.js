@@ -22,10 +22,11 @@ export default {
 			body: section
 		})
 	},
-	generateForm: (id) => {
+	generateForm: (id, dest) => {
 		return apiRequestorHelper({
 			url: apiConfig.url + '/generateForm/'+id,
-			method: 'post'
+			method: 'post',
+			body: dest
 		})
 	}
 }

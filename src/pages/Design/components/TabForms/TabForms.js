@@ -19,17 +19,19 @@ import { camelizerHelper } from "../../../../helpers";
 
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import { getFormByClienteIdPromise, updateFormPromise } from "./promises";
+import { getFormByClienteIdPromise, updateFormPromise, getFormHashPromise } from "./promises";
 import { generateFormPromise } from "../FormDetail/promises";
 
-const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
+const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
 	const { t } = useTranslation()
+  const { getFieldDecorator, validateFields } = form;
   const [forms, setForms] = useState([])
-  const [form, setForm] = useState(null)
+  const [frm, setFrm] = useState(null)
   const [key, setKey] = useState(Math.random())
   const [ isLoading, setIsLoading ] = useState(true)
   const [ isVisibleNewForm, setIsVisibleNewForm ] = useState(false)
-  const [ newFormObj, setNewFormObj ] = useState({})
+  const [ isVisibleURL, setIsVisibleURL ] = useState(false)
+  const [ hashURL, setHashURL ] = useState(null)
 
   useEffect(() => {
     loadForms()
@@ -55,7 +57,7 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
   }
 
   const handleEditForm = async (f) => {
-    setForm(f)
+    setFrm(f)
     let b = []
     b.push(breadcrumbs[0])
     refreshBreadCrumbs({ breadcrumbs: b, title: f.name } )
@@ -68,7 +70,7 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
     if(breadcrumbs.length === 2) {
       b.push(breadcrumbs[1])
     }else {
-      b.push({title: form.name})
+      b.push({title: frm.name})
     }
     b[1].onClick = handleClickForm
     b[1].link = 'design'      
@@ -97,27 +99,25 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
     handleChangeAttrForm(index, 'status', checked ? 'ACTIVE' : 'INACTIVE')
   }
 
-  const handleChangeAttrNewForm = (key, value) => {
-    let f = { ...newFormObj, [key]: value }
-    setNewFormObj(f)
-  }
-
   const handleOpenNewForm = () => {
-    setNewFormObj({})
     setIsVisibleNewForm(true)
   }
 
   const closeModalHandler = (create) => {
     if(create) {
-      updateFormPromise({ ...newFormObj, status: 'ACTIVE' }).then(r => {
-        loadForms()
+      validateFields(['category','name']).then((obj) => {
+        updateFormPromise({ ...obj, status: 'ACTIVE' }).then(r => {
+          loadForms()
+        })
+        setIsVisibleNewForm(false)
       })
+    }else {
+      setIsVisibleNewForm(false)
     }
-    setIsVisibleNewForm(false)
   }
 
-  const handleDeleteForm = (form) => {
-    updateFormPromise({ ...form, deleted: true }).then(r => {
+  const handleDeleteForm = (f) => {
+    updateFormPromise({ ...f, deleted: true }).then(r => {
       loadForms()
       notification.success({
         message: 'Formulario borrado'
@@ -125,18 +125,26 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
     })
   }
 
-  const handleGenerateForm = async (form) => {
-    let fId = await generateFormPromise(form.id)
+  const handleGenerateForm = async (f) => {
+    let fId = await generateFormPromise(f.id)
     window.open("forms/"+fId)
   }
 
+  const handleVisibleForm = async (visible, formId) => {
+    setHashURL(null)
+    if(visible) {
+      let hash = await getFormHashPromise(formId)
+      setHashURL(hash)
+    }
+    setIsVisibleURL(visible)
+  }
 
   return (
     <div className="tab-forms">
       { isLoading ? <Spin/>
       :
       <>
-        { form !== null ? <FormDetail key={key} formId={form.id} refreshBreadCrumbs={_refreshBreadCrumbs} />
+        { frm !== null ? <FormDetail key={key} formId={frm.id} refreshBreadCrumbs={_refreshBreadCrumbs} />
         :
         <>
           <Row className="tools-form">
@@ -153,31 +161,34 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
             <Col span={3}>Edición</Col>
           </Row>
 
-          { forms.map((form, index) =>
+          { forms.map((f, index) =>
             <Row className="rows-section">
-              <Col span={1}>{form.nro}</Col>
-              <Col span={2}>{camelizerHelper(form.category)}</Col>
-              <Col span={7}><Input size="small" value={form.name} onChange={(e) => changeNameForm(index, e.target.value)} className="editable"/></Col>
-              <Col span={3}>{form.userCreate}</Col>
-              <Col span={3}>{moment(form.creationDate).format('DD/MM/YYYY HH:mm')}</Col>
-              <Col span={3}>{form.updateDate && moment(form.updateDate).format('DD/MM/YYYY HH:mm')}</Col>
+              <Col span={1}>{f.nro}</Col>
+              <Col span={2}>{camelizerHelper(f.category)}</Col>
+              <Col span={7}><Input size="small" value={f.name} onChange={(e) => changeNameForm(index, e.target.value)} className="editable"/></Col>
+              <Col span={3}>{f.userCreate}</Col>
+              <Col span={3}>{moment(f.creationDate).format('DD/MM/YYYY HH:mm')}</Col>
+              <Col span={3}>{f.updateDate && moment(f.updateDate).format('DD/MM/YYYY HH:mm')}</Col>
               <Col span={2}>
-                <Checkbox checked={form.status === 'ACTIVE'} onChange={(e) => changeActiveForm(index, e.target.checked)}/>
+                <Checkbox checked={f.status === 'ACTIVE'} onChange={(e) => changeActiveForm(index, e.target.checked)}/>
               </Col>
               <Col span={3} className="tools-rows-forms">
                 <Tooltip title="Modificar">
-                  <Button icon="edit" size="small" onClick={(e) => handleEditForm(form)}/>
+                  <Button icon="edit" size="small" onClick={(e) => handleEditForm(f)}/>
                 </Tooltip>
                 <Tooltip title="Historial">
                   <Button icon="folder-open" size="small" />
                 </Tooltip>
                 <Tooltip title="Eliminar">
-                  <Popconfirm title="Confirma eliminar la Sección?" onConfirm={(e) => handleDeleteForm(form)}>
+                  <Popconfirm title="Confirma eliminar la Sección?" onConfirm={(e) => handleDeleteForm(f)}>
                     <Button icon="delete" size="small" />
                   </Popconfirm>
                 </Tooltip>
                 <Tooltip title="Generar Formulario">
-                  <Button icon="form" size="small" onClick={() => handleGenerateForm(form)} />
+                  <Button icon="form" size="small" onClick={() => handleGenerateForm(f)} />
+                </Tooltip>
+                <Tooltip title="URL">
+                  <Button icon="link" size="small" onClick={() => handleVisibleForm(true, f.id)} />
                 </Tooltip>
               </Col>
             </Row>
@@ -191,17 +202,52 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
             >
               <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
                 <Form.Item label="Categoría">
-                  <Select onChange={(value) => handleChangeAttrNewForm('category', value)}>
-                    <Select.Option value="CLIENTE">Cliente</Select.Option>
-                    <Select.Option value="COLABORADOR">Colaborador</Select.Option>
-                    <Select.Option value="PROVEEDOR">Proveedor</Select.Option>
-                    <Select.Option value="DIRECTOR">Director</Select.Option>
-                  </Select>
+                { getFieldDecorator('category', {
+                      validateTrigger: "onChange",
+                      rules:
+                        [
+                          { required: true, message: 'Campo requerido' }
+                        ]
+                    })(
+                    <Select>
+                      <Select.Option value="CLIENTE">Cliente</Select.Option>
+                      <Select.Option value="COLABORADOR">Colaborador</Select.Option>
+                      <Select.Option value="PROVEEDOR">Proveedor</Select.Option>
+                      <Select.Option value="DIRECTOR">Director</Select.Option>
+                    </Select>
+                    )
+                }
                 </Form.Item>
                 <Form.Item label="Formulario">
-                  <Input onChange={(e) => handleChangeAttrNewForm('name', e.target.value)}/>
+                { getFieldDecorator('name', {
+                      validateTrigger: "onChange",
+                      rules:
+                        [
+                          { required: true, message: 'Campo requerido' }
+                        ]
+                    })(
+                    <Input/>
+                    )
+                }
                 </Form.Item>
               </Form>
+            </Modal>
+          }
+
+          { isVisibleURL &&
+            <Modal
+              visible={true}
+              title="Link Formulario"
+              onCancel={ () => handleVisibleForm(false) }
+              width={700}
+              footer={ [
+                <Button onClick={ () => handleVisibleForm(false) }>
+                  { t('messages.aml.btnClose') }
+                </Button>
+              ]
+              }
+            >
+              <Input readOnly={true} value={window.location.protocol+'//'+window.location.host+ '/form/' + hashURL} size="small"/>
             </Modal>
           }
         </>
@@ -211,4 +257,4 @@ const TabForms = ({breadcrumbs, refreshBreadCrumbs}) => {
     </div>
   )
 }
-export default TabForms;
+export default Form.create()(TabForms);

@@ -13,26 +13,26 @@
         overflow: hidden;
         padding: 0px;
     }
+}
 
+.preview-content {
     .preview-mode {
         text-align: center;
         padding: 10px;
     }
 
-    .preview-content {
-        .preview-pdf {
-            margin: 5px;
-            padding: 10px;
-            border: 1px solid rgba(0, 0, 0, .1);
-            min-height: 300px;
-            position: relative;
-           
-            .ant-spin {
-                position: absolute;
-                left: 0px;
-                right: 0px;
-                padding: 100px;
-            }
+    .preview-pdf {
+        margin: 5px;
+        padding: 10px;
+        border: 1px solid rgba(0, 0, 0, .1);
+        min-height: 300px;
+        position: relative;
+        
+        .ant-spin {
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            padding: 100px;
         }
     }
 }

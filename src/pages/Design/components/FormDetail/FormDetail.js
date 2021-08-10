@@ -57,12 +57,13 @@ const FormDetail = ({ formId, refreshBreadCrumbs }) => {
 		})
   }
 
-  const handlerAddSection = (section) => {
+  const handlerAddSection = async (section) => {
     closeModalSectionHandler()
 
     let joined = sections.concat(section);
     setSections(joined)
-    saveForm(joined)
+    let f = await saveForm(joined)
+    editSection(f.sections[f.sections.length-1])
   }
 
   const deleteSection = (index) => {
@@ -134,12 +135,12 @@ const FormDetail = ({ formId, refreshBreadCrumbs }) => {
     if(section !== null) setSection(s)
   }
 
-  const saveForm = (s) => {
-    saveFormPromise({ ...form, sections: s}).then(f => {
-      setForm(f)
-      setSections(f.sections)
-      setKeyForm(getRandomId())
-    })
+  const saveForm = async (s) => {
+    let f = await saveFormPromise({ ...form, sections: s})
+    setForm(f)
+    setSections(f.sections)
+    setKeyForm(getRandomId())
+    return f
   }
 
   const handlePreviewSection = () => {
@@ -185,7 +186,7 @@ const FormDetail = ({ formId, refreshBreadCrumbs }) => {
           { section ? <SectionEdit s={section} refreshThisSection={refreshSection} />
           :
           <div className="form">
-            <Row>
+            <Row className="row-tools">
               <Col span={8}>
                 <Button onClick={openModalSectionHandler} type="primary" className="btn-add-section">Nueva Sección</Button>
               </Col>
@@ -193,10 +194,8 @@ const FormDetail = ({ formId, refreshBreadCrumbs }) => {
                 <Radio.Group onChange={onChangeMode} defaultValue={mode}>
                   <Radio.Button value="list"><Icon type="unordered-list"/>&nbsp;Lista</Radio.Button>
                   <Radio.Button value="design"><Icon type="form"/>&nbsp;Diseño</Radio.Button>
+                  <Radio.Button value="preview"><Icon type="file-text"/>&nbsp;Previsualizar</Radio.Button>
                 </Radio.Group>
-              </Col>
-              <Col span={8} className="tools-btn">
-                <Button onClick={handlePreviewSection}>Previsualizar</Button>
               </Col>
             </Row>
             { mode === 'list' ?
@@ -255,8 +254,10 @@ const FormDetail = ({ formId, refreshBreadCrumbs }) => {
                 </Droppable>
               </DragDropContext>
             </>
-            :
+            : mode === 'design' ?
               <FormEdit key={keyForm} form={form} refreshSection={refreshSection} setForm={setForm} />
+            :
+              <Preview form={form} closeModalHandler={closeModalHandler} />
             }
 
             { isVisiblePreview &&

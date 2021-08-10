@@ -7,7 +7,8 @@ import logout from './logout'
 import removeLoginAnimations from './removeLoginAnimations'
 import getDataSourcesCatalogo from './getDataSourcesCatalogo'
 import getDataSourcesForm from './getDataSourcesForm'
-
+import getFormHash from './getFormHash'
+import getDestinatarioByRut from './getDestinatarioByRut'
 
 export const animateLogoutPromise = animateLogout
 export const changePasswordPromise = changePassword
@@ -18,3 +19,5 @@ export const logoutPromise = logout
 export const removeLoginAnimationsPromise = removeLoginAnimations
 export const getDataSourcesCatalogoPromise = getDataSourcesCatalogo
 export const getDataSourcesFormPromise = getDataSourcesForm
+export const getFormHashPromise = getFormHash
+export const getDestinatarioByRutPromise = getDestinatarioByRut

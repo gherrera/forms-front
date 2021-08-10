@@ -134,15 +134,6 @@ const FormEdit = ({ form, refreshSection, setForm }) => {
                         </Row>
                     }
                 </Row>
-                <Row>
-                    <h2 className="form-title">{frm.name}</h2>
-                </Row>
-                <Row>
-                <Col span={12}>Fecha:&nbsp;&nbsp;<span className="inputHeader">{moment(frm.creationDate).format('DD-MM-YYYY')}</span></Col>
-                <Col span={12} style={{textAlign:'right', paddingRight:'20px'}}>
-                    Folio:&nbsp;&nbsp;<span className="inputHeader">{frm.folio?frm.folio:'###'}</span>
-                </Col>
-                </Row>
             </div>
             <div className="form-content">
                 {frm && frm.sections && frm.sections.map((section, index) => <SectionEdit s={section} refreshThisSection={refreshSection} sectionNro={index+1} />)}
