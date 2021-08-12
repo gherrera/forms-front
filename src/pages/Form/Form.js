@@ -105,7 +105,7 @@ const Form = ({ match, form }) => {
                                         rules:
                                             [
                                                 { required: true, message: 'Campo requerido' },
-                                                {validator: (rule, value, callback) => getValidator(rule, value, callback, 'rut')}
+                                                //{validator: (rule, value, callback) => getValidator(rule, value, callback, 'rut')}
                                             ]
                                         })(
                                             <Input onBlur={(e) => verifyRut(e.target.value)}/>
