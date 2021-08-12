@@ -91,9 +91,15 @@ const Form = ({ match, form }) => {
                     <div className="form-dest">
                         <FormAnt onSubmit={generateForm}>
                             <Row>
-                                <Col span={8} offset={8} className="form-data">
+                                <Col 
+                                    xs={{ span: 22, offset: 1 }} 
+                                    sm={{ span: 20, offset: 2 }} 
+                                    md={{ span: 16, offset: 4 }} 
+                                    lg={{ span: 12, offset: 6 }} 
+                                    xl={{ span: 8, offset: 8 }} 
+                                    className="form-data">
                                     <h3>Datos de Destinatario</h3>
-                                    <FormAnt.Item label="Rut">
+                                    <FormAnt.Item label="Nro. de Documento de Identidad">
                                     { getFieldDecorator('rut', {
                                         validateTrigger: "onChange",
                                         rules:
