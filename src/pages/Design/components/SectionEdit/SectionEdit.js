@@ -305,6 +305,7 @@ const SectionEdit = ({ s, refreshThisSection, sectionNro }) => {
       }
       { isVisiblePreview &&
         <Modal
+          title="Vista Previa"
           className="preview-modal"
           footer={ null }
           visible={ true }
@@ -312,9 +313,6 @@ const SectionEdit = ({ s, refreshThisSection, sectionNro }) => {
           onCancel={ closeModalHandler }
         >
           <div>
-            <div className="top-bar">
-              Vista Previa
-            </div>
             <Preview section={section} closeModalHandler={closeModalHandler} />
           </div>
         </Modal>
