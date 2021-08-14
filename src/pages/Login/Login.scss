@@ -199,6 +199,7 @@ body {
         color:#061551;
         letter-spacing: 0.6px;
         padding: 50px;
+        line-height: 1.25em;
     }
     .contenidoBox {
         display: block;
@@ -224,6 +225,17 @@ body {
     @media only screen and (max-width: 500px) {
         .funciona3 {
             padding-bottom: 18%;
+        }
+        #tituloF, #parrafoF {
+            text-align: center;
+            justify-content: center;
+            padding: 0px 10px 5px 10px;
+        }
+        #imagenF {
+            padding-bottom: 20px;
+        }
+        #titulo2B {
+            padding-bottom: 20px;
         }
     }
 
@@ -328,6 +340,9 @@ body {
         }
         .cajaIngreso {
             padding: 40px 0px 0px 0px;
+        }
+        .seccionSesion {
+            padding: 70px 0px 30px 70px;
         }
       }
 
