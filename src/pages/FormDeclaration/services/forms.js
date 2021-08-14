@@ -8,5 +8,11 @@ export default {
 			method: 'post',
 			body: section
 		})
+	},
+	sendForm: (formId) => {
+		return apiRequestorHelper({
+			url: apiConfig.url + '/sendForm/'+formId,
+			method: 'post'
+		})
 	}
 }

@@ -1,11 +1,12 @@
 import "./Form.scss";
 import React, { useEffect, useState, useContext } from "react";
+import { withRouter } from "react-router-dom";
+import { Spin, Row, Col, Form as FormAnt, Input, Button, notification, Modal } from "antd";
+
 import { FormDeclaration } from '../'
 import { getFormByIdPromise, generateFormPromise } from "../Design/components/FormDetail/promises";
 import { getFormHashPromise, getDestinatarioByRutPromise } from "../../promises";
-import { withRouter } from "react-router-dom";
-import { Spin, Row, Col, Form as FormAnt, Input, Button } from "antd";
-import InputMask from 'react-input-mask';
+import { sendFormPromise } from "../FormDeclaration/promises"; 
 import { validateRutHelper } from "../FormDeclaration/helpers";
 
 const Form = ({ match, form }) => {
@@ -14,6 +15,7 @@ const Form = ({ match, form }) => {
     const [mode, setMode] = useState("html");
     const [frm, setFrm] = useState(null);
     const [ isVisibleDest, setIsVisibleDest ] = useState(false)
+    const [ sentMessage, setSentMessage ] = useState(false)
 
     useEffect(async () => {
         if(match.params.id) {
@@ -81,70 +83,94 @@ const Form = ({ match, form }) => {
         }
     }
 
+    const sendForm = (f) => {
+        sendFormPromise(frm.id).then((response) => {
+            response.formStatus = 'SAVED'
+            setFrm(response)
+            setSentMessage(true)
+            setMode("pdf")
+        })
+    }
+
+    const closeModalMessageHandler = () => {
+        setSentMessage(false)
+    }
+
     return (
         <div className={"formulario" + (isVisibleDest ? ' visible-dest':'')}>
             {isLoading ? <Spin />
                 :
                 <>
-                <FormDeclaration form={frm} mode={mode} />
-                { isVisibleDest &&
-                    <div className="form-dest">
-                        <FormAnt onSubmit={generateForm}>
-                            <Row>
-                                <Col 
-                                    xs={{ span: 22, offset: 1 }} 
-                                    sm={{ span: 20, offset: 2 }} 
-                                    md={{ span: 16, offset: 4 }} 
-                                    lg={{ span: 12, offset: 6 }} 
-                                    xl={{ span: 8, offset: 8 }} 
-                                    className="form-data">
-                                    <h3>Datos de Destinatario</h3>
-                                    <FormAnt.Item label="Nro. de Documento de Identidad">
-                                    { getFieldDecorator('rut', {
-                                        validateTrigger: "onChange",
-                                        rules:
-                                            [
-                                                { required: true, message: 'Campo requerido' },
-                                                //{validator: (rule, value, callback) => getValidator(rule, value, callback, 'rut')}
-                                            ]
-                                        })(
-                                            <Input onBlur={(e) => verifyRut(e.target.value)}/>
-                                        )
-                                    }
-                                    </FormAnt.Item>
-                                    <FormAnt.Item label="Nombre">
-                                    { getFieldDecorator('name', {
-                                        validateTrigger: "onChange",
-                                        rules:
-                                            [
-                                                { required: true, message: 'Campo requerido' },
-                                            ]
-                                        })(
-                                            <Input/>
-                                        )
-                                    }
-                                    </FormAnt.Item>
-                                    <FormAnt.Item label="Email">
-                                    { getFieldDecorator('email', {
-                                        validateTrigger: "onChange",
-                                        rules:
-                                            [
-                                                { required: true, message: 'Campo requerido' },
-                                                {type: "email", message: "Email no es válido"}
-                                            ]
-                                        })(
-                                            <Input/>
-                                        )
-                                    }
-                                    </FormAnt.Item>
-                                    <Row>
-                                        <Button type="primary" htmlType="submit">Generar</Button>
-                                    </Row>
-                                </Col>
-                            </Row>
-                        </FormAnt>
-                    </div>
-                }
+                    <FormDeclaration form={frm} mode={mode} sendFormHandler={sendForm} />
+                    { isVisibleDest &&
+                        <div className="form-dest">
+                            <FormAnt onSubmit={generateForm}>
+                                <Row>
+                                    <Col 
+                                        xs={{ span: 22, offset: 1 }} 
+                                        sm={{ span: 20, offset: 2 }} 
+                                        md={{ span: 16, offset: 4 }} 
+                                        lg={{ span: 12, offset: 6 }} 
+                                        xl={{ span: 8, offset: 8 }} 
+                                        className="form-data">
+                                        <h3>Datos de Destinatario</h3>
+                                        <FormAnt.Item label="Nro. de Documento de Identidad">
+                                        { getFieldDecorator('rut', {
+                                            validateTrigger: "onChange",
+                                            rules:
+                                                [
+                                                    { required: true, message: 'Campo requerido' },
+                                                    //{validator: (rule, value, callback) => getValidator(rule, value, callback, 'rut')}
+                                                ]
+                                            })(
+                                                <Input onBlur={(e) => verifyRut(e.target.value)}/>
+                                            )
+                                        }
+                                        </FormAnt.Item>
+                                        <FormAnt.Item label="Nombre">
+                                        { getFieldDecorator('name', {
+                                            validateTrigger: "onChange",
+                                            rules:
+                                                [
+                                                    { required: true, message: 'Campo requerido' },
+                                                ]
+                                            })(
+                                                <Input/>
+                                            )
+                                        }
+                                        </FormAnt.Item>
+                                        <FormAnt.Item label="Email">
+                                        { getFieldDecorator('email', {
+                                            validateTrigger: "onChange",
+                                            rules:
+                                                [
+                                                    { required: true, message: 'Campo requerido' },
+                                                    {type: "email", message: "Email no es válido"}
+                                                ]
+                                            })(
+                                                <Input/>
+                                            )
+                                        }
+                                        </FormAnt.Item>
+                                        <Row>
+                                            <Button type="primary" htmlType="submit">Generar</Button>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </FormAnt>
+                        </div>
+                    }
+                    { sentMessage &&
+                        <Modal
+                            visible={true}
+                            footer={null}
+                            onCancel={ closeModalMessageHandler }
+                        >
+                            <h3>La Declaración ha sido enviada exitosamente</h3>
+
+                            <p>Se enviará un email con el comprobante de la declaración a {frm.dest.email}</p>
+                        </Modal>
+                    }
                 </>
             }
         </div>

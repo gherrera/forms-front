@@ -184,9 +184,6 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
                     <Button icon="delete" size="small" />
                   </Popconfirm>
                 </Tooltip>
-                <Tooltip title="Generar Formulario">
-                  <Button icon="form" size="small" onClick={() => handleGenerateForm(f)} />
-                </Tooltip>
                 <Tooltip title="URL">
                   <Button icon="link" size="small" onClick={() => handleVisibleForm(true, f.id)} />
                 </Tooltip>

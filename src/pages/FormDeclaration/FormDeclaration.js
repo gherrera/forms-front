@@ -4,7 +4,8 @@ import {
   Col,
   Row,
   Button,
-  notification
+  notification,
+  Modal
 } from "antd";
 import { Section } from './components'
 import moment from "moment";
@@ -13,7 +14,9 @@ import { useTranslation } from "react-i18next";
 import { datasourcesContext } from '../../contexts'
 import apiConfig from '../../config/api'
 
-const FormDeclaration = ({ form, mode }) => {
+const { confirm } = Modal;
+
+const FormDeclaration = ({ form, mode, sendFormHandler }) => {
   const { t } = useTranslation()
   const [decl, setDecl] = useState(form)
   const [ showErrors, setShowErrors ] = useState(false)
@@ -81,9 +84,15 @@ const FormDeclaration = ({ form, mode }) => {
         description: 'Faltan campos requeridos'
       })
     }else {
-      notification.success({
-        message: 'OK'
-      })
+      confirm({
+        title: 'Desea enviar la declaración?',
+        onOk() {
+          sendFormHandler()
+        },
+        onCancel() {
+        },
+      });
+
     }
   }
 
@@ -120,14 +129,14 @@ const FormDeclaration = ({ form, mode }) => {
         </Row>
       </div>
       <div className="form-content">
-        { decl.sections && decl.sections.map(section =>
+        { (decl.formStatus !== 'SENT' || mode === 'pdf') && decl.sections && decl.sections.map(section =>
           <Section decl={decl} section={section} mode={mode} refreshForm={refreshForm} showErrors={showErrors} />
         )}
       </div>
-      { mode !== 'pdf' &&
+      { mode !== 'pdf' && decl.formStatus !== 'SENT'  &&
         <Row className="form-actions">
             <Col offset={20} span={4}>
-              <Button onClick={sendForm} disabled={mode !== 'html'} type="primary" size="large" style={{width:'150px'}}>Enviar</Button>
+              <Button onClick={sendFormHandler && sendForm} disabled={mode !== 'html'} type="primary" size="large" style={{width:'150px'}}>Enviar</Button>
             </Col>
         </Row>
       }
