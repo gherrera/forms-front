@@ -48,11 +48,11 @@ body {
         }
         /* menu icon */  
         .header .menu-icon {
-            cursor: pointer;
-            display: inline-block;
-            padding: 40px 20px 15px 25px;
-            position: relative;
-            user-select: none;
+            position: fixed;
+            flex-direction: column;
+            top: 3rem;
+            left: 80%;
+            width: 100%;
         }  
         .header .menu-icon .navicon {
             background: rgb(255, 255, 255);
@@ -113,6 +113,11 @@ body {
               display: none;
         }
        }
+       @media only screen and (max-width: 500px) {
+        .header .logo {
+            padding-bottom: 45px;
+        }
+    }
 
 /* II.- PRIMER BLOQUE - BENEFICIOS */
     .primerBloque {
