@@ -41,7 +41,7 @@ body {
             transition: max-height .2s ease-out;
             z-index: 100;
         }
-        #textoMenu{
+        #textoMenu {
             font: 400 16px / 18px Raleway, sans-serif;
             color:rgb(255, 255, 255);
             letter-spacing: 1.2px;
@@ -50,7 +50,7 @@ body {
         .header .menu-icon {
             cursor: pointer;
             display: inline-block;
-            padding: 38px 10px 13px 30px;
+            padding: 40px 20px 15px 0px;
             margin-left: 30px;
             position: relative;
             user-select: none;
@@ -200,7 +200,8 @@ body {
         display: block;
     }
     #imagenF {
-        padding: 15px 15px 15px 50px;
+        display: block;
+        margin: auto;
     }
     #tituloF {
         text-align: center;
@@ -212,6 +213,14 @@ body {
         text-align: center;
         padding: 10px 50px 20px 20px;
         margin: 0px 0px 22.5px;
+    }
+    .funciona3 {
+        padding-bottom: 5%;
+    }
+    @media only screen and (max-width: 500px) {
+        .funciona3 {
+            padding-bottom: 18%;
+        }
     }
 
 /* III.- TERCER BLOQUE - INICIO DE SESIÓN */      
@@ -309,59 +318,78 @@ body {
         font: 12px Raleway, sans-serif;
         padding-top: 10px;
     }
+    @media only screen and (max-width: 500px) {
+        .seccionIngreso {
+            padding: 50px 0px 0px 0px;
+        }
+        .cajaIngreso {
+            padding: 40px 0px 0px 0px;
+        }
+      }
+
 /* IV.- CUARTO BLOQUE - CONTACTANOS */
     .cuartoBloque {
-        width: 100%;
+        block-size: 350px;
         position: relative;
-        background-color: white;    
+        background-color: white;
+    }
+    .cuartoBloque > * {
+        z-index: 1;
     }
     .seccionContacto {
-        padding: 100px 0px 100px 30px;
+        padding: 40px 0px 0px 45px;
     }
     #tituloC {
-        color: #061551;
+        color: white;
         text-align: left;
-        font: 600 60px / 60px Roboto, sans-serif;
+        font: 600 60px Roboto, sans-serif;
     }
     #tienes {
-        color: #061551;
+        color: white;
         font: 300 15px / 24px Raleway, sans-serif;
     }
     #parrafoC {
         font: 300 15px / 24px Raleway, sans-serif;
+        color: white;
         padding: 0px 25px 0px 0px;
     }
     .ingresoContacto {
-        block-size: 450px;
+        block-size: 350px;
         padding: 45px 0px 45px 0px;
     }
     .cajaContacto {
-        border-radius: 3px;
+        border-radius: 15px;
         background-size: cover;
         height: 100%;
-        width: 100% ;
-        background: url("https://htgsoluciones.com/wp-content/uploads/2021/02/soluciones-1.jpg") no-repeat fixed center;
+        width: 100%;
+        background: url("https://htgsoluciones.com/wp-content/uploads/2021/02/soluciones-1.jpg") no-repeat fixed center / cover padding-box border-box;
     }
     @media only screen and (max-width: 500px) {
-        .cajaContacto  {
-          position: absolute;
-          height: 100%;
-          width: 100%;
-          background-size: cover;
-          padding-bottom: 150px;
-          z-index: 1;
+        .ingresoContacto {
+            height: 875px;
         }
-      }
+        .cajaContacto {
+            height: 100%;
+            width: 100%;
+        }
+        #tituloC {
+          font-size: 50px;
+        }
+        #tituloContacto, #parrafoContacto {
+            padding-top: 8px;
+            text-align: center;
+        }
+    }
     .cajaContacto::after {
         content:"";
-        border-radius: 3px;
+        border-radius: 15px;
         position: absolute;
         top: 0;
         bottom: 0;
         width: 100%;
         height: 100%;
         background-color: #061551;
-        opacity: .7;
+        opacity: .85;
     }
     .cajaContacto::after {
         z-index: 1;
@@ -369,7 +397,8 @@ body {
     .cajaContacto > * {
         z-index: 100;
     }
-    .inputNombre, .inputCorreo, .inputTelefono, .inputMensaje {
+
+/*    .inputNombre, .inputCorreo, .inputTelefono, .inputMensaje {
         font: 300 15px / 24px Raleway, sans-serif;
         text-align: left;
         color: white;
@@ -390,7 +419,32 @@ body {
         width: 200px;  
         border-radius: 4px;
         margin: 5px 0px 0px 50px;
-    }
+    }*/
+
+/* IV.- NUEVO CUARTO BLOQUE - CONTACTANOS */
+
+.ordenContacto{
+    padding: 20px 0px 0px 0px;
+}
+#iconoContacto {
+    width: 20%;
+    filter: brightness(0) invert(1);
+    display: block;
+    margin: auto;
+}
+#tituloContacto {
+    color: white;
+    font: 600 24px Raleway, sans-serif;
+    letter-spacing: 0.6px;
+    display: block;
+    margin: auto;
+}
+#parrafoContacto {
+    color: white;
+    font: 400 16px Raleway, sans-serif;
+}
+
+
 /* V.- FOOTER*/
     .footer {
         width: 100%;;
@@ -399,15 +453,15 @@ body {
     }
     #logoHtgFooter {
         position: relative;
-        top: 30px;
+        margin-top: 30px;
         width: 100%;
-        padding: 45px;
+        padding: 35px;
     }
     #logoForFooter {
         position: relative;
         top: 10px;
         width: 100%;
-        padding: 45px;
+        padding: 35px 45px 35px 45px;
     }
     #parrafoFooter {
         position: relative;
@@ -415,14 +469,14 @@ body {
         text-align: left;
         font: 300 14px / 18px Raleway, sans-serif;
         width: 100%;
-        padding: 0px 45px 45px 45px;
+        padding: 0px 45px 20px 45px;
     }
     #parrafoCopyright {
+        font: 300 14px / 18px Raleway, sans-serif;
         color: white;
-        position: relative;
-        padding: 180px 15px 0px 15px;
-        text-align: right;
-        font: 400 14px / 18px Raleway, sans-serif;
+        display: block;
+        width: 100%;
+        padding: 180px 0px 0px 0px;
     }
     #solicite {
         color: white;
@@ -449,5 +503,14 @@ body {
     }
     #quitar {
         list-style: none;
-    } 
-}
+    }
+    @media only screen and (max-width: 500px) {
+        #parrafoCopyright {
+            text-align: center;
+            padding: 30px 0px 30px 0px;
+        }
+        #solicite, #iconoCorreo, #iconoTelefono, #comuniquese {
+            padding: 15px 25px 0px 65px;
+        }
+      }
+    }   

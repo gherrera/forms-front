@@ -144,7 +144,7 @@ class Login extends Component {
                 </Row>
                 <Row className="beneficios">
                     <p id="parrafoPB">
-                        Diseña tus formularios a medida sin restricciones, accede a una galería de tipos de secciones y campos precargados. Visualiza tu formulario en cualquier momento y modifícalo cuando lo necesites.
+                        Diseña tus formularios a medida sin restricciones, accede a un catalogo de datos prediseñados, plantillas predefinidas y validaciones pre cargadas. Visualiza tu formulario en cualquier momento y modifícalo cuando lo necesites.
                     </p>
                 </Row>
               </Col>
@@ -159,7 +159,7 @@ class Login extends Component {
                 </Row>
                 <Row className="beneficios">
                     <p id="parrafoPB">
-                    Solicita formularios a distintas categorías. Integra tus necesidades con nuestra plataforma vía APIs. Envía recordatorios a solicitud o define un parámetro de tiempo. Haz seguimiento en línea al avance.
+                    Organiza tus formularios por categoría de destinatarios. Realiza un envío masivo de solicitudes. Envía recordatorios. Haz seguimiento en línea al avance. Administra un historial por formulario.
                     </p>
                 </Row>
               </Col>
@@ -174,7 +174,7 @@ class Login extends Component {
                 </Row>
                 <Row className="beneficios">
                     <p id="parrafoPB">
-                    Administra los formularios desde el envío hasta que son completados. Descarga los comprobantes o la información contenida. Visualiza la información en la plataforma o intégrala con tus sistemas.
+                    Administra los formularios desde el envío hasta que son completados. Descarga los comprobantes o la información contenida. Visualiza la información en la plataforma. Administra un historial por declarante.
                     </p>
                 </Row>
               </Col>
@@ -246,7 +246,7 @@ class Login extends Component {
                   </Row>
               </Col>  
           </Row>
-          <Row className="funciona2">
+          <Row className="funciona3">
               <Col id="contenidoBox" span={16} xs={24} sm={16} md={16} lg={16}>
                   <Row className="tituloBox">
                     <h3 id="tituloF">
@@ -341,7 +341,7 @@ class Login extends Component {
           </Col>
         </Row>
 
-{/* IV.- CUARTO BLOQUE - CONTACTANOS */}
+{/* IV.- CUARTO BLOQUE - CONTACTANOS
       <Row className="cuartoBloque" id="servicioC">
           <Col span={1} xs={24} sm={16} md={1} lg={1}>
           </Col>
@@ -380,7 +380,82 @@ class Login extends Component {
                  Escribe tu mensaje a continuación
               </Row>
                 <Input className="cajaInputMensaje" type="textarea" />
-              </Row>
+            </Row>
+          </Col>
+          <Col span={2} xs={24} sm={16} md={2} lg={2}>
+          </Col>
+      </Row>/}
+
+{/* IV.- NUEVO CUARTO BLOQUE - CONTACTANOS */}
+<Row className="cuartoBloque" id="servicioC">
+          <Col span={2} xs={24} sm={16} md={2} lg={2}>
+          </Col>
+          {/* <Col className="seccionContacto" span={9} xs={24} sm={16} md={9} lg={9}>
+              <h6 id="tienes">
+                ¿Tienes una pregunta?
+              </h6>
+              <h7 id="tituloC">
+                Contáctanos
+              </h7>
+              <p id="parrafoC">
+              Comunícate con nuestra área especializada de soporte, estamos disponibles para recibir tus consultas y asesorarte
+              </p>
+          </Col>*/}   
+          <Col className="ingresoContacto" span={20} xs={24} sm={16} md={20} lg={20}>
+            <Row className="cajaContacto">
+              <Col className="seccionContacto" span={11} xs={24} sm={16} md={11} lg={11}>
+                  <h6 id="tienes">
+                    ¿Tienes una pregunta?
+                  </h6>
+                  <h7 id="tituloC">
+                    Contáctanos
+                  </h7>
+                  <p id="parrafoC">
+                    Comunícate con nuestra área especializada de soporte, estamos disponibles para recibir tus consultas y asesorarte
+                  </p>
+              </Col> 
+              <Col span={13} xs={24} sm={16} md={13} lg={13}>
+                <Row className="ordenContacto">
+                    <Col span={8} xs={24} sm={16} md={8} lg={8}>
+                            <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/Icono-Correo.png" alt="" id="iconoContacto" />
+                    </Col>
+                        <Col span={16} xs={24} sm={16} md={16} lg={16}>
+                            <h10 id="tituloContacto">
+                            Envianos un correo a:
+                            </h10>
+                            <p id="parrafoContacto">
+                            soporte@htgsoluciones
+                            </p>
+                        </Col>               
+                </Row>
+                <Row className="ordenContacto">
+                    <Col span={8} xs={24} sm={16} md={8} lg={8}>
+                          <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/Icono-Telefono.png" alt="" id="iconoContacto" />
+                    </Col>
+                        <Col span={16} xs={24} sm={16} md={16} lg={16}>
+                            <h11 id="tituloContacto">
+                            Comunícate con nosotros a:
+                            </h11>
+                            <p id="parrafoContacto">
+                            +56 9 1000 0000
+                            </p>
+                        </Col>               
+                </Row>
+                <Row className="ordenContacto">
+                    <Col span={8} xs={24} sm={16} md={8} lg={8}>
+                           <img src="https://htgsoluciones.com/wp-content/uploads/2021/08/Icono-reloj.png" alt="" id="iconoContacto" />
+                    </Col>
+                        <Col span={16} xs={24} sm={16} md={16} lg={16}>
+                            <h12 id="tituloContacto">
+                            Horarios de atención
+                            </h12>
+                            <p id="parrafoContacto">
+                            De lunes a viernes: 9:00 a 18:00 horas
+                            </p>
+                        </Col>               
+                </Row>
+              </Col>
+            </Row>
           </Col>
           <Col span={2} xs={24} sm={16} md={2} lg={2}>
           </Col>
@@ -418,9 +493,9 @@ class Login extends Component {
             </Row>
           </Col>
           <Col className="CopyrightBox" span={4} xs={24} sm={16} md={4} lg={4}>
-              <p id="parrafoCopyright">
+              <span id="parrafoCopyright">
               Copyright © - HTG Soluciones - Todos los derechos reservados
-              </p>
+              </span>
           </Col>
       </Row>
 {/* Final Inicio Arreglos Guille, página nueva */}
