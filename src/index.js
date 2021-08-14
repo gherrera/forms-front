@@ -52,7 +52,7 @@ class App extends Component {
     moment.locale(language.substring(0,2))
 
     this.handleThemeCheck()
-    if(window && window.location && window.location.pathname && !window.location.pathname.startsWith("/forms")) {
+    //if(window && window.location && window.location.pathname && !window.location.pathname.startsWith("/forms")) {
         const isValidAuthToken = await authTokenValidatorHelper()
 
         if (isValidAuthToken) {
@@ -78,7 +78,7 @@ class App extends Component {
             }
           }
         }
-    }
+    //}
     this.loadDatasourcesCatalogo()
     await this.setState({ isLoading: false })
     
