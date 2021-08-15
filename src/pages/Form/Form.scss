@@ -8,6 +8,20 @@ body, .theme-metal {
         filter: blur(3px);
     }
 
+    .sending-overlay {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255,255,255,.5);
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        display: flex;
+
+        .ant-spin {
+            margin: auto;
+        }
+    }
+
     .form-dest {
         position: absolute;
         width: 100%;
