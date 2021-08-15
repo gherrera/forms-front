@@ -25,9 +25,12 @@ export default ({ currentUser }) => {
       <Menu.Item id="request">
         Solicitud
       </Menu.Item>
-      <Menu.Item id="manage">
-        Gestion
-      </Menu.Item>
+      { currentUser.modules.includes('FORMS') && currentUser.type === 'ADMIN' &&
+        <Menu.Item id="manage">
+          Gestion
+          <Link to={ '/manage' } />
+        </Menu.Item>
+      }
       <Menu.Item id="report">
         Informes
       </Menu.Item>
