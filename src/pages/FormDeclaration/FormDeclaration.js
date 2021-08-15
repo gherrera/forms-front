@@ -16,7 +16,7 @@ import apiConfig from '../../config/api'
 
 const { confirm } = Modal;
 
-const FormDeclaration = ({ form, mode, sendFormHandler }) => {
+const FormDeclaration = ({ form, mode, sendFormHandler, sending }) => {
   const { t } = useTranslation()
   const [decl, setDecl] = useState(form)
   const [ showErrors, setShowErrors ] = useState(false)
@@ -136,7 +136,7 @@ const FormDeclaration = ({ form, mode, sendFormHandler }) => {
       { mode !== 'pdf' && decl.formStatus !== 'SENT'  &&
         <Row className="form-actions">
             <Col offset={20} span={4}>
-              <Button onClick={sendFormHandler && sendForm} disabled={mode !== 'html'} type="primary" size="large" style={{width:'150px'}}>Enviar</Button>
+              <Button onClick={sendFormHandler && sendForm} disabled={mode !== 'html' || sending} type="primary" size="large" style={{width:'150px'}} icon={sending?'loading':''}>Enviar</Button>
             </Col>
         </Row>
       }

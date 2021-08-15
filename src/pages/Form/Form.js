@@ -104,7 +104,7 @@ const Form = ({ match, form }) => {
             {isLoading ? <Spin />
                 :
                 <>
-                    <FormDeclaration form={frm} mode={mode} sendFormHandler={sendForm} />
+                    <FormDeclaration form={frm} mode={mode} sendFormHandler={sendForm} sending={sending} />
                     { isVisibleDest &&
                         <div className="form-dest">
                             <FormAnt onSubmit={generateForm}>
