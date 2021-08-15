@@ -1,4 +1,14 @@
 .text-form {
+    border: 1px solid red !important;
+
+    .ant-col {
+        border: 1px solid blue !important;
+
+        textarea {
+            border: 1px solid black !important;
+        }
+    }
+
     .text-title {
         padding: 2px 2px 2px 5px;
     }

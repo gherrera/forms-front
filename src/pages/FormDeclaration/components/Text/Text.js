@@ -2,7 +2,8 @@ import "./Text.scss";
 import React, { useEffect, useState, useContext } from "react";
 import {
   Input,
-  Row
+  Row,
+  Col
 } from "antd";
 
 import { useTranslation } from "react-i18next";
@@ -22,11 +23,13 @@ const Text = ({ component, mode, handleChangeValues }) => {
                     {component.title}
                 </Row>
             }
-            <TextArea rows={4} value={component.value} disabled={mode==='pdf'} 
-                onChange={(e) => handleChangeFieldValue(component, e.target.value)}
-                style={{ width: "100%" }}
-                className={'field-section'+(mode !== 'pdf' && component.required ? ' required':'')+(component.value ? ' withval':' noval')}
-            />
+            <Col>
+                <TextArea rows={4} value={component.value} disabled={mode==='pdf'} 
+                    onChange={(e) => handleChangeFieldValue(component, e.target.value)}
+                    style={{ width: "100%" }}
+                    className={'field-section'+(mode !== 'pdf' && component.required ? ' required':'')+(component.value ? ' withval':' noval')}
+                />
+            </Col>
         </Row>
     )
 }
