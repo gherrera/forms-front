@@ -22,8 +22,10 @@ const Text = ({ component, mode, handleChangeValues }) => {
                     {component.title}
                 </Row>
             }
-            <TextArea rows={4} value={component.value} disabled={mode==='pdf'} onChange={(e) => handleChangeFieldValue(component, e.target.value)}
-                    className={'field-section'+(mode !== 'pdf' && component.required ? ' required':'')+(component.value ? ' withval':' noval')}
+            <TextArea rows={4} value={component.value} disabled={mode==='pdf'} 
+                onChange={(e) => handleChangeFieldValue(component, e.target.value)}
+                style={{ width: "100%" }}
+                className={'field-section'+(mode !== 'pdf' && component.required ? ' required':'')+(component.value ? ' withval':' noval')}
             />
         </div>
     )

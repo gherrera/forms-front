@@ -185,7 +185,7 @@ useEffect(() => {
                       validateTrigger: "onChange",
                       rules:
                         [
-                          { required: field.required, message: 'Campo requerido' },
+                          { required: mode !== 'pdf' && field.required, message: 'Campo requerido' },
                           ... field.validation && field.validation.type === 'email' ? [{type: "email", message: "Email no es válido"}]: [],
                           ... field.validation && (field.validation.type === 'number' || field.validation.type === 'rut' || field.validation.type === 'rutEmp' || field.validation.type === 'rutNat' || field.validation.type === 'percent') ? [{validator: (rule, value, callback) => getValidator(rule, value, callback, field.validation)}]: [],
                         ]
