@@ -16,7 +16,7 @@ const Text = ({ component, mode, handleChangeValues }) => {
       }
 
     return (
-        <div className="text-form">
+        <Row className="text-form">
             { component.hasTitle &&
                 <Row className="text-title">
                     {component.title}
@@ -27,7 +27,7 @@ const Text = ({ component, mode, handleChangeValues }) => {
                 style={{ width: "100%" }}
                 className={'field-section'+(mode !== 'pdf' && component.required ? ' required':'')+(component.value ? ' withval':' noval')}
             />
-        </div>
+        </Row>
     )
 }
     
