@@ -129,11 +129,11 @@ const FormDeclaration = ({ form, mode, sendFormHandler, sending }) => {
         </Row>
       </div>
       <div className="form-content">
-        { form.formStatus !== 'SENT' && decl.sections && decl.sections.map(section =>
+        { (form.formStatus !== 'SENT' || mode === 'pdf') && decl.sections && decl.sections.map(section =>
           <Section decl={decl} section={section} mode={mode} refreshForm={refreshForm} showErrors={showErrors} />
         )}
       </div>
-      { mode !== 'pdf' && decl.formStatus !== 'SENT'  &&
+      { mode !== 'pdf' && form.formStatus !== 'SENT'  &&
         <Row className="form-actions">
             <Col offset={20} span={4}>
               <Button onClick={sendFormHandler && sendForm} disabled={mode !== 'html' || sending} type="primary" size="large" style={{width:'150px'}} icon={sending?'loading':''}>Enviar</Button>
