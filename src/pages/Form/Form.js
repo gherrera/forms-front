@@ -87,7 +87,6 @@ const Form = ({ match, form }) => {
     const sendForm = (f) => {
         setSending(true)
         sendFormPromise(frm.id).then((response) => {
-            response.formStatus = 'SAVED'
             setFrm(response)
             setSentMessage(true)
             setMode("pdf")
