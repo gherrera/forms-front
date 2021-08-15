@@ -17,7 +17,7 @@ const ModalPdfViewer = ({pdfId}) => {
         <div>
             {base64 === null ? <Spin spinning={true} tip="Cargando..." size="big"/> 
             :
-                <iframe src={"data:application/pdf;base64,"+ base64} height="550px" width="100%"></iframe>
+                <iframe src={"data:application/pdf;base64,"+ base64} height="560px" width="100%"></iframe>
             }
             
         </div>

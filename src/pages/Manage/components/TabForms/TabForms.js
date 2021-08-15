@@ -92,7 +92,6 @@ const TabForms = () => {
               className="modal-pdf-viewer"
               visible={true}
               title="Declaración"
-              centered = { true }
               width = {1200}
               style={{ top: 10 }}
               header={ null }
