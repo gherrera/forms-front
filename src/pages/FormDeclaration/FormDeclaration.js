@@ -129,7 +129,7 @@ const FormDeclaration = ({ form, mode, sendFormHandler, sending }) => {
         </Row>
       </div>
       <div className="form-content">
-        { (decl.formStatus !== 'SENT' || mode === 'pdf') && decl.sections && decl.sections.map(section =>
+        { form.formStatus !== 'SENT' && decl.sections && decl.sections.map(section =>
           <Section decl={decl} section={section} mode={mode} refreshForm={refreshForm} showErrors={showErrors} />
         )}
       </div>

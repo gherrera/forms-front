@@ -87,6 +87,7 @@ const Form = ({ match, form }) => {
     const sendForm = (f) => {
         setSending(true)
         sendFormPromise(frm.id).then((response) => {
+            debugger
             setFrm(response)
             setSentMessage(true)
             setMode("pdf")
