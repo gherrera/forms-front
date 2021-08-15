@@ -213,7 +213,6 @@ useEffect(() => {
                         </Select>
                       : field.typeField === 'RADIO' || field.typeField === 'RADIOOTHER' ?
                         <Radio.Group
-                          disabled={mode === 'pdf'}
                           onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.value)}>
                             { getValuesFromDS(field).map(val =>
                               <Radio value={val.value}>{val.value}</Radio>
@@ -233,12 +232,10 @@ useEffect(() => {
                         </Radio.Group>
                       : field.typeField === 'CHECKBOX' ?
                         <Checkbox checked={field.value}
-                          disabled={mode === 'pdf'}
                           onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.checked)}
                         />
                       : field.typeField === 'CHKOPTS' ?
                         <Checkbox.Group
-                          disabled={mode === 'pdf'}
                           onChange={(values) => handleChangeValues && handleChangeFieldValue(field, values.toString())}
                           options={getValuesFromDS(field).map(val => {return {label: val.value, value: val.value}})}
                           />
