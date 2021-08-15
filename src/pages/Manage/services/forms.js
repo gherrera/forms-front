@@ -20,5 +20,11 @@ export default {
 			method: 'post',
 			body: form
 		})
+	},
+	getB64Form: (id) => {
+		return apiRequestorHelper({
+			url: apiConfig.url + '/b64Form/' + id,
+			method: 'post'
+		})
 	}
 }

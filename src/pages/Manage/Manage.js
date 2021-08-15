@@ -52,7 +52,7 @@ class Manage extends Component {
             />
           <PageContent>
               <Row className="wrapper">
-                  <TabForms key={keyTab} currentUser={currentUser} breadcrumbs={breadcrumbs} refreshBreadCrumbs={this.refreshBreadCrumbs.bind(this)} />
+                  <TabForms key={keyTab} />
               </Row>
           </PageContent>
         </Page>
