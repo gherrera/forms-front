@@ -20,7 +20,7 @@ body, .theme-metal {
         }
         .ant-radio-wrapper {
             line-height: 1.3;
-            
+
             .ant-radio-inner {
                 width: 14px;
                 height: 14px;
@@ -30,7 +30,11 @@ body, .theme-metal {
                     left: 2px;
                 }
             }
+            &>span:last-child {
+                position: relative;
+                top:-2px;
             }
+        }
     }
     &.visible-dest .form-declaration {
         filter: blur(3px);
