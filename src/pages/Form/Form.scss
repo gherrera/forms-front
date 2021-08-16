@@ -13,8 +13,21 @@ body, .theme-metal {
         input[type='text'] {
             height: 88%;
         }
-    }
+        .ant-checkbox-inner {
+            width: 14px;
+            height: 14px;
+            top: -1px;
+        }
+        .ant-radio-inner {
+            width: 14px;
+            height: 14px;
 
+            &:after {
+                top: 2px;
+                left: 2px;
+            }
+        }
+    }
     &.visible-dest .form-declaration {
         filter: blur(3px);
     }
