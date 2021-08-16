@@ -1,7 +1,7 @@
 import "./Form.scss";
 import React, { useEffect, useState, useContext } from "react";
 import { withRouter } from "react-router-dom";
-import { Spin, Row, Col, Form as FormAnt, Input, Button, notification, Modal } from "antd";
+import { Spin, Row, Col, Form as FormAnt, Input, Button, Modal } from "antd";
 
 import { FormDeclaration } from '../'
 import { getFormByIdPromise, generateFormPromise } from "../Design/components/FormDetail/promises";
@@ -16,7 +16,8 @@ const Form = ({ match, form }) => {
     const [frm, setFrm] = useState(null);
     const [ isVisibleDest, setIsVisibleDest ] = useState(false)
     const [ sentMessage, setSentMessage ] = useState(false)
-
+    const [ sending, setSending ] = useState(false)
+  
     useEffect(async () => {
         if(match.params.id) {
             setIsloading(true);
@@ -84,11 +85,11 @@ const Form = ({ match, form }) => {
     }
 
     const sendForm = (f) => {
+        setSending(true)
         sendFormPromise(frm.id).then((response) => {
-            response.formStatus = 'SAVED'
             setFrm(response)
             setSentMessage(true)
-            setMode("pdf")
+            setSending(false)
         })
     }
 
@@ -101,7 +102,7 @@ const Form = ({ match, form }) => {
             {isLoading ? <Spin />
                 :
                 <>
-                    <FormDeclaration form={frm} mode={mode} sendFormHandler={sendForm} />
+                    <FormDeclaration form={frm} mode={mode} sendFormHandler={sendForm} sending={sending} />
                     { isVisibleDest &&
                         <div className="form-dest">
                             <FormAnt onSubmit={generateForm}>
@@ -170,6 +171,11 @@ const Form = ({ match, form }) => {
 
                             <p>Se enviará un email con el comprobante de la declaración a {frm.dest.email}</p>
                         </Modal>
+                    }
+                    { sending &&
+                        <div className="sending-overlay">
+                            <Spin size="large" />
+                        </div>
                     }
                 </>
             }

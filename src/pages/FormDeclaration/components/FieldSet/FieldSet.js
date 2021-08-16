@@ -185,7 +185,7 @@ useEffect(() => {
                       validateTrigger: "onChange",
                       rules:
                         [
-                          { required: field.required, message: 'Campo requerido' },
+                          { required: mode !== 'pdf' && field.required, message: 'Campo requerido' },
                           ... field.validation && field.validation.type === 'email' ? [{type: "email", message: "Email no es válido"}]: [],
                           ... field.validation && (field.validation.type === 'number' || field.validation.type === 'rut' || field.validation.type === 'rutEmp' || field.validation.type === 'rutNat' || field.validation.type === 'percent') ? [{validator: (rule, value, callback) => getValidator(rule, value, callback, field.validation)}]: [],
                         ]
@@ -213,8 +213,7 @@ useEffect(() => {
                         </Select>
                       : field.typeField === 'RADIO' || field.typeField === 'RADIOOTHER' ?
                         <Radio.Group
-                          disabled={mode === 'pdf'}
-                          onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.value)}>
+                          onChange={(e) => handleChangeValues && mode !== 'pdf' && handleChangeFieldValue(field, e.target.value)}>
                             { getValuesFromDS(field).map(val =>
                               <Radio value={val.value}>{val.value}</Radio>
                             )}
@@ -233,13 +232,11 @@ useEffect(() => {
                         </Radio.Group>
                       : field.typeField === 'CHECKBOX' ?
                         <Checkbox checked={field.value}
-                          disabled={mode === 'pdf'}
-                          onChange={(e) => handleChangeValues && handleChangeFieldValue(field, e.target.checked)}
+                          onChange={(e) => handleChangeValues && mode !== 'pdf' && handleChangeFieldValue(field, e.target.checked)}
                         />
                       : field.typeField === 'CHKOPTS' ?
                         <Checkbox.Group
-                          disabled={mode === 'pdf'}
-                          onChange={(values) => handleChangeValues && handleChangeFieldValue(field, values.toString())}
+                          onChange={(values) => handleChangeValues && mode !== 'pdf' && handleChangeFieldValue(field, values.toString())}
                           options={getValuesFromDS(field).map(val => {return {label: val.value, value: val.value}})}
                           />
                       :

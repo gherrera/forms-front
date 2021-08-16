@@ -184,7 +184,7 @@ const Table = ({ section, component, mode, handleChangeValues, showErrors }) => 
             {component.text}
         </Col>
         <Col span={2}>
-            <Radio.Group value={component.decision} disabled={mode === 'pdf'} onChange={(e) => handleChangeDecision(e.target.value)} style={{float:'right'}}>
+            <Radio.Group value={component.decision} onChange={(e) => mode !== 'pdf' && handleChangeDecision(e.target.value)} style={{float:'right'}}>
               <Radio className="radio-switch" value={true}>
                 Sí
               </Radio>

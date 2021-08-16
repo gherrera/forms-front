@@ -9,7 +9,7 @@ import { datasourcesContext } from './contexts'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { LayoutPrivate, LayoutPublic } from './layouts'
 import { Loading, ModalChangePassword } from './layouts/Private/components'
-import { AdminPage,HomePage, LoginPage, NotAuthorizedPage, NotFoundPage,DesignPage, Form } from './pages'
+import { AdminPage,HomePage, LoginPage, NotAuthorizedPage, NotFoundPage, DesignPage, Form, ManagePage } from './pages'
 import { LocalStorageService } from './services'
 import { authTokenValidatorHelper, sessionStorageCleanerHelper, authTokenRenewerHelper } from './helpers'
 import { animateLogoutPromise, changePasswordPromise, getCurrentUserPromise, logoutPromise, removeLoginAnimationsPromise } from './promises'
@@ -52,7 +52,7 @@ class App extends Component {
     moment.locale(language.substring(0,2))
 
     this.handleThemeCheck()
-    if(!window.location.pathname.startsWith("/forms")) {
+    //if(window && window.location && window.location.pathname && !window.location.pathname.startsWith("/forms")) {
         const isValidAuthToken = await authTokenValidatorHelper()
 
         if (isValidAuthToken) {
@@ -78,7 +78,7 @@ class App extends Component {
             }
           }
         }
-    }
+    //}
     this.loadDatasourcesCatalogo()
     await this.setState({ isLoading: false })
     
@@ -151,11 +151,13 @@ class App extends Component {
     const { isLoggedIn, currentUser } = this.state
 
     if (protectedContent && currentUser !== {} && currentUser.cliente !== undefined) {
+      /*
       switch(protectedContent) {
         case 'service1':
           CurrentPage = (currentUser.tipoServicio !== null && currentUser.tipoServicio.includes('SERVICIO1')) ? CurrentPage : NotAuthorizedPage
           break
       }
+      */
     }
 
     return isLoggedIn ? <CurrentPage currentUser={ currentUser } service={protectedContent} /> : <LoginPage successHandler={ this.handleLogin.bind(this) } />
@@ -177,6 +179,7 @@ class App extends Component {
                   <Route path="/" exact render={ () => this.renderComponent(HomePage) } />
                   <Route path="/administracion" exact render={ () => this.renderComponent(AdminPage) } />
                   <Route path="/design" exact render={ () => this.renderComponent(DesignPage, 'design') } />
+                  <Route path="/manage" exact render={ () => this.renderComponent(ManagePage, 'manage') } />
                   <Route path="/forms/:id/:view?" exact render={ () => <Form /> } />
                   <Route path="/form/:hash" exact render={ () => <Form /> } />
 
