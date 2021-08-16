@@ -98,7 +98,7 @@ const Form = ({ match, form }) => {
     }
 
     return (
-        <div className={"formulario" + (isVisibleDest ? ' visible-dest':'')}>
+        <div className={"formulario" + (isVisibleDest ? ' visible-dest':'') + (' mode-'+mode)}>
             {isLoading ? <Spin />
                 :
                 <>

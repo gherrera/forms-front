@@ -4,6 +4,13 @@ body, .theme-metal {
 }
 
 .formulario {
+    &.mode-pdf {
+        font-size: .85em !important;
+        label {
+            font-size: .85em !important;
+        }
+    }
+
     &.visible-dest .form-declaration {
         filter: blur(3px);
     }
