@@ -172,7 +172,7 @@ class App extends Component {
     } else {
       return (
         <I18nextProvider i18n={ i18nextConfig }>
-          <datasourcesContext.Provider value={{ datasources, loadFormDatasource: this.loadFormDatasource.bind(this) }} >
+          <datasourcesContext.Provider value={{ currentUser, datasources, loadFormDatasource: this.loadFormDatasource.bind(this) }} >
             <Router>
               <Layout currentUser={ currentUser } logoutHandler={ this.handleLogout.bind(this) }>
                 <Switch>

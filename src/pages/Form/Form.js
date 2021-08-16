@@ -17,7 +17,7 @@ const Form = ({ match, form }) => {
     const [ isVisibleDest, setIsVisibleDest ] = useState(false)
     const [ sentMessage, setSentMessage ] = useState(false)
     const [ sending, setSending ] = useState(false)
-  
+
     useEffect(async () => {
         if(match.params.id) {
             setIsloading(true);
@@ -60,7 +60,7 @@ const Form = ({ match, form }) => {
             value = value.replaceAll('.','').replaceAll('-','').trim()
             if(valType === 'rutEmp') type = 'Entity'
             else if(valType === 'rutNat') type = 'Person'
-            if(validateRutHelper(value, type)) {
+            if(frm.cliente.pais !== 'CHI' || validateRutHelper(value, type)) {
               callback()
             }else {
               if(valType === 'rut') {
@@ -121,7 +121,7 @@ const Form = ({ match, form }) => {
                                             rules:
                                                 [
                                                     { required: true, message: 'Campo requerido' },
-                                                    //{validator: (rule, value, callback) => getValidator(rule, value, callback, 'rut')}
+                                                    {validator: (rule, value, callback) => getValidator(rule, value, callback, 'rut')}
                                                 ]
                                             })(
                                                 <Input onBlur={(e) => verifyRut(e.target.value)}/>
