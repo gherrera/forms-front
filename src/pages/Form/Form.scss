@@ -5,12 +5,13 @@ body, .theme-metal {
 
 .formulario {
     &.mode-pdf {
-        font-size: .85em !important;
-        label, input {
-            font-size: .85em !important;
+        font-size: .88em !important;
+
+        label, input, pre, .ant-table {
+            font-size: .88em !important;
         }
         input[type='text'] {
-            height: 85%;
+            height: 88%;
         }
     }
 
