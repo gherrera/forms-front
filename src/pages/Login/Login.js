@@ -189,10 +189,10 @@ class Login extends Component {
               </h2>      
           </Row>
           <Row className="funciona1">
-              <Col className="imagenBox" span={8} xs={24} sm={16} md={8} lg={8}>
+              <Col className="imagenBox" span={8} xs={24} sm={24} md={8} lg={8}>
                   <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/port6-300x225.jpg" alt="" id="imagenF" />
               </Col>
-              <Col className="contenidoBox" span={8} xs={24} sm={16} md={8} lg={8}>
+              <Col className="contenidoBox" span={8} xs={24} sm={24} md={8} lg={8}>
                   <Row className="tituloBox">
                     <h3 id="tituloF">
                         Desarrolla tus propios formularios
@@ -204,7 +204,7 @@ class Login extends Component {
                     </p>
                   </Row>
               </Col>
-              <Col className="contenidoBox" span={8} xs={24} sm={16} md={8} lg={8}>
+              <Col className="contenidoBox" span={8} xs={24} sm={24} md={8} lg={8}>
                   <Row className="tituloBox">
                     <h3 id="tituloF">
                         Galería de campos y secciones a tu disposición
@@ -218,7 +218,7 @@ class Login extends Component {
               </Col>  
           </Row>
           <Row className="funciona2">
-              <Col className="contenidoBox" span={8} xs={24} sm={16} md={8} lg={8}>
+              <Col className="contenidoBox" span={8} xs={24} sm={24} md={8} lg={8}>
                   <Row className="tituloBox">
                     <h3 id="tituloF">
                         Envía las solicitudes a quien necesites
@@ -230,10 +230,10 @@ class Login extends Component {
                     </p>
                   </Row>
               </Col>
-              <Col className="imagenBox" span={8} xs={24} sm={16} md={8} lg={8}>
+              <Col className="imagenBox" span={8} xs={24} sm={24} md={8} lg={8}>
                   <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/port6-300x225.jpg" alt="" id="imagenF" />
               </Col>
-              <Col className="contenidoBox" span={8} xs={24} sm={16} md={8} lg={8}>
+              <Col className="contenidoBox" span={8} xs={24} sm={24} md={8} lg={8}>
                   <Row className="tituloBox">
                     <h3 id="tituloF">
                        Comprobantes y datos a tu disposición
@@ -247,7 +247,7 @@ class Login extends Component {
               </Col>  
           </Row>
           <Row className="funciona3">
-              <Col id="contenidoBox" span={16} xs={24} sm={16} md={16} lg={16}>
+              <Col id="contenidoBox" span={16} xs={24} sm={24} md={16} lg={16}>
                   <Row className="tituloBox">
                     <h3 id="tituloF">
                         Automatiza la entrada y salida de datos
@@ -259,7 +259,7 @@ class Login extends Component {
                     </p>
                   </Row>
               </Col>
-              <Col className="imagenBox" span={8} xs={24} sm={16} md={8} lg={8}>
+              <Col className="imagenBox" span={8} xs={24} sm={24} md={8} lg={8}>
                   <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/port6-300x225.jpg" alt="" id="imagenF" />
               </Col>
           </Row>
@@ -388,7 +388,7 @@ class Login extends Component {
 
 {/* IV.- NUEVO CUARTO BLOQUE - CONTACTANOS */}
 <Row className="cuartoBloque" id="servicioC">
-          <Col span={2} xs={24} sm={16} md={2} lg={2}>
+          <Col span={2} xs={24} sm={24} md={2} lg={2}>
           </Col>
           {/* <Col className="seccionContacto" span={9} xs={24} sm={16} md={9} lg={9}>
               <h6 id="tienes">
@@ -401,9 +401,9 @@ class Login extends Component {
               Comunícate con nuestra área especializada de soporte, estamos disponibles para recibir tus consultas y asesorarte
               </p>
           </Col>*/}   
-          <Col className="ingresoContacto" span={20} xs={24} sm={16} md={20} lg={20}>
+          <Col className="ingresoContacto" span={20} xs={24} sm={24} md={20} lg={20}>
             <Row className="cajaContacto">
-              <Col className="seccionContacto" span={11} xs={24} sm={16} md={11} lg={11}>
+              <Col className="seccionContacto" span={11} xs={24} sm={24} md={11} lg={11}>
                   <h6 id="tienes">
                     ¿Tienes una pregunta?
                   </h6>
@@ -414,9 +414,9 @@ class Login extends Component {
                     Comunícate con nuestra área especializada de soporte, estamos disponibles para recibir tus consultas y asesorarte
                   </p>
               </Col> 
-              <Col span={13} xs={24} sm={16} md={13} lg={13}>
+              <Col span={13} xs={24} sm={24} md={13} lg={13}>
                 <Row className="ordenContacto">
-                    <Col span={8} xs={24} sm={16} md={8} lg={8}>
+                    <Col span={8} xs={24} sm={8} md={8} lg={8}>
                             <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/Icono-Correo.png" alt="" id="iconoContacto" />
                     </Col>
                         <Col span={16} xs={24} sm={16} md={16} lg={16}>
@@ -429,7 +429,7 @@ class Login extends Component {
                         </Col>               
                 </Row>
                 <Row className="ordenContacto">
-                    <Col span={8} xs={24} sm={16} md={8} lg={8}>
+                    <Col span={8} xs={24} sm={8} md={8} lg={8}>
                           <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/Icono-Telefono.png" alt="" id="iconoContacto" />
                     </Col>
                         <Col span={16} xs={24} sm={16} md={16} lg={16}>
@@ -442,7 +442,7 @@ class Login extends Component {
                         </Col>               
                 </Row>
                 <Row className="ordenContacto">
-                    <Col span={8} xs={24} sm={16} md={8} lg={8}>
+                    <Col span={8} xs={24} sm={8} md={8} lg={8}>
                            <img src="https://htgsoluciones.com/wp-content/uploads/2021/08/Icono-reloj.png" alt="" id="iconoContacto" />
                     </Col>
                         <Col span={16} xs={24} sm={16} md={16} lg={16}>
@@ -463,16 +463,16 @@ class Login extends Component {
 
 {/* V.- FOOTER*/}
       <Row className="footer">
-          <Col className="logoBox" span={6} xs={24} sm={16} md={6} lg={6}>
+          <Col className="logoBox" span={6} xs={24} sm={6} md={6} lg={6}>
               <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/logo-white-e1627335689960-300x103.png" alt="" id="logoHtgFooter" />
           </Col>
-          <Col className="HTGBox" span={8} xs={24} sm={16} md={8} lg={8}>
+          <Col className="HTGBox" span={8} xs={24} sm={10} md={10} lg={8}>
               <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/Logo-e1627334345137-1024x199.png" alt="" id="logoForFooter" />
               <p id="parrafoFooter">
                     Es una plataforma creada por HTG Soluciones, empresa que busca proponer iniciativas de transformación digital enfocada en optimizar los procesos de tu negocio.
               </p>
           </Col>
-          <Col className="demoBox" span={6} xs={24} sm={16} md={6} lg={6}>
+          <Col className="demoBox" span={6} xs={24} sm={8} md={8} lg={6}>
             <Row>
               <h6 id="solicite">
                 Solicite una demostración
@@ -492,7 +492,7 @@ class Login extends Component {
               </li>
             </Row>
           </Col>
-          <Col className="CopyrightBox" span={4} xs={24} sm={16} md={4} lg={4}>
+          <Col className="CopyrightBox" span={4} xs={24} sm={24} md={24} lg={4}>
               <span id="parrafoCopyright">
               Copyright © - HTG Soluciones - Todos los derechos reservados
               </span>

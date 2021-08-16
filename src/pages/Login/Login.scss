@@ -345,10 +345,15 @@ body {
             padding: 70px 0px 30px 70px;
         }
       }
+      @media screen and (max-width: 992px) {
+        .seccionIngreso {
+            width: 100%;
+        }
+      }
 
 /* IV.- CUARTO BLOQUE - CONTACTANOS */
     .cuartoBloque {
-        block-size: 350px;
+        display: block;
         position: relative;
         background-color: white;
     }
@@ -398,7 +403,15 @@ body {
             padding-top: 8px;
             text-align: center;
         }
-    }
+      }
+      @media only screen and (max-width: 992px) and (min-width: 500px) {
+        .ingresoContacto {
+            height: 580px;
+        }
+        .cajaContacto {
+            width: 100%;
+        }
+      }
     .cajaContacto::after {
         content:"";
         border-radius: 15px;
@@ -416,6 +429,7 @@ body {
     .cajaContacto > * {
         z-index: 100;
     }
+
 
 /*    .inputNombre, .inputCorreo, .inputTelefono, .inputMensaje {
         font: 300 15px / 24px Raleway, sans-serif;
@@ -463,12 +477,14 @@ body {
     font: 400 16px Raleway, sans-serif;
 }
 
-
 /* V.- FOOTER*/
     .footer {
-        width: 100%;;
+        display: block;
         position: relative;
         background-color: #061551;  
+    }
+    .footer > * {
+        z-index: 1;
     }
     #logoHtgFooter {
         position: relative;
@@ -524,12 +540,23 @@ body {
         list-style: none;
     }
     @media only screen and (max-width: 500px) {
+        .footer {
+            height: 100%;
+            width: 100%;  
+        }
         #parrafoCopyright {
             text-align: center;
-            padding: 30px 0px 30px 0px;
+            padding: 30px 20px 30px 20px;
         }
         #solicite, #iconoCorreo, #iconoTelefono, #comuniquese {
             padding: 15px 25px 0px 65px;
         }
       }
-    }   
+      @media screen and (max-width: 992px) {
+        .footer {
+            width: 100%;
+            height: 100%;
+        }
+      }
+ 
+    }
