@@ -61,7 +61,7 @@ const TabForms = () => {
             <Col span={7}>Nombre</Col>
             <Col span={3}>Doc. de Identidad</Col>
             <Col span={3}>Destinatario</Col>
-            <Col span={3}>Fecha de Envío</Col>
+            <Col span={3}>Email</Col>
             <Col span={3}>Fecha Recibido</Col>
             <Col span={2}></Col>
           </Row>
@@ -72,8 +72,8 @@ const TabForms = () => {
               <Col span={2}>{camelizerHelper(f.category)}</Col>
               <Col span={7}>{f.name}</Col>
               <Col span={3}>{f.dest.rut}</Col>
-              <Col span={3}>{f.userUpdate}</Col>
-              <Col span={3}>{f.request.type === 'AUTO' ? 'URL' : moment(f.creationDate).format('DD/MM/YYYY HH:mm')}</Col>
+              <Col span={3}>{f.dest.name}</Col>
+              <Col span={3}>{f.dest.email}</Col>
               <Col span={3}>{f.sendDate && moment(f.sendDate).format('DD/MM/YYYY HH:mm')}</Col>
               <Col span={2} className="tools-rows-forms">
                 <Tooltip title="Detalles">
