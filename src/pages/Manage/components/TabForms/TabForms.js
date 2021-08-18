@@ -61,9 +61,9 @@ const TabForms = () => {
             <Col span={7}>Nombre</Col>
             <Col span={3}>Doc. de Identidad</Col>
             <Col span={3}>Destinatario</Col>
-            <Col span={3}>Email</Col>
+            <Col span={4}>Email</Col>
             <Col span={3}>Fecha Recibido</Col>
-            <Col span={2}></Col>
+            <Col span={1}></Col>
           </Row>
 
           { forms.map((f, index) =>
@@ -73,9 +73,9 @@ const TabForms = () => {
               <Col span={7}>{f.name}</Col>
               <Col span={3}>{f.dest.rut}</Col>
               <Col span={3}>{f.dest.name}</Col>
-              <Col span={3}>{f.dest.email}</Col>
+              <Col span={4}>{f.dest.email}</Col>
               <Col span={3}>{f.sendDate && moment(f.sendDate).format('DD/MM/YYYY HH:mm')}</Col>
-              <Col span={2} className="tools-rows-forms">
+              <Col span={1} className="tools-rows-forms">
                 <Tooltip title="Detalles">
                   <Button icon="info" size="small" onClick={(e) => handleViewForm(f)}/>
                 </Tooltip>
