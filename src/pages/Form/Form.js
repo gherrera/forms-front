@@ -47,6 +47,8 @@ const Form = ({ match, form }) => {
         e.preventDefault()
 
         validateFields(['rut','name', 'email']).then(async (obj) => {
+            if(frm.cliente.pais !== 'CHI') obj.tipDoc = 'DNI'
+            else obj.tipDoc = 'Rut'
             let fId = await generateFormPromise(frm.id, obj)
             window.location = "../forms/"+fId
         })

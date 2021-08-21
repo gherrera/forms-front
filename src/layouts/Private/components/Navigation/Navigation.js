@@ -13,19 +13,18 @@ export default ({ currentUser }) => {
       theme="light"
       mode="horizontal"
       >
-      { currentUser.modules.includes('FORMS') && currentUser.type === 'ADMIN' &&
+      { currentUser.modules.includes('DESIGN') &&
         <Menu.Item id="design">
           Diseño
           <Link to={ '/design' } />
         </Menu.Item>
       }
-      <Menu.Item id="recipíents">
-        Destinatarios
-      </Menu.Item>
-      <Menu.Item id="request">
-        Solicitud
-      </Menu.Item>
-      { currentUser.modules.includes('FORMS') && currentUser.type === 'ADMIN' &&
+      { currentUser.modules.includes('DEST') &&
+        <Menu.Item id="recipíents">
+          Destinatarios
+        </Menu.Item>
+      }
+      { currentUser.modules.includes('FORMS') &&
         <Menu.Item id="manage">
           Gestion
           <Link to={ '/manage' } />

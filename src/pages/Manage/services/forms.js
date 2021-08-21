@@ -30,5 +30,15 @@ export default {
 			url: apiConfig.url + '/b64Form/' + id,
 			method: 'post'
 		})
+	},
+	addComment: (id, comments) => {
+		return apiRequestorHelper({
+			url: apiConfig.url + '/addComment',
+			method: 'post',
+			body: {
+				id,
+				comments
+			}
+		})
 	}
 }

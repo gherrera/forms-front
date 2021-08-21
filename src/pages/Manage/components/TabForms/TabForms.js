@@ -41,7 +41,7 @@ const TabForms = () => {
   }
 
   const handleViewForm = (f) => {
-    //setFrm(f)
+    setFrm(f)
   }
 
   const handleViewPDF = (f) => {
