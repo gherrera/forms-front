@@ -2,10 +2,14 @@ import apiConfig from '../../../config/api'
 import { apiRequestorHelper } from '../../../helpers'
 
 export default {
-	getFormByClienteId: () => {
+	getFormByClienteId: (from, size) => {
 		return apiRequestorHelper({
 			url: apiConfig.url + '/getFormReceivedByClienteId',
-			method: 'post'
+			method: 'post',
+			body: {
+				from,
+				size
+			}
 		})
 	},
 	getFormById: (id) => {

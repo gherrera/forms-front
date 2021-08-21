@@ -7,6 +7,7 @@ import {
   Spin,
   Modal,
   Tooltip,
+  Pagination
 } from "antd";
 import { camelizerHelper } from "../../../../helpers";
 
@@ -21,15 +22,20 @@ const TabForms = () => {
   const [frm, setFrm] = useState(null)
   const [ isLoading, setIsLoading ] = useState(true)
   const [ pdfItem, setPdfItem ] = useState(null)
+  const [ currentPage, setCurrentPage ] = useState(1)
+  const [ totalRecords, setTotalRecords ] = useState(-1)
+  const recordsxPage = 10
 
   useEffect(() => {
-    loadForms()
+    loadForms(1)
   }, [])
 
-  const loadForms = () => {
+  const loadForms = (page) => {
     setIsLoading(true)
-    getFormByClienteIdPromise().then(response => {
-      setForms(response)
+    let from = (page-1) * recordsxPage
+    getFormByClienteIdPromise(from, recordsxPage).then(response => {
+      setForms(response.records)
+      setTotalRecords(response.total)
       setIsLoading(false)
     })
   }
@@ -48,6 +54,11 @@ const TabForms = () => {
 
   const closeHandlerPDF = () => {
     setPdfItem(null)
+  }
+
+  const handleChangePage = (page) => {
+    setCurrentPage(page)
+    loadForms(page)
   }
 
   return (
@@ -85,8 +96,11 @@ const TabForms = () => {
               </Col>
             </Row>
           )}
-          { frm !== null && <FormDetail form={frm} closeHandler={closeHandler} /> }
+          { totalRecords > forms.length &&
+            <Pagination current={currentPage} total={totalRecords} pageSize={recordsxPage} onChange={handleChangePage} size="small"/>
+          }
 
+          { frm !== null && <FormDetail form={frm} closeHandler={closeHandler} /> }
           { pdfItem &&
             <Modal
               className="modal-pdf-viewer"

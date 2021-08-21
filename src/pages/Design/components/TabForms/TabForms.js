@@ -12,7 +12,8 @@ import {
   Select,
   Tooltip,
   notification,
-  Popconfirm
+  Popconfirm,
+  Pagination
 } from "antd";
 import { FormDetail } from '../'
 import { camelizerHelper } from "../../../../helpers";
@@ -20,7 +21,6 @@ import { camelizerHelper } from "../../../../helpers";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { getFormByClienteIdPromise, updateFormPromise, getFormHashPromise } from "./promises";
-import { generateFormPromise } from "../FormDetail/promises";
 
 const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
 	const { t } = useTranslation()
@@ -32,15 +32,20 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
   const [ isVisibleNewForm, setIsVisibleNewForm ] = useState(false)
   const [ isVisibleURL, setIsVisibleURL ] = useState(false)
   const [ hashURL, setHashURL ] = useState(null)
+  const [ currentPage, setCurrentPage ] = useState(1)
+  const [ totalRecords, setTotalRecords ] = useState(-1)
+  const recordsxPage = 10
 
   useEffect(() => {
-    loadForms()
+    loadForms(1)
   }, [])
 
-  const loadForms = () => {
+  const loadForms = (page) => {
     setIsLoading(true)
-    getFormByClienteIdPromise().then(response => {
-      setForms(response)
+    let from = (page-1) * recordsxPage
+    getFormByClienteIdPromise(from, recordsxPage).then(response => {
+      setForms(response.records)
+      setTotalRecords(response.total)
       setIsLoading(false)
     })
   }
@@ -107,7 +112,7 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
     if(create) {
       validateFields(['category','name']).then((obj) => {
         updateFormPromise({ ...obj, status: 'ACTIVE' }).then(r => {
-          loadForms()
+          loadForms(currentPage)
         })
         setIsVisibleNewForm(false)
       })
@@ -118,16 +123,11 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
 
   const handleDeleteForm = (f) => {
     updateFormPromise({ ...f, deleted: true }).then(r => {
-      loadForms()
+      loadForms(currentPage)
       notification.success({
         message: 'Formulario borrado'
       })
     })
-  }
-
-  const handleGenerateForm = async (f) => {
-    let fId = await generateFormPromise(f.id)
-    window.open("forms/"+fId)
   }
 
   const handleVisibleForm = async (visible, formId) => {
@@ -137,6 +137,11 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
       setHashURL(hash)
     }
     setIsVisibleURL(visible)
+  }
+
+  const handleChangePage = (page) => {
+    setCurrentPage(page)
+    loadForms(page)
   }
 
   return (
@@ -190,6 +195,9 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
               </Col>
             </Row>
           )}
+          { totalRecords > forms.length &&
+            <Pagination current={currentPage} total={totalRecords} pageSize={recordsxPage} onChange={handleChangePage} size="small"/>
+          }
           { isVisibleNewForm &&
             <Modal
               visible={true}
