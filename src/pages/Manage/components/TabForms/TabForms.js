@@ -7,7 +7,8 @@ import {
   Spin,
   Modal,
   Tooltip,
-  Pagination
+  Pagination,
+  Icon
 } from "antd";
 import { camelizerHelper } from "../../../../helpers";
 
@@ -15,8 +16,9 @@ import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { getFormByClienteIdPromise } from "../../promises";
 import { FormDetail, ModalPdfViewer } from "..";
+import { Filter } from "./components";
 
-const TabForms = () => {
+const TabForms = ({status}) => {
 	const { t } = useTranslation()
   const [forms, setForms] = useState([])
   const [frm, setFrm] = useState(null)
@@ -24,21 +26,29 @@ const TabForms = () => {
   const [ pdfItem, setPdfItem ] = useState(null)
   const [ currentPage, setCurrentPage ] = useState(1)
   const [ totalRecords, setTotalRecords ] = useState(-1)
+  const [ showFilter, setShowFilter ] = useState(false)
+  const [ filters, setFilters ] = useState({})
   const recordsxPage = 10
 
   useEffect(() => {
-    loadForms(1)
+    loadForms(1, {})
   }, [])
 
-  const loadForms = (page) => {
+  const loadForms = (page, filters) => {
     setIsLoading(true)
     let from = (page-1) * recordsxPage
-    getFormByClienteIdPromise(from, recordsxPage).then(response => {
+    filters.status = status
+    getFormByClienteIdPromise(from, recordsxPage, filters).then(response => {
       setForms(response.records)
       setTotalRecords(response.total)
       setIsLoading(false)
     })
   }
+
+  const cbFilters = (objFilters) => {
+		setFilters(objFilters);
+		loadForms(1, objFilters);
+	};
 
   const handleViewForm = (f) => {
     setFrm(f)
@@ -58,11 +68,32 @@ const TabForms = () => {
 
   const handleChangePage = (page) => {
     setCurrentPage(page)
-    loadForms(page)
+    loadForms(page, filters)
+  }
+
+  const getStatus = (status) => {
+    if(status === 'NUEVO') return 'Nuevos'
+    else if(status === 'PENDIENTE') return 'Pendientes'
+    else if(status === 'EVALUACION') return 'En Evaluación'
+    else if(status === 'CERRADO') return 'Cerrados'
+  }
+
+  const handleShowFilter = (visible) => {
+    setShowFilter(visible)
   }
 
   return (
     <div className="tab-forms">
+      <Row className="row-header">
+        { status && 
+            <h2 className="title">{getStatus(status)}</h2>
+        }
+        <Col className="filter">
+          <Button type="link" icon="filter" onClick={() => handleShowFilter(!showFilter)}>Búsqueda avanzada</Button>
+          <Icon type={showFilter ? 'close' : 'down'}/>
+        </Col>
+      </Row>
+      { showFilter && <Filter cbFilters={cbFilters} /> }
       { isLoading ? <Spin/>
       :
         <>

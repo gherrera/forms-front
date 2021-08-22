@@ -28,16 +28,6 @@ export default ({ currentUser }) => {
           Destinatarios
         </Menu.Item>
       }
-      { currentUser.modules.includes('FORMS') &&
-        <Menu.Item id="manage">
-          Gestión
-          <Link to={ '/manage' } />
-        </Menu.Item>
-      }
-      <Menu.Item id="report">
-        Informes
-      </Menu.Item>
-
     </Menu>
   )
 }

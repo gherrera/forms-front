@@ -4,6 +4,23 @@
     margin-bottom: 20px;
   }
 
+  h2.title {
+    color: rgba(219, 134, 22, 0.8);
+  }
+  .row-header {
+    height: 42px;
+
+    .filter {
+      position: absolute;
+      right: 0px;
+      top: 0px;
+
+      button {
+          color: rgba(0,0,0,.6);
+      }
+    }
+  }
+
   .ant-pagination {
     margin-top: 10px;
     text-align: right;
