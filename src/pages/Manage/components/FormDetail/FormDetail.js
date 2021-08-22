@@ -14,7 +14,7 @@ import { ModalPdfViewer } from "..";
 
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import { getFormByIdPromise, addCommentPromise } from "../../promises";
+import { getFormByIdPromise, addCommentPromise, addStatusPromise } from "../../promises";
 
 const { TextArea } = Input;
 
@@ -104,14 +104,14 @@ const FormDetail = ({ form, closeHandler }) => {
                     <Row>
                         <Col span={2}>Estado</Col>
                         <Col span={3}>
-                            <Select size="small" value={form.statusForm} style={{width:'100%'}}>
+                            <Select size="small" value={form.actualState && form.actualState.status} style={{width:'100%'}}>
                                 <Select.Option value="NUEVO">Nuevo</Select.Option>
                                 <Select.Option value="PENDIENTE">Pendiente</Select.Option>
                                 <Select.Option value="EVALUACION">En Evaluación</Select.Option>
                                 <Select.Option value="CERRADO">Cerrado</Select.Option>
                             </Select>
                         </Col>
-                        <Col span={6} offset={1}>Fecha: <span className="data-value">{moment(form.fecStatusForm).format('DD.MM.YYYY')}</span></Col>
+                        <Col span={6} offset={1}>Fecha: <span className="data-value">{form.actualState ? moment(form.actualState.date).format('DD.MM.YYYY'):null}</span></Col>
                         <Col span={6}>
                             Ver Historico&nbsp;&nbsp;
                             <Button icon="folder-open" size="small" disabled/>

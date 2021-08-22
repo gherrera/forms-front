@@ -40,5 +40,15 @@ export default {
 				comments
 			}
 		})
+	},
+	addStatus: (id, status) => {
+		return apiRequestorHelper({
+			url: apiConfig.url + '/addStatus',
+			method: 'post',
+			body: {
+				id,
+				status
+			}
+		})
 	}
 }
