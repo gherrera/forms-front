@@ -7,13 +7,18 @@ import {
   Input,
   Tooltip,
   Button,
-  Select
+  Select,
+  DatePicker
 } from "antd";
 
 import moment from "moment";
+
+import { getUsersByClientPromise } from '../../../../../../promises';
+
 const { TabPane } = Tabs;
 
 const Filter = ({cbFilters}) => {
+    const [users, setUsers] = useState([])
     const [advancedObj, setAdvancedObj] = useState({});
     const [advancedObjMenu, setAdvancedObjMenu] = useState({
         m1: {},
@@ -22,17 +27,23 @@ const Filter = ({cbFilters}) => {
         m4: {},
       });
 
+    useEffect(() => {
+        getUsersByClientPromise().then((response) => {
+            setUsers(response)
+        })
+    }, [])
+
     const handlerChange = (menu, field, value, enter) => {
         const obj = { ...advancedObj, [field]: value };
-        if (value === null || value === "") {
+        if (value === null || value === "" || value === undefined) {
             delete obj[field];
         }
         setAdvancedObj(obj);
         if (enter) {
             let objMenu = advancedObjMenu[menu];
             const obj2 = { ...objMenu, [field]: value };
-            if (value === null || value === "") {
-            delete obj2[field];
+            if (value === null || value === "" || value === undefined) {
+               delete obj2[field];
             }
             const obj3 = { ...advancedObjMenu, [menu]: obj2 };
 
@@ -64,20 +75,21 @@ const Filter = ({cbFilters}) => {
             </Tooltip>
             <Tabs>
                 <TabPane tab="Persona" key="1">
-                    <Row gutter={8}>
+                    <Row gutter={10}>
                         <Col span={6}>
                             <Input
                                 size="small"
                                 placeholder={"Destinatario o Nro de Documento"}
                                 value={advancedObj.rutNombre}
-                                onChange={(e) => handlerChange("m1", "rutNombre", e.target.value, false)}
+                                onChange={(e) => {debugger;handlerChange("m1", "rutNombre", e.target.value, false)}}
                                 onPressEnter={(e) => enterHandler("m1", "rutNombre", e.target.value)}
                             />
                         </Col>
-                        <Col span={3}>
+                        <Col span={4}>
                             <Select 
                                 placeholder="Tipo de Persona"
                                 size="small"
+                                allowClear
                                 value={advancedObj.tipoPersona}
                                 onChange={(value) => handlerChange("m1", "tipoPersona", value, true)}
                             >
@@ -97,16 +109,144 @@ const Filter = ({cbFilters}) => {
                     </Row>
                 </TabPane>
                 <TabPane tab="Datos Opcionales" key="2">
-                    
+                    <Row gutter={10}>
+                        <Col span={4}>
+                            <Input
+                                size="small"
+                                placeholder={"Empresa"}
+                                value={advancedObj.empresa}
+                                onChange={(e) => handlerChange("m2", "empresa", e.target.value, false)}
+                                onPressEnter={(e) => enterHandler("m2", "empresa", e.target.value)}
+                            />
+                        </Col>
+                        <Col span={4}>
+                            <Input
+                                size="small"
+                                placeholder={"Gerencia"}
+                                value={advancedObj.gerencia}
+                                onChange={(e) => handlerChange("m2", "gerencia", e.target.value, false)}
+                                onPressEnter={(e) => enterHandler("m2", "gerencia", e.target.value)}
+                            />
+                        </Col>
+                        <Col span={4}>
+                            <Input
+                                size="small"
+                                placeholder={"Area"}
+                                value={advancedObj.area}
+                                onChange={(e) => handlerChange("m2", "area", e.target.value, false)}
+                                onPressEnter={(e) => enterHandler("m2", "area", e.target.value)}
+                            />
+                        </Col>
+                    </Row>
                 </TabPane>
                 <TabPane tab="Formulario" key="3">
-                    
+                    <Row gutter={10}>
+                        <Col span={4}>
+                            <Select 
+                                placeholder="Categoría"
+                                size="small"
+                                allowClear
+                                value={advancedObj.category}
+                                onChange={(value) => handlerChange("m3", "category", value, true)}
+                            >
+                                <Select.Option value="CLIENTE">Cliente</Select.Option>
+                                <Select.Option value="COLABORADOR">Colaborador</Select.Option>
+                                <Select.Option value="PROVEEDOR">Proveedor</Select.Option>
+                                <Select.Option value="DIRECTOR">Director</Select.Option>
+                            </Select>
+                        </Col>
+                        <Col span={4}>
+                            <Input
+                                size="small"
+                                placeholder="Nombre Formulario"
+                                value={advancedObj.formName}
+                                onChange={(e) => handlerChange("m3", "formName", e.target.value, false)}
+                                onPressEnter={(e) => enterHandler("m3", "formName", e.target.value)}
+                            />
+                        </Col>
+                        <Col span={4}>
+                            <DatePicker.RangePicker
+                                size="small"
+                                placeholder={["F. Recepción", "Hasta"]}
+                                format = 'DD/MM/YYYY'
+                                style={{ width: "100%" }}
+                                value={
+                                advancedObj.fechaRecepcion
+                                    ? [
+                                        moment(advancedObj.fechaRecepcion[0]),
+                                        moment(advancedObj.fechaRecepcion[1]),
+                                    ]
+                                    : null
+                                }
+                                onChange={(momentObj) => 
+                                handlerChange(
+                                    "m3",
+                                    "fechaRecepcion",
+                                    momentObj !== null && momentObj.length === 2
+                                    ? [
+                                        moment(momentObj[0]).valueOf(),
+                                        moment(momentObj[1]).valueOf(),
+                                        ]
+                                    : null,
+                                    true
+                                )
+                                }
+                            />
+                        </Col>
+                        <Col span={4}>
+                            <Input
+                                size="small"
+                                placeholder="Folio"
+                                value={advancedObj.folio}
+                                onChange={(e) => handlerChange("m3", "folio", e.target.value, false)}
+                                onPressEnter={(e) => enterHandler("m3", "folio", e.target.value)}
+                            />
+                        </Col>
+                    </Row>
                 </TabPane>
-                <TabPane tab="Comentario" key="4">
-                    
-                </TabPane>
-                <TabPane tab="Estado" key="5">
-                    
+                <TabPane tab="Comentarios" key="4">
+                    <Row gutter={10}>
+                        <Col span={4}>
+                            <Select 
+                                    placeholder="Usuario"
+                                    size="small"
+                                    allowClear
+                                    value={advancedObj.userIdComment}
+                                    onChange={(value) => handlerChange("m4", "userIdComment", value, true)}
+                                >
+                                {users.map((user) => <Select.Option value={user.id}>{user.name}</Select.Option>)}
+                            </Select>
+                        </Col>
+                        <Col span={6}>
+                            <DatePicker.RangePicker
+                                size="small"
+                                placeholder={["F. Ultimo Comentario", "Hasta"]}
+                                format = 'DD/MM/YYYY'
+                                style={{ width: "100%" }}
+                                value={
+                                advancedObj.fecLastComment
+                                    ? [
+                                        moment(advancedObj.fecLastComment[0]),
+                                        moment(advancedObj.fecLastComment[1]),
+                                    ]
+                                    : null
+                                }
+                                onChange={(momentObj) => 
+                                handlerChange(
+                                    "m4",
+                                    "fecLastComment",
+                                    momentObj !== null && momentObj.length === 2
+                                    ? [
+                                        moment(momentObj[0]).valueOf(),
+                                        moment(momentObj[1]).valueOf(),
+                                        ]
+                                    : null,
+                                    true
+                                )
+                                }
+                            />
+                        </Col>
+                    </Row>
                 </TabPane>
             </Tabs>
         </div>

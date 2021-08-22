@@ -8,9 +8,14 @@
     min-height: 388px;
 
     .ant-spin {
-      padding-top: 50px;
+      padding: 100px;
       margin: auto;
       display: table;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 100px;
     }
   }
 
@@ -56,6 +61,7 @@
     border-bottom: 1px solid rgba(0, 0, 0, .15);
 
     .tools-rows-forms {
+      text-align: center;
       button {
         margin-right: 3px;
       }

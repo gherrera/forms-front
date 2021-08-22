@@ -72,7 +72,7 @@ const TabForms = ({status}) => {
   }
 
   const getStatus = (status) => {
-    if(status === 'NUEVO') return 'Nuevos'
+    if(status === 'RECIBIDO') return 'Recibidos'
     else if(status === 'PENDIENTE') return 'Pendientes'
     else if(status === 'EVALUACION') return 'En Evaluación'
     else if(status === 'CERRADO') return 'Cerrados'
@@ -95,30 +95,30 @@ const TabForms = ({status}) => {
       </Row>
       { showFilter && <Filter cbFilters={cbFilters} /> }
       <Row className="titles-section" gutter={4}>
-        <Col span={1}>Nro</Col>
+        <Col span={1}>Folio</Col>
         <Col span={2}>Categoria</Col>
         <Col span={7}>Nombre</Col>
         <Col span={3}>Doc. de Identidad</Col>
         <Col span={3}>Destinatario</Col>
         <Col span={4}>Email</Col>
-        <Col span={3}>Fecha Recibido</Col>
-        <Col span={1}></Col>
+        <Col span={2}>Fecha Recibido</Col>
+        <Col span={2}></Col>
       </Row>
       <div className="body">
-        { isLoading ? 
-            <Spin size="large"/>
+        { isLoading ? <Spin size="large"/>
+        : totalRecords === 0 ? <h3 className="no-results">No hay resultados</h3>
         :
           <>
             { forms.map((f, index) =>
               <Row className="rows-section" gutter={4}>
-                <Col span={1}>{f.nro}</Col>
+                <Col span={1}>{f.folio}</Col>
                 <Col span={2}>{camelizerHelper(f.category)}</Col>
                 <Col span={7}>{f.name}</Col>
                 <Col span={3}>{f.dest.rut}</Col>
                 <Col span={3}>{f.dest.name}</Col>
                 <Col span={4}>{f.dest.email}</Col>
-                <Col span={3}>{f.sendDate && moment(f.sendDate).format('DD/MM/YYYY HH:mm')}</Col>
-                <Col span={1} className="tools-rows-forms">
+                <Col span={2}>{f.sendDate && moment(f.sendDate).format('DD/MM/YYYY HH:mm')}</Col>
+                <Col span={2} className="tools-rows-forms">
                   <Tooltip title="Detalles">
                     <Button icon="info" size="small" onClick={(e) => handleViewForm(f)}/>
                   </Tooltip>

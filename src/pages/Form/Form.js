@@ -20,11 +20,7 @@ const Form = ({ match, form }) => {
 
     useEffect(async () => {
         if(match.params.id) {
-            setIsloading(true);
-            getFormByIdPromise(match.params.id).then(response => {
-                setFrm(response)
-                setIsloading(false);
-            })
+            loadForm(match.params.id)
             if (match.params.view === "pdf") {
                 setMode("pdf");
             }
@@ -43,6 +39,14 @@ const Form = ({ match, form }) => {
         }
     }, [])
 
+    const loadForm = (id) => {
+        setIsloading(true);
+        getFormByIdPromise(id).then(response => {
+            setFrm(response)
+            setIsloading(false);
+        })
+    }
+
     const generateForm = (e) => {
         e.preventDefault()
 
@@ -50,7 +54,10 @@ const Form = ({ match, form }) => {
             if(frm.cliente.pais !== 'CHI') obj.tipDoc = 'DNI'
             else obj.tipDoc = 'Rut'
             let fId = await generateFormPromise(frm.id, obj)
-            window.location = "../forms/"+fId
+            //window.location = "../forms/"+fId
+            loadForm(fId)
+            setIsVisibleDest(false)
+            setMode('html')
         })
     }
 

@@ -110,7 +110,7 @@ const FormDetail = ({ form, closeHandler }) => {
             dataIndex: 'status',
             width: '30%',
             render: (text) => {
-                if(text === 'NUEVO') return 'Nuevo'
+                if(text === 'RECIBIDO') return 'Recibido'
                 else if(text === 'PENDIENTE') return 'Pendiente'
                 else if(text === 'EVALUACION') return 'En Evaluación'
                 else if(text === 'CERRADO') return 'Cerrado'
@@ -175,7 +175,7 @@ const FormDetail = ({ form, closeHandler }) => {
                         <Col span={2}>Estado</Col>
                         <Col span={3}>
                             <Select size="small" value={status} style={{width:'80%'}} onChange={handleChangleStatus}>
-                                <Select.Option value="NUEVO">Nuevo</Select.Option>
+                                <Select.Option value="RECIBIDO">Recibido</Select.Option>
                                 <Select.Option value="PENDIENTE">Pendiente</Select.Option>
                                 <Select.Option value="EVALUACION">En Evaluación</Select.Option>
                                 <Select.Option value="CERRADO">Cerrado</Select.Option>

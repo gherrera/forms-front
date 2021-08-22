@@ -9,8 +9,8 @@ const { Header } = Layout
 const dropdownMenuEstados = (
   <Menu>
     <Menu.Item>
-      <Link to={ '/manage/NUEVO' }>
-        Nuevo
+      <Link to={ '/manage/RECIBIDO' }>
+        Recibido
       </Link>
     </Menu.Item>
     <Menu.Item>
