@@ -1,7 +1,17 @@
-.tab-forms {
+.tab-forms-design {
   .tools-form {
     text-align: right;
     margin-bottom: 20px;
+  }
+
+  .body {
+    min-height: 378px;
+
+    .ant-spin {
+      padding-top: 50px;
+      margin: auto;
+      display: table;
+    }
   }
 
   .ant-pagination {

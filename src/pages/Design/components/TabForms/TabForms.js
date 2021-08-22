@@ -44,7 +44,8 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
     setIsLoading(true)
     let from = (page-1) * recordsxPage
     getFormByClienteIdPromise(from, recordsxPage).then(response => {
-      setForms(response.records)
+      let records = response.records
+      setForms(records)
       setTotalRecords(response.total)
       setIsLoading(false)
     })
@@ -145,119 +146,120 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
   }
 
   return (
-    <div className="tab-forms">
-      { isLoading ? <Spin/>
-      :
-      <>
-        { frm !== null ? <FormDetail key={key} formId={frm.id} refreshBreadCrumbs={_refreshBreadCrumbs} />
+    <div className="tab-forms-design">
+      <Row className="tools-form">
+        <Button icon="plus" type="primary" onClick={handleOpenNewForm}>Nuevo Formulario</Button>
+      </Row>
+      <Row className="titles-section">
+        <Col span={1}>Nro</Col>
+        <Col span={2}>Categoria</Col>
+        <Col span={7}>Nombre</Col>
+        <Col span={3}>Creado por</Col>
+        <Col span={3}>Fecha de Creación</Col>
+        <Col span={3}>Ultima modificacion</Col>
+        <Col span={2}>Activo</Col>
+        <Col span={3}>Edición</Col>
+      </Row>
+      <div className="body">
+        { isLoading ? <Spin size="large" />
         :
         <>
-          <Row className="tools-form">
-            <Button icon="plus" type="primary" onClick={handleOpenNewForm}>Nuevo Formulario</Button>
-          </Row>
-          <Row className="titles-section">
-            <Col span={1}>Nro</Col>
-            <Col span={2}>Categoria</Col>
-            <Col span={7}>Nombre</Col>
-            <Col span={3}>Creado por</Col>
-            <Col span={3}>Fecha de Creación</Col>
-            <Col span={3}>Ultima modificacion</Col>
-            <Col span={2}>Activo</Col>
-            <Col span={3}>Edición</Col>
-          </Row>
+          { frm !== null ? <FormDetail key={key} formId={frm.id} refreshBreadCrumbs={_refreshBreadCrumbs} />
+          :
+          <>
+            { forms.map((f, index) =>
+              <Row className="rows-section">
+                <Col span={1}>{f.nro}</Col>
+                <Col span={2}>{camelizerHelper(f.category)}</Col>
+                <Col span={7}><Input size="small" value={f.name} onChange={(e) => changeNameForm(index, e.target.value)} className="editable"/></Col>
+                <Col span={3}>{f.userCreate}</Col>
+                <Col span={3}>{moment(f.creationDate).format('DD/MM/YYYY HH:mm')}</Col>
+                <Col span={3}>{f.updateDate && moment(f.updateDate).format('DD/MM/YYYY HH:mm')}</Col>
+                <Col span={2}>
+                  <Checkbox checked={f.status === 'ACTIVE'} onChange={(e) => changeActiveForm(index, e.target.checked)}/>
+                </Col>
+                <Col span={3} className="tools-rows-forms">
+                  <Tooltip title="Modificar">
+                    <Button icon="edit" size="small" onClick={(e) => handleEditForm(f)}/>
+                  </Tooltip>
+                  <Tooltip title="Historial">
+                    <Button icon="folder-open" size="small" />
+                  </Tooltip>
+                  <Tooltip title="Eliminar">
+                    <Popconfirm title="Confirma eliminar la Sección?" onConfirm={(e) => handleDeleteForm(f)}>
+                      <Button icon="delete" size="small" />
+                    </Popconfirm>
+                  </Tooltip>
+                  <Tooltip title="URL">
+                    <Button icon="link" size="small" onClick={() => handleVisibleForm(true, f.id)} />
+                  </Tooltip>
+                </Col>
+              </Row>
+            )}
+            { isVisibleNewForm &&
+              <Modal
+                visible={true}
+                title="Nuevo Formulario"
+                onOk={ () => closeModalHandler(true)  }
+                onCancel={ () => closeModalHandler(false) }
+              >
+                <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
+                  <Form.Item label="Categoría">
+                  { getFieldDecorator('category', {
+                        validateTrigger: "onChange",
+                        rules:
+                          [
+                            { required: true, message: 'Campo requerido' }
+                          ]
+                      })(
+                      <Select>
+                        <Select.Option value="CLIENTE">Cliente</Select.Option>
+                        <Select.Option value="COLABORADOR">Colaborador</Select.Option>
+                        <Select.Option value="PROVEEDOR">Proveedor</Select.Option>
+                        <Select.Option value="DIRECTOR">Director</Select.Option>
+                      </Select>
+                      )
+                  }
+                  </Form.Item>
+                  <Form.Item label="Formulario">
+                  { getFieldDecorator('name', {
+                        validateTrigger: "onChange",
+                        rules:
+                          [
+                            { required: true, message: 'Campo requerido' }
+                          ]
+                      })(
+                      <Input/>
+                      )
+                  }
+                  </Form.Item>
+                </Form>
+              </Modal>
+            }
 
-          { forms.map((f, index) =>
-            <Row className="rows-section">
-              <Col span={1}>{f.nro}</Col>
-              <Col span={2}>{camelizerHelper(f.category)}</Col>
-              <Col span={7}><Input size="small" value={f.name} onChange={(e) => changeNameForm(index, e.target.value)} className="editable"/></Col>
-              <Col span={3}>{f.userCreate}</Col>
-              <Col span={3}>{moment(f.creationDate).format('DD/MM/YYYY HH:mm')}</Col>
-              <Col span={3}>{f.updateDate && moment(f.updateDate).format('DD/MM/YYYY HH:mm')}</Col>
-              <Col span={2}>
-                <Checkbox checked={f.status === 'ACTIVE'} onChange={(e) => changeActiveForm(index, e.target.checked)}/>
-              </Col>
-              <Col span={3} className="tools-rows-forms">
-                <Tooltip title="Modificar">
-                  <Button icon="edit" size="small" onClick={(e) => handleEditForm(f)}/>
-                </Tooltip>
-                <Tooltip title="Historial">
-                  <Button icon="folder-open" size="small" />
-                </Tooltip>
-                <Tooltip title="Eliminar">
-                  <Popconfirm title="Confirma eliminar la Sección?" onConfirm={(e) => handleDeleteForm(f)}>
-                    <Button icon="delete" size="small" />
-                  </Popconfirm>
-                </Tooltip>
-                <Tooltip title="URL">
-                  <Button icon="link" size="small" onClick={() => handleVisibleForm(true, f.id)} />
-                </Tooltip>
-              </Col>
-            </Row>
-          )}
-          { totalRecords > forms.length &&
-            <Pagination current={currentPage} total={totalRecords} pageSize={recordsxPage} onChange={handleChangePage} size="small"/>
-          }
-          { isVisibleNewForm &&
-            <Modal
-              visible={true}
-              title="Nuevo Formulario"
-              onOk={ () => closeModalHandler(true)  }
-              onCancel={ () => closeModalHandler(false) }
-            >
-              <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
-                <Form.Item label="Categoría">
-                { getFieldDecorator('category', {
-                      validateTrigger: "onChange",
-                      rules:
-                        [
-                          { required: true, message: 'Campo requerido' }
-                        ]
-                    })(
-                    <Select>
-                      <Select.Option value="CLIENTE">Cliente</Select.Option>
-                      <Select.Option value="COLABORADOR">Colaborador</Select.Option>
-                      <Select.Option value="PROVEEDOR">Proveedor</Select.Option>
-                      <Select.Option value="DIRECTOR">Director</Select.Option>
-                    </Select>
-                    )
+            { isVisibleURL &&
+              <Modal
+                visible={true}
+                title="Link Formulario"
+                onCancel={ () => handleVisibleForm(false) }
+                width={700}
+                footer={ [
+                  <Button onClick={ () => handleVisibleForm(false) }>
+                    { t('messages.aml.btnClose') }
+                  </Button>
+                ]
                 }
-                </Form.Item>
-                <Form.Item label="Formulario">
-                { getFieldDecorator('name', {
-                      validateTrigger: "onChange",
-                      rules:
-                        [
-                          { required: true, message: 'Campo requerido' }
-                        ]
-                    })(
-                    <Input/>
-                    )
-                }
-                </Form.Item>
-              </Form>
-            </Modal>
-          }
-
-          { isVisibleURL &&
-            <Modal
-              visible={true}
-              title="Link Formulario"
-              onCancel={ () => handleVisibleForm(false) }
-              width={700}
-              footer={ [
-                <Button onClick={ () => handleVisibleForm(false) }>
-                  { t('messages.aml.btnClose') }
-                </Button>
-              ]
-              }
-            >
-              <Input readOnly={true} value={window.location.protocol+'//'+window.location.host+ '/form/' + hashURL} size="small"/>
-            </Modal>
+              >
+                <Input readOnly={true} value={window.location.protocol+'//'+window.location.host+ '/form/' + hashURL} size="small"/>
+              </Modal>
+            }
+          </>
           }
         </>
         }
-      </>
+      </div>
+      { totalRecords > forms.length &&
+        <Pagination current={currentPage} total={totalRecords} pageSize={recordsxPage} onChange={handleChangePage} size="small"/>
       }
     </div>
   )

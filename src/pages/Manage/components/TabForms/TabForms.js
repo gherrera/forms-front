@@ -94,59 +94,60 @@ const TabForms = ({status}) => {
         </Col>
       </Row>
       { showFilter && <Filter cbFilters={cbFilters} /> }
-      { isLoading ? <Spin/>
-      :
-        <>
-          <Row className="titles-section" gutter={4}>
-            <Col span={1}>Nro</Col>
-            <Col span={2}>Categoria</Col>
-            <Col span={7}>Nombre</Col>
-            <Col span={3}>Doc. de Identidad</Col>
-            <Col span={3}>Destinatario</Col>
-            <Col span={4}>Email</Col>
-            <Col span={3}>Fecha Recibido</Col>
-            <Col span={1}></Col>
-          </Row>
-
-          { forms.map((f, index) =>
-            <Row className="rows-section" gutter={4}>
-              <Col span={1}>{f.nro}</Col>
-              <Col span={2}>{camelizerHelper(f.category)}</Col>
-              <Col span={7}>{f.name}</Col>
-              <Col span={3}>{f.dest.rut}</Col>
-              <Col span={3}>{f.dest.name}</Col>
-              <Col span={4}>{f.dest.email}</Col>
-              <Col span={3}>{f.sendDate && moment(f.sendDate).format('DD/MM/YYYY HH:mm')}</Col>
-              <Col span={1} className="tools-rows-forms">
-                <Tooltip title="Detalles">
-                  <Button icon="info" size="small" onClick={(e) => handleViewForm(f)}/>
-                </Tooltip>
-                <Tooltip title="PDF">
-                  <Button icon="file-pdf" size="small" onClick={(e) => handleViewPDF(f)}/>
-                </Tooltip>
-              </Col>
-            </Row>
-          )}
-          { totalRecords > forms.length &&
-            <Pagination current={currentPage} total={totalRecords} pageSize={recordsxPage} onChange={handleChangePage} size="small"/>
-          }
-
-          { frm !== null && <FormDetail form={frm} closeHandler={closeHandler} /> }
-          { pdfItem &&
-            <Modal
-              className="modal-pdf-viewer"
-              visible={true}
-              title="Declaración"
-              width = {1200}
-              style={{ top: 10 }}
-              header={ null }
-              footer= { [<Button key="back" onClick={ closeHandlerPDF }>Cerrar</Button>] }
-              onCancel={ closeHandlerPDF }
-            >
-              <ModalPdfViewer pdfId={pdfItem.id} />
-            </Modal>          
-          }
-        </>
+      <Row className="titles-section" gutter={4}>
+        <Col span={1}>Nro</Col>
+        <Col span={2}>Categoria</Col>
+        <Col span={7}>Nombre</Col>
+        <Col span={3}>Doc. de Identidad</Col>
+        <Col span={3}>Destinatario</Col>
+        <Col span={4}>Email</Col>
+        <Col span={3}>Fecha Recibido</Col>
+        <Col span={1}></Col>
+      </Row>
+      <div className="body">
+        { isLoading ? 
+            <Spin size="large"/>
+        :
+          <>
+            { forms.map((f, index) =>
+              <Row className="rows-section" gutter={4}>
+                <Col span={1}>{f.nro}</Col>
+                <Col span={2}>{camelizerHelper(f.category)}</Col>
+                <Col span={7}>{f.name}</Col>
+                <Col span={3}>{f.dest.rut}</Col>
+                <Col span={3}>{f.dest.name}</Col>
+                <Col span={4}>{f.dest.email}</Col>
+                <Col span={3}>{f.sendDate && moment(f.sendDate).format('DD/MM/YYYY HH:mm')}</Col>
+                <Col span={1} className="tools-rows-forms">
+                  <Tooltip title="Detalles">
+                    <Button icon="info" size="small" onClick={(e) => handleViewForm(f)}/>
+                  </Tooltip>
+                  <Tooltip title="PDF">
+                    <Button icon="file-pdf" size="small" onClick={(e) => handleViewPDF(f)}/>
+                  </Tooltip>
+                </Col>
+              </Row>
+            )}
+            { frm !== null && <FormDetail form={frm} closeHandler={closeHandler} /> }
+            { pdfItem &&
+              <Modal
+                className="modal-pdf-viewer"
+                visible={true}
+                title="Declaración"
+                width = {1200}
+                style={{ top: 10 }}
+                header={ null }
+                footer= { [<Button key="back" onClick={ closeHandlerPDF }>Cerrar</Button>] }
+                onCancel={ closeHandlerPDF }
+              >
+                <ModalPdfViewer pdfId={pdfItem.id} />
+              </Modal>          
+            }
+          </>
+        }
+      </div>
+      { totalRecords > forms.length &&
+        <Pagination current={currentPage} total={totalRecords} pageSize={recordsxPage} onChange={handleChangePage} size="small"/>
       }
     </div>
   )
