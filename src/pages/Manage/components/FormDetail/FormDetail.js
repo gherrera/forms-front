@@ -7,7 +7,8 @@ import {
   Modal,
   Select,
   Drawer,
-  Input
+  Input,
+  Table
 } from "antd";
 import { camelizerHelper } from "../../../../helpers";
 import { ModalPdfViewer } from "..";
@@ -22,6 +23,10 @@ const FormDetail = ({ form, closeHandler }) => {
     const [frm, setFrm] = useState({})
     const [ showPdf, setShowPdf ] = useState(false)
     const [ comments, setComments ] = useState(null)
+    const [ status, setStatus ] = useState(null)
+    const [ statusChanged, setStatusChanged ] = useState(false)
+    const [ isVisibleHistoryStatus, setIsVisibleHistoryStatus ] = useState(false)
+    const [ isVisibleHistoryComment, setIsVisibleHistoryComment ] = useState(false)
 
     useEffect(() => {
         loadForm()
@@ -30,6 +35,7 @@ const FormDetail = ({ form, closeHandler }) => {
     const loadForm = () => {
         getFormByIdPromise(form.id).then((response) => {
             setFrm(response)
+            response.actualState && setStatus(response.actualState.status)
         })
     }
 
@@ -58,6 +64,70 @@ const FormDetail = ({ form, closeHandler }) => {
     const handleChangleComments = (e) => {
         setComments(e.target.value)
     }
+
+    const handleChangleStatus = (value) => {
+        setStatus(value)
+        setStatusChanged(true)
+    }
+
+    const handleSaveStatus = () => {
+        addStatusPromise(form.id, status).then((response) => {
+            loadForm()
+            setStatusChanged(false)
+        })
+    }
+
+    const closeModalComments = () => {
+        setIsVisibleHistoryComment(false)
+    }
+
+    const closeModalStatus = () => {
+        setIsVisibleHistoryStatus(false)
+    }
+
+    const columnsComment = [
+        {
+            title: 'Comentario',
+            dataIndex: 'comment',
+            width: '60%'
+        },
+        {
+            title: 'Autor',
+            dataIndex: 'autor',
+            width: '20%'
+        },
+        {
+            title: 'Fecha',
+            dataIndex: 'date',
+            width: '20%',
+            render: (text, record) => moment(text).format('DD.MM.YYYY HH:mm')
+        }
+    ]
+
+    const columnsStatus = [
+        {
+            title: 'Estado',
+            dataIndex: 'status',
+            width: '30%',
+            render: (text) => {
+                if(text === 'NUEVO') return 'Nuevo'
+                else if(text === 'PENDIENTE') return 'Pendiente'
+                else if(text === 'EVALUACION') return 'En Evaluación'
+                else if(text === 'CERRADO') return 'Cerrado'
+            }
+        },
+        {
+            title: 'Autor',
+            dataIndex: 'autor',
+            width: '35%'
+        },
+        {
+            title: 'Fecha',
+            dataIndex: 'date',
+            width: '35%',
+            render: (text, record) => moment(text).format('DD.MM.YYYY HH:mm')
+        }
+    ]
 
     return (
         <div>
@@ -104,17 +174,19 @@ const FormDetail = ({ form, closeHandler }) => {
                     <Row>
                         <Col span={2}>Estado</Col>
                         <Col span={3}>
-                            <Select size="small" value={form.actualState && form.actualState.status} style={{width:'100%'}}>
+                            <Select size="small" value={status} style={{width:'80%'}} onChange={handleChangleStatus}>
                                 <Select.Option value="NUEVO">Nuevo</Select.Option>
                                 <Select.Option value="PENDIENTE">Pendiente</Select.Option>
                                 <Select.Option value="EVALUACION">En Evaluación</Select.Option>
                                 <Select.Option value="CERRADO">Cerrado</Select.Option>
                             </Select>
+                            &nbsp;
+                            <Button size="small" icon="save" disabled={!statusChanged} onClick={handleSaveStatus}/>
                         </Col>
-                        <Col span={6} offset={1}>Fecha: <span className="data-value">{form.actualState ? moment(form.actualState.date).format('DD.MM.YYYY'):null}</span></Col>
+                        <Col span={6} offset={1}>Fecha: <span className="data-value">{frm.actualState ? moment(frm.actualState.date).format('DD.MM.YYYY'):null}</span></Col>
                         <Col span={6}>
                             Ver Historico&nbsp;&nbsp;
-                            <Button icon="folder-open" size="small" disabled/>
+                            <Button icon="folder-open" size="small" onClick={() => setIsVisibleHistoryStatus(true)}/>
                         </Col>
                     </Row>
                 </Row>
@@ -137,7 +209,7 @@ const FormDetail = ({ form, closeHandler }) => {
                             <Col span={5} offset={1}>
                                 <Row>Agregado por: <span className="data-value">{frm.lastComment && frm.lastComment.autor}</span></Row>
                                 <Row>Fecha: <span className="data-value">{frm.lastComment && moment(frm.lastComment.date).format('DD.MM.YYYY')}</span></Row>
-                                <Row>Ver Histórico: <Button icon="folder-open" size="small" disabled/></Row>
+                                <Row>Ver Histórico: <Button icon="folder-open" size="small" onClick={() => setIsVisibleHistoryComment(true)}/></Row>
                             </Col>
                         </Col>
                     </Row>
@@ -156,6 +228,29 @@ const FormDetail = ({ form, closeHandler }) => {
                 >
                     <ModalPdfViewer pdfId={form.id} />
                 </Modal>          
+            }
+            { isVisibleHistoryComment &&
+                <Modal
+                    visible={true}
+                    title="Comentarios"
+                    header={ null }
+                    width={800}
+                    footer= { [<Button key="back" onClick={ closeModalComments }>Cerrar</Button>] }
+                    onCancel={ closeModalComments }
+                >
+                    <Table size="small" dataSource={frm.comments} columns={columnsComment} />
+                </Modal>
+            }
+            { isVisibleHistoryStatus &&
+                <Modal
+                    visible={true}
+                    title="Estados"
+                    header={ null }
+                    footer= { [<Button key="back" onClick={ closeModalStatus }>Cerrar</Button>] }
+                    onCancel={ closeModalStatus }
+                >
+                    <Table size="small" dataSource={frm.statuses} columns={columnsStatus} />
+                </Modal>
             }
         </div>
     )

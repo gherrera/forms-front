@@ -66,7 +66,7 @@ const TabForms = () => {
       { isLoading ? <Spin/>
       :
         <>
-          <Row className="titles-section">
+          <Row className="titles-section" gutter={4}>
             <Col span={1}>Nro</Col>
             <Col span={2}>Categoria</Col>
             <Col span={7}>Nombre</Col>
@@ -78,7 +78,7 @@ const TabForms = () => {
           </Row>
 
           { forms.map((f, index) =>
-            <Row className="rows-section">
+            <Row className="rows-section" gutter={4}>
               <Col span={1}>{f.nro}</Col>
               <Col span={2}>{camelizerHelper(f.category)}</Col>
               <Col span={7}>{f.name}</Col>

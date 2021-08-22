@@ -13,6 +13,10 @@ export default ({ currentUser }) => {
       theme="light"
       mode="horizontal"
       >
+      <Menu.Item id="home">
+          Inicio
+          <Link to={ '/' } />
+      </Menu.Item>
       { currentUser.modules.includes('DESIGN') &&
         <Menu.Item id="design">
           Diseño
@@ -26,7 +30,7 @@ export default ({ currentUser }) => {
       }
       { currentUser.modules.includes('FORMS') &&
         <Menu.Item id="manage">
-          Gestion
+          Gestión
           <Link to={ '/manage' } />
         </Menu.Item>
       }
