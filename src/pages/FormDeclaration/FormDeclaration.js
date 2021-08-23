@@ -96,27 +96,33 @@ const FormDeclaration = ({ form, mode, sendFormHandler, sending }) => {
     }
   }
 
+  const getLogoPosition = (logos, position) => {
+    let pos = null
+    logos && logos.map((logo) => {
+        if(logo.position === position) pos = position
+    })
+    return pos
+  }
+
+  const getColLogo = (logos, position) => {
+    return (
+      <Col span={4} offset={position === 'LEFT' ? 0 : 6} className={position}>
+          { getLogoPosition(logos, position) === position &&
+              <img src={apiConfig.url +'/getLogoForm/'+(form.formParentId === null ?form.id : form.formParentId)+'/'+position}/>
+          }
+      </Col>
+    )
+  }
+
   return (
     <div className="form-declaration">
       <div className="form-header">
-        { form.logo !== null &&
-        <Row className="row-logo">
-          <Col span={4} className="LEFT">
-              { form.logo.position === 'LEFT' &&
-                  <img src={apiConfig.url +'/getLogoForm?formId='+(form.formParentId === null ?form.id : form.formParentId)}/>
-              }
-          </Col>
-          <Col span={4} offset={6} className="CENTER">
-              { form.logo.position === 'CENTER' &&
-                  <img src={apiConfig.url +'/getLogoForm?formId='+(form.formParentId === null ?form.id : form.formParentId)}/>
-              }
-          </Col>
-          <Col span={4} offset={6} className="RIGHT">
-              { form.logo.position === 'RIGHT' &&
-                  <img src={apiConfig.url +'/getLogoForm?formId='+(form.formParentId === null ?form.id : form.formParentId)}/>
-              }
-          </Col>
-        </Row>
+        { form.logos !== null && form.logos.length > 0 &&
+          <Row className="row-logo">
+            { getColLogo(form.logos, 'LEFT') }
+            { getColLogo(form.logos, 'CENTER') }
+            { getColLogo(form.logos, 'RIGHT') }
+          </Row>
         }
         <Row>
           <h2 className="form-title">{form.name}</h2>

@@ -40,8 +40,14 @@ const FormEdit = ({ form, refreshSection, setForm }) => {
             onChange(info) {
                 const { status } = info.file;
                 if (status === 'done') {
-                    message.success(`${info.file.name} archivo cargado exitosamente.`);
-                    setFrm(info.file.response)
+                    if(info.file.response === "") {
+                        message.error(`${info.file.name} no ha sido cargado.`);
+                        info.fileList = []
+                    }else {
+                        message.success(`${info.file.name} archivo cargado exitosamente.`);
+                        setFrm(info.file.response)
+                        setForm(info.file.response)
+                    }
                 } else if (status === 'error') {
                     message.error(`${info.file.name} no ha sido cargado.`);
                     info.fileList = []
@@ -50,8 +56,8 @@ const FormEdit = ({ form, refreshSection, setForm }) => {
         }
     };
 
-    const removeLogo = () => {
-        deleteLogoPromise(form.id).then((f) => {
+    const removeLogo = (position) => {
+        deleteLogoPromise(form.id, position).then((f) => {
             setFrm(f)
             setForm(f)
         })
@@ -64,28 +70,38 @@ const FormEdit = ({ form, refreshSection, setForm }) => {
         }else if(result.destination.droppableId !== result.draggableId){
             let f = {...frm, logo: {position: result.destination.droppableId}}
             setFrm(f)
-            changePositionLogoPromise(form.id, result.destination.droppableId).then((f) => {
-                setFrm(f)
-                setForm(f)
+            changePositionLogoPromise(form.id, result.draggableId, result.destination.droppableId).then((f) => {
+                if(f && f !== "") {
+                    setFrm(f)
+                    setForm(f)
+                }
             })
         }
     }
 
-    const getDraggable = (form) => {
-            return(<Draggable key={form.id} draggableId={form.logo.position} >
+    const getLogoPosition = (logos, position) => {
+        let pos = null
+        logos && logos.map((logo) => {
+            if(logo.position === position) pos = position
+        })
+        return pos
+    }
+
+    const getDraggable = (form, position) => {
+            return(<Draggable key={form.id} draggableId={getLogoPosition(form.logos, position)} >
                 {(provided, snapshot) =>
                     <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         style={getItemStyle(
-                        snapshot.isDragging,
-                        provided.draggableProps.style
+                            snapshot.isDragging,
+                            provided.draggableProps.style
                         )}
                     >
-                        <img src={apiConfig.url +'/getLogoForm?formId='+form.id}/>
+                        <img src={apiConfig.url +'/getLogoForm/'+form.id+'/'+position}/>
                         <Tooltip title="Quitar Logo">
-                            <a className="remove-logo" onClick={removeLogo}>
+                            <a className="remove-logo" onClick={() => removeLogo(position)}>
                                 <Icon size="small" type="close-circle"/>
                             </a>
                         </Tooltip>
@@ -96,17 +112,15 @@ const FormEdit = ({ form, refreshSection, setForm }) => {
 
     const getDroppableLogo = (form, position) => {
         return (
-            <Col span={4} offset={position!=='LEFT'?6:0} className={position+(form.logo && form.logo.position === position?' selected':'')}>
+            <Col span={4} offset={position!=='LEFT'?6:0} className={position+(form.logos && getLogoPosition(form.logos, position) === position?' selected':'')}>
                 <Droppable key={position} droppableId={position}>
                     {(provided, snapshot) => (
                         <div
                             {...provided.droppableProps}
                             ref={provided.innerRef}
                         >
-                            { form.logo && form.logo.position === position ?
-                                getDraggable(frm)
-                            : form.logo ?
-                                <span className="logo">Logo</span>
+                            { form.logos && getLogoPosition(form.logos, position) === position ?
+                                getDraggable(frm, position)
                             :
                                 <Dragger {...getPropsUpload(position)}>
                                     <Tooltip title="Cargar imagen">
