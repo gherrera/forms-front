@@ -38,14 +38,14 @@ const FormEdit = ({ form, refreshSection, setForm }) => {
             multiple: false,
             action: apiConfig.url + '/uploadLogoForm/'+form.id+'/'+position,
             onChange(info) {
-            const { status } = info.file;
-            if (status === 'done') {
-                message.success(`${info.file.name} archivo cargado exitosamente.`);
-                setFrm(info.file.response)
-            } else if (status === 'error') {
-                message.error(`${info.file.name} no ha sido cargado.`);
-                info.fileList = []
-            }
+                const { status } = info.file;
+                if (status === 'done') {
+                    message.success(`${info.file.name} archivo cargado exitosamente.`);
+                    setFrm(info.file.response)
+                } else if (status === 'error') {
+                    message.error(`${info.file.name} no ha sido cargado.`);
+                    info.fileList = []
+                }
             }
         }
     };
@@ -109,9 +109,11 @@ const FormEdit = ({ form, refreshSection, setForm }) => {
                                 <span className="logo">Logo</span>
                             :
                                 <Dragger {...getPropsUpload(position)}>
-                                    <p className="ant-upload-drag-icon">
-                                        <Icon type="file-image" size="small"/>
-                                    </p>
+                                    <Tooltip title="Cargar imagen">
+                                        <p className="ant-upload-drag-icon">
+                                            <Icon type="file-image" size="small"/>
+                                        </p>
+                                    </Tooltip>
                                 </Dragger>
                             }
                         </div>
