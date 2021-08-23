@@ -506,12 +506,26 @@ body {
         width: 100%;
         padding: 0px 45px 20px 45px;
     }
-    #parrafoCopyright {
+    #usoLink {
         font: 300 14px / 18px Raleway, sans-serif;
         color: white;
-        display: block;
+        top: 130px;
         width: 100%;
-        padding: 180px 0px 0px 0px;
+        padding: 155px 0px 10px 0px;
+        display: block;
+    }
+    #copyrightMensaje {
+        font: 300 14px / 18px Raleway, sans-serif;
+        color: white;
+        width: 100%;
+        display: block;
+    }
+    .usolink {
+        font: 300 13px / 18px Raleway, sans-serif;
+        color: white;
+        //display: block;
+        //width: 100%;
+        //padding: 180px 0px 0px 0px;
     }
     #solicite {
         color: white;
@@ -544,9 +558,13 @@ body {
             height: 100%;
             width: 100%;  
         }
-        #parrafoCopyright {
+        #usoLink  {
             text-align: center;
-            padding: 30px 20px 30px 20px;
+            padding: 30px 20px 10px 20px;
+        }
+        #copyrightMensaje  {
+            text-align: center;
+            padding: 10px 20px 10px 20px;
         }
         #solicite, #iconoCorreo, #iconoTelefono, #comuniquese {
             padding: 15px 25px 0px 65px;

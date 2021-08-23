@@ -492,10 +492,11 @@ class Login extends Component {
               </li>
             </Row>
           </Col>
-          <Col className="CopyrightBox" span={4} xs={24} sm={24} md={24} lg={4}>
-              <span id="parrafoCopyright">
-              Copyright © - HTG Soluciones - Todos los derechos reservados
-              </span>
+          <Col className="politicas" span={4} xs={24} sm={24} md={24} lg={4}>
+                  <a href="https://htgsoluciones.com/politica-de-uso/" target="_blank" id="usoLink">Política de Uso</a>
+                  <p id="copyrightMensaje">
+                      Copyright © - HTG Soluciones - Todos los derechos reservados
+                  </p>
           </Col>
       </Row>
 {/* Final Inicio Arreglos Guille, página nueva */}
