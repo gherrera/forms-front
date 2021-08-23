@@ -108,7 +108,7 @@ const FormDeclaration = ({ form, mode, sendFormHandler, sending }) => {
     return (
       <Col span={4} offset={position === 'LEFT' ? 0 : 6} className={position}>
           { getLogoPosition(logos, position) === position &&
-              <img src={apiConfig.url +'/getLogoForm/'+(form.formParentId === null ?form.id : form.formParentId)+'/'+position}/>
+              <img src={apiConfig.url +'/getLogoForm/'+(form.formParentId === null ?form.id : form.formParentId)+'/'+position+'?r='+Math.random()}/>
           }
       </Col>
     )

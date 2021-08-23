@@ -99,7 +99,7 @@ const FormEdit = ({ form, refreshSection, setForm }) => {
                             provided.draggableProps.style
                         )}
                     >
-                        <img src={apiConfig.url +'/getLogoForm/'+form.id+'/'+position}/>
+                        <img src={apiConfig.url +'/getLogoForm/'+form.id+'/'+position+'?r='+Math.random()}/>
                         <Tooltip title="Quitar Logo">
                             <a className="remove-logo" onClick={() => removeLogo(position)}>
                                 <Icon size="small" type="close-circle"/>
