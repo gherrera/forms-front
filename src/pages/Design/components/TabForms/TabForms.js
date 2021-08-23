@@ -147,24 +147,24 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
 
   return (
     <div className="tab-forms-design">
-      <Row className="tools-form">
-        <Button icon="plus" type="primary" onClick={handleOpenNewForm}>Nuevo Formulario</Button>
-      </Row>
-      <Row className="titles-section">
-        <Col span={1}>Nro</Col>
-        <Col span={2}>Categoria</Col>
-        <Col span={7}>Nombre</Col>
-        <Col span={3}>Creado por</Col>
-        <Col span={3}>Fecha de Creación</Col>
-        <Col span={3}>Ultima modificacion</Col>
-        <Col span={2}>Activo</Col>
-        <Col span={3}>Edición</Col>
-      </Row>
-      <div className="body">
-        { isLoading ? <Spin size="large" />
-        :
-        <>
-          { frm !== null ? <FormDetail key={key} formId={frm.id} refreshBreadCrumbs={_refreshBreadCrumbs} />
+      { frm !== null ? <FormDetail key={key} formId={frm.id} refreshBreadCrumbs={_refreshBreadCrumbs} />
+      :
+      <>
+        <Row className="tools-form">
+          <Button icon="plus" type="primary" onClick={handleOpenNewForm}>Nuevo Formulario</Button>
+        </Row>
+        <Row className="titles-section">
+          <Col span={1}>Nro</Col>
+          <Col span={2}>Categoria</Col>
+          <Col span={7}>Nombre</Col>
+          <Col span={3}>Creado por</Col>
+          <Col span={3}>Fecha de Creación</Col>
+          <Col span={3}>Ultima modificacion</Col>
+          <Col span={2}>Activo</Col>
+          <Col span={3}>Edición</Col>
+        </Row>
+        <div className="body">
+          { isLoading ? <Spin size="large" />
           :
           <>
             { forms.map((f, index) =>
@@ -186,7 +186,7 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
                     <Button icon="folder-open" size="small" />
                   </Tooltip>
                   <Tooltip title="Eliminar">
-                    <Popconfirm title="Confirma eliminar la Sección?" onConfirm={(e) => handleDeleteForm(f)}>
+                    <Popconfirm title="Confirma eliminar el Formulario?" onConfirm={(e) => handleDeleteForm(f)}>
                       <Button icon="delete" size="small" />
                     </Popconfirm>
                   </Tooltip>
@@ -255,11 +255,11 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
             }
           </>
           }
-        </>
+        </div>
+        { totalRecords > forms.length &&
+          <Pagination current={currentPage} total={totalRecords} pageSize={recordsxPage} onChange={handleChangePage} size="small"/>
         }
-      </div>
-      { totalRecords > forms.length &&
-        <Pagination current={currentPage} total={totalRecords} pageSize={recordsxPage} onChange={handleChangePage} size="small"/>
+      </>
       }
     </div>
   )

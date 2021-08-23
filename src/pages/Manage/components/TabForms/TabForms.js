@@ -8,7 +8,9 @@ import {
   Modal,
   Tooltip,
   Pagination,
-  Icon
+  Icon,
+  notification,
+  Popconfirm
 } from "antd";
 import { camelizerHelper } from "../../../../helpers";
 
@@ -17,6 +19,7 @@ import moment from "moment";
 import { getFormByClienteIdPromise } from "../../promises";
 import { FormDetail, ModalPdfViewer } from "..";
 import { Filter } from "./components";
+import { updateFormPromise } from "../../promises";
 
 const TabForms = ({status}) => {
 	const { t } = useTranslation()
@@ -82,6 +85,15 @@ const TabForms = ({status}) => {
     setShowFilter(visible)
   }
 
+  const handleDeleteForm = (f) => {
+    updateFormPromise({ ...f, deleted: true }).then(r => {
+      loadForms(currentPage, filters)
+      notification.success({
+        message: 'Formulario borrado'
+      })
+    })
+  }
+
   return (
     <div className="tab-forms">
       <Row className="row-header">
@@ -124,6 +136,11 @@ const TabForms = ({status}) => {
                   </Tooltip>
                   <Tooltip title="PDF">
                     <Button icon="file-pdf" size="small" onClick={(e) => handleViewPDF(f)}/>
+                  </Tooltip>
+                  <Tooltip title="Eliminar">
+                    <Popconfirm title="Confirma eliminar el Formulario?" onConfirm={(e) => handleDeleteForm(f)}>
+                      <Button icon="delete" size="small" />
+                    </Popconfirm>
                   </Tooltip>
                 </Col>
               </Row>

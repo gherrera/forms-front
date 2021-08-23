@@ -18,7 +18,7 @@
             margin-bottom: 5px;
 
             .ant-upload-btn {
-                padding: 8px 0px;
+                padding: 4px 0px;
             }
 
             .row-logo {
@@ -31,7 +31,7 @@
                         padding: 3px;
                         z-index: 10;
 
-                        span {
+                        span.logo {
                             position: absolute;
                             left: 80px;
                             font-size: 3em;

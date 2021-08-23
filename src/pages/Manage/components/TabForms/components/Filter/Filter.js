@@ -14,11 +14,13 @@ import {
 import moment from "moment";
 
 import { getUsersByClientPromise } from '../../../../../../promises';
+import { getFormNamesPromise } from './promises';
 
 const { TabPane } = Tabs;
 
 const Filter = ({cbFilters}) => {
     const [users, setUsers] = useState([])
+    const [formNames, setFormNames] = useState([])
     const [advancedObj, setAdvancedObj] = useState({});
     const [advancedObjMenu, setAdvancedObjMenu] = useState({
         m1: {},
@@ -30,6 +32,9 @@ const Filter = ({cbFilters}) => {
     useEffect(() => {
         getUsersByClientPromise().then((response) => {
             setUsers(response)
+        })
+        getFormNamesPromise().then((response) => {
+            setFormNames(response)
         })
     }, [])
 
@@ -155,14 +160,17 @@ const Filter = ({cbFilters}) => {
                                 <Select.Option value="DIRECTOR">Director</Select.Option>
                             </Select>
                         </Col>
-                        <Col span={4}>
-                            <Input
+                        <Col span={6}>
+                            <Select
+                                showSearch
                                 size="small"
                                 placeholder="Nombre Formulario"
                                 value={advancedObj.formName}
-                                onChange={(e) => handlerChange("m3", "formName", e.target.value, false)}
-                                onPressEnter={(e) => enterHandler("m3", "formName", e.target.value)}
-                            />
+                                allowClear
+                                onChange={(value) => handlerChange("m3", "formName", value, true)}
+                            >
+                                {formNames.map((name) => <Select.Option value={name}>{name}</Select.Option>)}
+                            </Select>
                         </Col>
                         <Col span={4}>
                             <DatePicker.RangePicker
@@ -193,7 +201,7 @@ const Filter = ({cbFilters}) => {
                                 }
                             />
                         </Col>
-                        <Col span={4}>
+                        <Col span={3}>
                             <Input
                                 size="small"
                                 placeholder="Folio"

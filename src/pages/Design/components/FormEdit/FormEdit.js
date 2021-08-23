@@ -31,21 +31,23 @@ const FormEdit = ({ form, refreshSection, setForm }) => {
     useEffect(() => {
     }, [])
 
-    const props = {
-        accept: '.png,.jpg,.jpeg',
-        name: 'file',
-        multiple: false,
-        action: apiConfig.url + '/uploadLogoForm/'+form.id+'/LEFT',
-        onChange(info) {
-          const { status } = info.file;
-          if (status === 'done') {
-            message.success(`${info.file.name} archivo cargado exitosamente.`);
-            setFrm(info.file.response)
-          } else if (status === 'error') {
-            message.error(`${info.file.name} no ha sido cargado.`);
-            info.fileList = []
-          }
-        },
+    const getPropsUpload = (position) => {
+        return {
+            accept: '.png,.jpg,.jpeg',
+            name: 'file',
+            multiple: false,
+            action: apiConfig.url + '/uploadLogoForm/'+form.id+'/'+position,
+            onChange(info) {
+            const { status } = info.file;
+            if (status === 'done') {
+                message.success(`${info.file.name} archivo cargado exitosamente.`);
+                setFrm(info.file.response)
+            } else if (status === 'error') {
+                message.error(`${info.file.name} no ha sido cargado.`);
+                info.fileList = []
+            }
+            }
+        }
     };
 
     const removeLogo = () => {
@@ -94,17 +96,23 @@ const FormEdit = ({ form, refreshSection, setForm }) => {
 
     const getDroppableLogo = (form, position) => {
         return (
-            <Col span={4} offset={position!=='LEFT'?6:0} className={position+(form.logo.position === position?' selected':'')}>
+            <Col span={4} offset={position!=='LEFT'?6:0} className={position+(form.logo && form.logo.position === position?' selected':'')}>
                 <Droppable key={position} droppableId={position}>
                     {(provided, snapshot) => (
                         <div
                             {...provided.droppableProps}
                             ref={provided.innerRef}
                         >
-                            { form.logo.position === position ?
+                            { form.logo && form.logo.position === position ?
                                 getDraggable(frm)
-                                :
-                                <span>Logo</span>
+                            : form.logo ?
+                                <span className="logo">Logo</span>
+                            :
+                                <Dragger {...getPropsUpload(position)}>
+                                    <p className="ant-upload-drag-icon">
+                                        <Icon type="file-image" size="small"/>
+                                    </p>
+                                </Dragger>
                             }
                         </div>
                     )}
@@ -117,22 +125,13 @@ const FormEdit = ({ form, refreshSection, setForm }) => {
         <div className="form-edit">
             <div className="form-header">
                 <Row className="header-logo">
-                    { frm.logo === null ?
-                        <Dragger {...props}>
-                            <p className="ant-upload-drag-icon">
-                                <Icon type="file-image" size="small"/>
-                            </p>
-                            <p className="ant-upload-text">Haga clic o arrastre el archivo a esta área para cargar el Logo</p>
-                        </Dragger>
-                        :
-                        <Row className="row-logo">
-                            <DragDropContext onDragEnd={onDragEnd}>
-                                {getDroppableLogo(frm,'LEFT')}
-                                {getDroppableLogo(frm,'CENTER')}
-                                {getDroppableLogo(frm,'RIGHT')}
-                            </DragDropContext>
-                        </Row>
-                    }
+                    <Row className="row-logo">
+                        <DragDropContext onDragEnd={onDragEnd}>
+                            {getDroppableLogo(frm,'LEFT')}
+                            {getDroppableLogo(frm,'CENTER')}
+                            {getDroppableLogo(frm,'RIGHT')}
+                        </DragDropContext>
+                    </Row>
                 </Row>
             </div>
             <div className="form-content">

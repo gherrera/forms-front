@@ -16,6 +16,7 @@ import { ModalPdfViewer } from "..";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { getFormByIdPromise, addCommentPromise, addStatusPromise } from "../../promises";
+import { ReportService } from "../../../../services";
 
 const { TextArea } = Input;
 
@@ -129,6 +130,10 @@ const FormDetail = ({ form, closeHandler }) => {
         }
     ]
 
+    const downloadJson = () => {
+        ReportService.read('/getJsonFormId/'+form.id, null, null, 'form.json')
+    }
+
     return (
         <div>
             <Drawer
@@ -164,7 +169,7 @@ const FormDetail = ({ form, closeHandler }) => {
                     <Row>
                         <Col className="btns">
                             <Button size="small" type="primary" onClick={handleViewForm}>Ver Formulario</Button>
-                            <Button size="small" type="primary" disabled>Descargar Información</Button>
+                            <Button size="small" type="primary" onClick={downloadJson}>Descargar Información</Button>
                             <Button size="small" type="primary" disabled>Ver todos los formularios</Button>
                         </Col>
                     </Row>
