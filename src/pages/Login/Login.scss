@@ -569,5 +569,93 @@ body {
             height: 100%;
         }
       }
- 
+
+/* IV.- NUEVO CUARTO BLOQUE - CONTACTANOS */
+
+.ordenContacto{
+    padding: 20px 0px 0px 0px;
+}
+#iconoContacto {
+    width: 20%;
+    filter: brightness(0) invert(1);
+    display: block;
+    margin: auto;
+}
+#tituloContacto {
+    color: white;
+    font: 600 24px Raleway, sans-serif;
+    letter-spacing: 0.6px;
+    display: block;
+    margin: auto;
+}
+#parrafoContacto {
+    color: white;
+    font: 400 16px Raleway, sans-serif;
+}
+
+/* V.- FOOTER*/
+    .footer1 {
+        background-color: #061551;  
+    }
+    #logoHtgFooter1, #logoForFooter1 {
+        width: 80%;
+        display:block;
+        margin:auto;
+    }
+    #parrafoFooter1 {
+        color: white;
+        text-align: left;
+        font: 300 14px / 18px Raleway, sans-serif;
+        padding-left: 10%;
+        padding-top: 3%;
+    }
+    #usoLink1 {
+        font: 300 14px / 18px Raleway, sans-serif;
+        color: white;
+    }
+    #copyrightMensaje1 {
+        font: 300 14px / 18px Raleway, sans-serif;
+        color: white;
+        padding: 25px 0px 0px 0px;
+    }
+    .demoBox1 {
+        padding:3%;
+    }
+    #solicite1 {
+        color: white;
+        font: 600 18px / 24px Raleway, sans-serif;
+    }
+    #comuniquese1 {
+        color: white;
+        font: 300 14px / 18px Raleway, sans-serif;
+    }
+    #textoicono1 {
+        color: white;
+        font: 300 14px / 24px Raleway, sans-serif;
+    }
+    #iconoCorreo1, #iconoTelefono1 {
+        color: white;
+        padding: 0px 20px 0px 0px;
+    }
+    #quitar1 {
+        list-style: none;
+    }
+    @media only screen and (max-width: 500px) {
+        .politicas1  {
+            text-align: center;
+            width: 90%;
+        }
+        .demoBox1 {
+            padding:10%;
+        }
+        #logoHtgFooter1 {
+            margin: 10%;
+        }
+      }
+      @media screen and (max-width: 992px) {
+        .footer1 {
+            width: 100%;
+            height: 100%;
+        }
+      }
     }

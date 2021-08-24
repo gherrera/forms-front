@@ -462,43 +462,46 @@ class Login extends Component {
       </Row>
 
 {/* V.- FOOTER*/}
-      <Row className="footer">
-          <Col className="logoBox" span={6} xs={24} sm={6} md={6} lg={6}>
-              <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/logo-white-e1627335689960-300x103.png" alt="" id="logoHtgFooter" />
+<Row className="footer1" type="flex" justify="space-around" align="middle">
+          <Col className="logoBox1" span={6} xs={24} sm={6} md={6} lg={6}>
+              <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/logo-white-e1627335689960-300x103.png" alt="" id="logoHtgFooter1" />
           </Col>
-          <Col className="HTGBox" span={8} xs={24} sm={10} md={10} lg={8}>
-              <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/Logo-e1627334345137-1024x199.png" alt="" id="logoForFooter" />
-              <p id="parrafoFooter">
+          <Col className="HTGBox1" span={8} xs={24} sm={10} md={10} lg={8}>
+              <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/Logo-e1627334345137-1024x199.png" alt="" id="logoForFooter1" />
+              <p id="parrafoFooter1">
                     Es una plataforma creada por HTG Soluciones, empresa que busca proponer iniciativas de transformación digital enfocada en optimizar los procesos de tu negocio.
               </p>
           </Col>
-          <Col className="demoBox" span={6} xs={24} sm={8} md={8} lg={6}>
+          <Col className="demoBox1" span={6} xs={24} sm={8} md={8} lg={6}>
             <Row>
-              <h6 id="solicite">
+              <h6 id="solicite1">
                 Solicite una demostración
               </h6>
-              <p id="comuniquese">
+              <p id="comuniquese1">
                 Comuníquese con nosotros:
               </p>
             </Row>
             <Row>
-              <li id="quitar">
-                <span id="iconoCorreo"><Icon size="small" type="mail"/></span>
-                <span id="textoicono">contacto@htgsoluciones.com</span>
+              <li id="quitar1">
+                <span id="iconoCorreo1"><Icon size="small" type="mail"/></span>
+                <span id="textoicono1">contacto@htgsoluciones.com</span>
               </li>
-              <li id="quitar">
-                <span id="iconoTelefono"><Icon size="small" type="phone"/></span>
-                <span id="textoicono">+56-9-7910000</span>
+              <li id="quitar1">
+                <span id="iconoTelefono1"><Icon size="small" type="phone"/></span>
+                <span id="textoicono1">+56-9-7910000</span>
               </li>
             </Row>
           </Col>
-          <Col className="politicas" span={4} xs={24} sm={24} md={24} lg={4}>
-                  <a href="https://htgsoluciones.com/politica-de-uso/" target="_blank" id="usoLink">Política de Uso</a>
-                  <p id="copyrightMensaje">
+          <Col className="politicas1" span={4} xs={24} sm={24} md={24} lg={4}>
+                    <a href="https://htgsoluciones.com/politica-de-uso/" target="_blank" id="usoLink1">Política de Uso</a>
+                    <p id="copyrightMensaje1">
                       Copyright © - HTG Soluciones - Todos los derechos reservados
-                  </p>
+                    </p>
           </Col>
       </Row>
+
+
+
 {/* Final Inicio Arreglos Guille, página nueva */}
       </div>
     )
