@@ -2,15 +2,15 @@ import apiConfig from '../../../../../config/api'
 import { apiRequestorHelper } from '../../../../../helpers'
 
 export default {
-	deleteLogo: (id) => {
+	deleteLogo: (id, position) => {
 		return apiRequestorHelper({
-			url: apiConfig.url + '/deleteLogo/' + id,
+			url: apiConfig.url + '/deleteLogo/' + id+'/'+position,
 			method: 'post'
 		})
 	},
-	changePositionLogo: (id, position) => {
+	changePositionLogo: (id, position, newPosition) => {
 		return apiRequestorHelper({
-			url: apiConfig.url + '/changePositionLogo/' + id+'/'+position,
+			url: apiConfig.url + '/changePositionLogo/' + id+'/'+position+'/'+newPosition,
 			method: 'post'
 		})
 	}

@@ -1,6 +1,7 @@
 import './Header.scss'
 import React from 'react'
-import { Layout, Col } from 'antd'
+import { Link } from 'react-router-dom'
+import { Layout, Col, Menu, Button, Dropdown, Icon } from 'antd'
 import { CurrentUser, Logo, Navigation } from '../'
 
 const { Header } = Layout
@@ -16,7 +17,7 @@ export default ({ currentUser, logoutHandler  }) => (
         logoutHandler={ logoutHandler }
         />
     </Col>
-    <Col span={18}>
+    <Col span={12}>
       <Navigation currentUser={ currentUser } />
     </Col>
   </Header>

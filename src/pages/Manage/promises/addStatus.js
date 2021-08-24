@@ -1,8 +1,8 @@
 import { formsService } from '../services'
 
-export default (from, size, params) => {
+export default (id, status) => {
  	return new Promise(resolve => {
- 		formsService.getFormByClienteId(from, size, params)
+ 		formsService.addStatus(id, status)
  			.then(response => resolve(response.data))
  	})
 }

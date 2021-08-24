@@ -48,7 +48,7 @@
     }
   }
 
-  #inicio #header .navigation li#home-button,
+  #inicio #header .navigation li#home,
   #design #header .navigation li#design,
   #manage #header .navigation li#manage,
   {
@@ -113,7 +113,7 @@
 // ################
 
 .theme-metal {
-  @include render-theme(#c9c7c7, #6877b1, #f8f6f6, #898888, #fbfbfb, #f6f6f6, #f3f3f3);
+  @include render-theme(#c9c7c7, #6877b1, #f8f6f6, #6877b1, #fbfbfb, #f6f6f6, #f3f3f3);
 }
 
 .theme-sepia {
@@ -130,15 +130,6 @@
 
 .ant-layout {
   background: transparent;
-}
-
-.ant-tabs-tab {
-  background: rgba(0, 0, 0, .1) !important;
-}
-
-.ant-tabs-tab-active {
-  background: transparent !important;
-  border-bottom:  !important;
 }
 
 .ant-pagination-item-active {

@@ -2,10 +2,35 @@ import './Navigation.scss'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { Icon, Menu } from 'antd'
+import { Icon, Menu, Dropdown, Button } from 'antd'
 
 export default ({ currentUser }) => {
   const { t } = useTranslation()
+
+  const dropdownMenuEstados = (
+    <Menu>
+      <Menu.Item>
+        <Link to={ '/manage/RECIBIDO' }>
+          Recibido
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to={ '/manage/PENDIENTE' }>
+          Pendiente
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to={ '/manage/EVALUACION' }>
+          En Evaluación
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to={ '/manage/CERRADO' }>
+          Cerrado
+        </Link>
+      </Menu.Item>
+    </Menu>
+  )
 
   return (
     <Menu
@@ -13,28 +38,34 @@ export default ({ currentUser }) => {
       theme="light"
       mode="horizontal"
       >
-      { currentUser.modules.includes('FORMS') && currentUser.type === 'ADMIN' &&
+      <Menu.Item id="home">
+          Inicio
+          <Link to={ '/' } />
+      </Menu.Item>
+      { currentUser.modules.includes('DESIGN') &&
         <Menu.Item id="design">
           Diseño
           <Link to={ '/design' } />
         </Menu.Item>
       }
-      <Menu.Item id="recipíents">
-        Destinatarios
-      </Menu.Item>
-      <Menu.Item id="request">
-        Solicitud
-      </Menu.Item>
-      { currentUser.modules.includes('FORMS') && currentUser.type === 'ADMIN' &&
+      { currentUser.modules.includes('DEST') &&
+        <Menu.Item id="recipíents">
+          Destinatarios
+        </Menu.Item>
+      }
+      { currentUser.modules.includes('FORMS') &&
         <Menu.Item id="manage">
-          Gestion
-          <Link to={ '/manage' } />
+          <Dropdown overlay={ dropdownMenuEstados }>
+              <Button type="link" ghost>
+                <Link to={ '/manage' }>
+                <span>Gestión</span>&nbsp;&nbsp;<Icon type="caret-down"/></Link>
+              </Button>
+          </Dropdown>
         </Menu.Item>
       }
       <Menu.Item id="report">
         Informes
       </Menu.Item>
-
     </Menu>
   )
 }

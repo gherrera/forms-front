@@ -17,14 +17,10 @@ const Form = ({ match, form }) => {
     const [ isVisibleDest, setIsVisibleDest ] = useState(false)
     const [ sentMessage, setSentMessage ] = useState(false)
     const [ sending, setSending ] = useState(false)
-  
+
     useEffect(async () => {
         if(match.params.id) {
-            setIsloading(true);
-            getFormByIdPromise(match.params.id).then(response => {
-                setFrm(response)
-                setIsloading(false);
-            })
+            loadForm(match.params.id)
             if (match.params.view === "pdf") {
                 setMode("pdf");
             }
@@ -43,12 +39,25 @@ const Form = ({ match, form }) => {
         }
     }, [])
 
+    const loadForm = (id) => {
+        setIsloading(true);
+        getFormByIdPromise(id).then(response => {
+            setFrm(response)
+            setIsloading(false);
+        })
+    }
+
     const generateForm = (e) => {
         e.preventDefault()
 
         validateFields(['rut','name', 'email']).then(async (obj) => {
+            if(frm.cliente.pais !== 'CHI') obj.tipDoc = 'DNI'
+            else obj.tipDoc = 'Rut'
             let fId = await generateFormPromise(frm.id, obj)
-            window.location = "../forms/"+fId
+            //window.location = "../forms/"+fId
+            loadForm(fId)
+            setIsVisibleDest(false)
+            setMode('html')
         })
     }
 
@@ -60,7 +69,7 @@ const Form = ({ match, form }) => {
             value = value.replaceAll('.','').replaceAll('-','').trim()
             if(valType === 'rutEmp') type = 'Entity'
             else if(valType === 'rutNat') type = 'Person'
-            if(validateRutHelper(value, type)) {
+            if(frm.cliente.pais !== 'CHI' || validateRutHelper(value, type)) {
               callback()
             }else {
               if(valType === 'rut') {
@@ -98,7 +107,7 @@ const Form = ({ match, form }) => {
     }
 
     return (
-        <div className={"formulario" + (isVisibleDest ? ' visible-dest':'')}>
+        <div className={"formulario" + (isVisibleDest ? ' visible-dest':'') + (' mode-'+mode)}>
             {isLoading ? <Spin />
                 :
                 <>
@@ -121,7 +130,7 @@ const Form = ({ match, form }) => {
                                             rules:
                                                 [
                                                     { required: true, message: 'Campo requerido' },
-                                                    //{validator: (rule, value, callback) => getValidator(rule, value, callback, 'rut')}
+                                                    {validator: (rule, value, callback) => getValidator(rule, value, callback, 'rut')}
                                                 ]
                                             })(
                                                 <Input onBlur={(e) => verifyRut(e.target.value)}/>

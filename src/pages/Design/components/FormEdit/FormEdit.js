@@ -31,25 +31,33 @@ const FormEdit = ({ form, refreshSection, setForm }) => {
     useEffect(() => {
     }, [])
 
-    const props = {
-        accept: '.png,.jpg,.jpeg',
-        name: 'file',
-        multiple: false,
-        action: apiConfig.url + '/uploadLogoForm/'+form.id+'/LEFT',
-        onChange(info) {
-          const { status } = info.file;
-          if (status === 'done') {
-            message.success(`${info.file.name} archivo cargado exitosamente.`);
-            setFrm(info.file.response)
-          } else if (status === 'error') {
-            message.error(`${info.file.name} no ha sido cargado.`);
-            info.fileList = []
-          }
-        },
+    const getPropsUpload = (position) => {
+        return {
+            accept: '.png,.jpg,.jpeg',
+            name: 'file',
+            multiple: false,
+            action: apiConfig.url + '/uploadLogoForm/'+form.id+'/'+position,
+            onChange(info) {
+                const { status } = info.file;
+                if (status === 'done') {
+                    if(info.file.response === "") {
+                        message.error(`${info.file.name} no ha sido cargado.`);
+                        info.fileList = []
+                    }else {
+                        message.success(`${info.file.name} archivo cargado exitosamente.`);
+                        setFrm(info.file.response)
+                        setForm(info.file.response)
+                    }
+                } else if (status === 'error') {
+                    message.error(`${info.file.name} no ha sido cargado.`);
+                    info.fileList = []
+                }
+            }
+        }
     };
 
-    const removeLogo = () => {
-        deleteLogoPromise(form.id).then((f) => {
+    const removeLogo = (position) => {
+        deleteLogoPromise(form.id, position).then((f) => {
             setFrm(f)
             setForm(f)
         })
@@ -62,28 +70,38 @@ const FormEdit = ({ form, refreshSection, setForm }) => {
         }else if(result.destination.droppableId !== result.draggableId){
             let f = {...frm, logo: {position: result.destination.droppableId}}
             setFrm(f)
-            changePositionLogoPromise(form.id, result.destination.droppableId).then((f) => {
-                setFrm(f)
-                setForm(f)
+            changePositionLogoPromise(form.id, result.draggableId, result.destination.droppableId).then((f) => {
+                if(f && f !== "") {
+                    setFrm(f)
+                    setForm(f)
+                }
             })
         }
     }
 
-    const getDraggable = (form) => {
-            return(<Draggable key={form.id} draggableId={form.logo.position} >
+    const getLogoPosition = (logos, position) => {
+        let pos = null
+        logos && logos.map((logo) => {
+            if(logo.position === position) pos = position
+        })
+        return pos
+    }
+
+    const getDraggable = (form, position) => {
+            return(<Draggable key={form.id} draggableId={getLogoPosition(form.logos, position)} >
                 {(provided, snapshot) =>
                     <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         style={getItemStyle(
-                        snapshot.isDragging,
-                        provided.draggableProps.style
+                            snapshot.isDragging,
+                            provided.draggableProps.style
                         )}
                     >
-                        <img src={apiConfig.url +'/getLogoForm?formId='+form.id}/>
+                        <img src={apiConfig.url +'/getLogoForm/'+form.id+'/'+position+'?r='+Math.random()}/>
                         <Tooltip title="Quitar Logo">
-                            <a className="remove-logo" onClick={removeLogo}>
+                            <a className="remove-logo" onClick={() => removeLogo(position)}>
                                 <Icon size="small" type="close-circle"/>
                             </a>
                         </Tooltip>
@@ -94,17 +112,23 @@ const FormEdit = ({ form, refreshSection, setForm }) => {
 
     const getDroppableLogo = (form, position) => {
         return (
-            <Col span={4} offset={position!=='LEFT'?6:0} className={position+(form.logo.position === position?' selected':'')}>
+            <Col span={4} offset={position!=='LEFT'?6:0} className={position+(form.logos && getLogoPosition(form.logos, position) === position?' selected':'')}>
                 <Droppable key={position} droppableId={position}>
                     {(provided, snapshot) => (
                         <div
                             {...provided.droppableProps}
                             ref={provided.innerRef}
                         >
-                            { form.logo.position === position ?
-                                getDraggable(frm)
-                                :
-                                <span>Logo</span>
+                            { form.logos && getLogoPosition(form.logos, position) === position ?
+                                getDraggable(frm, position)
+                            :
+                                <Dragger {...getPropsUpload(position)}>
+                                    <Tooltip title="Cargar imagen">
+                                        <p className="ant-upload-drag-icon">
+                                            <Icon type="file-image" size="small"/>
+                                        </p>
+                                    </Tooltip>
+                                </Dragger>
                             }
                         </div>
                     )}
@@ -117,22 +141,13 @@ const FormEdit = ({ form, refreshSection, setForm }) => {
         <div className="form-edit">
             <div className="form-header">
                 <Row className="header-logo">
-                    { frm.logo === null ?
-                        <Dragger {...props}>
-                            <p className="ant-upload-drag-icon">
-                                <Icon type="file-image" size="small"/>
-                            </p>
-                            <p className="ant-upload-text">Haga clic o arrastre el archivo a esta área para cargar el Logo</p>
-                        </Dragger>
-                        :
-                        <Row className="row-logo">
-                            <DragDropContext onDragEnd={onDragEnd}>
-                                {getDroppableLogo(frm,'LEFT')}
-                                {getDroppableLogo(frm,'CENTER')}
-                                {getDroppableLogo(frm,'RIGHT')}
-                            </DragDropContext>
-                        </Row>
-                    }
+                    <Row className="row-logo">
+                        <DragDropContext onDragEnd={onDragEnd}>
+                            {getDroppableLogo(frm,'LEFT')}
+                            {getDroppableLogo(frm,'CENTER')}
+                            {getDroppableLogo(frm,'RIGHT')}
+                        </DragDropContext>
+                    </Row>
                 </Row>
             </div>
             <div className="form-content">
