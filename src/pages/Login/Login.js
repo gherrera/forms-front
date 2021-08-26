@@ -341,121 +341,47 @@ class Login extends Component {
           </Col>
         </Row>
 
-{/* IV.- CUARTO BLOQUE - CONTACTANOS
-      <Row className="cuartoBloque" id="servicioC">
-          <Col span={1} xs={24} sm={16} md={1} lg={1}>
-          </Col>
-          <Col className="seccionContacto" span={9} xs={24} sm={16} md={9} lg={9}>
-              <h5 id="tienes">
-                ¿Tienes una pregunta?
-              </h5>
-              <h6 id="tituloC">
-                Contáctanos
-              </h6>
-              <p id="parrafoC">
-              Escríbenos a: <span id="cualquier">soporte@htgsoluciones.com</span> ó envíanos un mensajes a través de nuestro formulario de contacto
-              </p>
-          </Col>        
-          <Col className="ingresoContacto" span={12} xs={24} sm={16} md={12} lg={12}>
-            <Row className="cajaContacto">
-               <Row className="inputNombre">
-                 Nombre
-               </Row>
-                  <Input className="cajaInputNombre"/>
-               <Row className="inputSegundaFila">
-                 <Col className="cajaInputCorreo" span={12} xs={24} sm={16} md={12} lg={12}>
-                    <Row className="inputCorreo">
-                    Correo Electrónico
-                    </Row>
-                    <Input className="cajaInputCorreo"/>
-                 </Col>
-                 <Col className="cajaInputTelefono" span={12} xs={24} sm={16} md={12} lg={12}>
-                    <Row className="inputTelefono">
-                    Teléfono
-                    </Row>
-                    <Input className="cajaInputTelefono"/>
-                 </Col>
-              </Row>
-              <Row className="inputMensaje">
-                 Escribe tu mensaje a continuación
-              </Row>
-                <Input className="cajaInputMensaje" type="textarea" />
-            </Row>
-          </Col>
-          <Col span={2} xs={24} sm={16} md={2} lg={2}>
-          </Col>
-      </Row>/}
-
-{/* IV.- NUEVO CUARTO BLOQUE - CONTACTANOS */}
-<Row className="cuartoBloque" id="servicioC">
+{/* IV.- CUARTO BLOQUE - CONTACTANOS */}
+<Row className="cuartoBloque">
           <Col span={2} xs={24} sm={24} md={2} lg={2}>
           </Col>
-          {/* <Col className="seccionContacto" span={9} xs={24} sm={16} md={9} lg={9}>
-              <h6 id="tienes">
-                ¿Tienes una pregunta?
-              </h6>
-              <h7 id="tituloC">
-                Contáctanos
-              </h7>
-              <p id="parrafoC">
-              Comunícate con nuestra área especializada de soporte, estamos disponibles para recibir tus consultas y asesorarte
-              </p>
-          </Col>*/}   
-          <Col className="ingresoContacto" span={20} xs={24} sm={24} md={20} lg={20}>
-            <Row className="cajaContacto">
-              <Col className="seccionContacto" span={11} xs={24} sm={24} md={11} lg={11}>
-                  <h6 id="tienes">
-                    ¿Tienes una pregunta?
-                  </h6>
-                  <h7 id="tituloC">
-                    Contáctanos
-                  </h7>
-                  <p id="parrafoC">
-                    Comunícate con nuestra área especializada de soporte, estamos disponibles para recibir tus consultas y asesorarte
-                  </p>
-              </Col> 
-              <Col span={13} xs={24} sm={24} md={13} lg={13}>
-                <Row className="ordenContacto">
-                    <Col span={8} xs={24} sm={8} md={8} lg={8}>
-                            <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/Icono-Correo.png" alt="" id="iconoContacto" />
+          <Col className="columnaContacto" span={20} xs={24} sm={24} md={20} lg={20}>
+              <Row className="cajaContacto" type="flex" justify="space-around" align="middle">
+                  <Col className="seccionContacto" span={11} xs={24} sm={24} md={11} lg={11}>
+                        <h6 id="tienes">¿Tienes una pregunta?</h6>
+                        <h7 id="tituloC">Contáctanos</h7>
+                        <p id="parrafoC">Comunícate con nuestra área especializada de soporte, estamos disponibles para recibir tus consultas y asesorarte</p>
+                  </Col>
+                  <Col span={13} xs={24} sm={24} md={13} lg={13}>
+                        <Row className="ordenContacto">
+                              <Col span={8} xs={24} sm={8} md={8} lg={8}>
+                                    <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/Icono-Correo.png" alt="" id="iconoContacto" />
+                              </Col>
+                              <Col span={16} xs={24} sm={16} md={16} lg={16}>
+                                    <h10 id="tituloContacto">Envianos un correo a:</h10>
+                                    <p id="parrafoContacto">soporte@htgsoluciones</p>
+                              </Col>          
+                        </Row>
+                        <Row className="ordenContacto">
+                              <Col span={8} xs={24} sm={8} md={8} lg={8}>
+                                    <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/Icono-Telefono.png" alt="" id="iconoContacto" />
+                              </Col>
+                              <Col span={16} xs={24} sm={16} md={16} lg={16}>
+                                    <h11 id="tituloContacto">Comunícate con nosotros a:</h11>
+                                    <p id="parrafoContacto">+56 9 1000 0000</p>
+                              </Col>               
+                        </Row>
+                        <Row className="ordenContacto">
+                              <Col span={8} xs={24} sm={8} md={8} lg={8}>
+                                    <img src="https://htgsoluciones.com/wp-content/uploads/2021/08/Icono-reloj.png" alt="" id="iconoContacto" />
+                              </Col>
+                              <Col span={16} xs={24} sm={16} md={16} lg={16}>
+                                    <h12 id="tituloContacto">Horarios de atención</h12>
+                                    <p id="parrafoContacto">De lunes a viernes: 9:00 a 18:00 horas</p>
+                              </Col>            
+                        </Row>
                     </Col>
-                        <Col span={16} xs={24} sm={16} md={16} lg={16}>
-                            <h10 id="tituloContacto">
-                            Envianos un correo a:
-                            </h10>
-                            <p id="parrafoContacto">
-                            soporte@htgsoluciones
-                            </p>
-                        </Col>               
                 </Row>
-                <Row className="ordenContacto">
-                    <Col span={8} xs={24} sm={8} md={8} lg={8}>
-                          <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/Icono-Telefono.png" alt="" id="iconoContacto" />
-                    </Col>
-                        <Col span={16} xs={24} sm={16} md={16} lg={16}>
-                            <h11 id="tituloContacto">
-                            Comunícate con nosotros a:
-                            </h11>
-                            <p id="parrafoContacto">
-                            +56 9 1000 0000
-                            </p>
-                        </Col>               
-                </Row>
-                <Row className="ordenContacto">
-                    <Col span={8} xs={24} sm={8} md={8} lg={8}>
-                           <img src="https://htgsoluciones.com/wp-content/uploads/2021/08/Icono-reloj.png" alt="" id="iconoContacto" />
-                    </Col>
-                        <Col span={16} xs={24} sm={16} md={16} lg={16}>
-                            <h12 id="tituloContacto">
-                            Horarios de atención
-                            </h12>
-                            <p id="parrafoContacto">
-                            De lunes a viernes: 9:00 a 18:00 horas
-                            </p>
-                        </Col>               
-                </Row>
-              </Col>
-            </Row>
           </Col>
           <Col span={2} xs={24} sm={16} md={2} lg={2}>
           </Col>
@@ -466,22 +392,19 @@ class Login extends Component {
           <Col className="logoBox1" span={6} xs={24} sm={6} md={6} lg={6}>
               <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/logo-white-e1627335689960-300x103.png" alt="" id="logoHtgFooter1" />
           </Col>
-          <Col className="HTGBox1" span={8} xs={24} sm={10} md={10} lg={8}>
+          <Col className="HTGBox1" span={8} xs={24} sm={8} md={8} lg={8}>
               <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/Logo-e1627334345137-1024x199.png" alt="" id="logoForFooter1" />
               <p id="parrafoFooter1">
                     Es una plataforma creada por HTG Soluciones, empresa que busca proponer iniciativas de transformación digital enfocada en optimizar los procesos de tu negocio.
               </p>
           </Col>
-          <Col className="demoBox1" span={6} xs={24} sm={8} md={8} lg={6}>
-            <Row>
+          <Col className="demoBox1" span={6} xs={24} sm={6} md={6} lg={6}>
               <h6 id="solicite1">
                 Solicite una demostración
               </h6>
               <p id="comuniquese1">
                 Comuníquese con nosotros:
               </p>
-            </Row>
-            <Row>
               <li id="quitar1">
                 <span id="iconoCorreo1"><Icon size="small" type="mail"/></span>
                 <span id="textoicono1">contacto@htgsoluciones.com</span>
@@ -490,9 +413,8 @@ class Login extends Component {
                 <span id="iconoTelefono1"><Icon size="small" type="phone"/></span>
                 <span id="textoicono1">+56-9-7910000</span>
               </li>
-            </Row>
           </Col>
-          <Col className="politicas1" span={4} xs={24} sm={24} md={24} lg={4}>
+          <Col className="politicas1" span={4} xs={24} sm={4} md={4} lg={4}>
                     <a href="https://htgsoluciones.com/politica-de-uso/" target="_blank" id="usoLink1">Política de Uso</a>
                     <p id="copyrightMensaje1">
                       Copyright © - HTG Soluciones - Todos los derechos reservados

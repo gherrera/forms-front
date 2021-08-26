@@ -353,71 +353,35 @@ body {
 
 /* IV.- CUARTO BLOQUE - CONTACTANOS */
     .cuartoBloque {
-        display: block;
-        position: relative;
         background-color: white;
     }
-    .cuartoBloque > * {
-        z-index: 1;
-    }
     .seccionContacto {
-        padding: 40px 0px 0px 45px;
+        padding-left: 5%;
+        padding-right: 5%;
     }
     #tituloC {
         color: white;
         text-align: left;
         font: 600 60px Roboto, sans-serif;
     }
-    #tienes {
+    #tienes, #parrafoC {
         color: white;
         font: 300 15px / 24px Raleway, sans-serif;
     }
-    #parrafoC {
-        font: 300 15px / 24px Raleway, sans-serif;
-        color: white;
-        padding: 0px 25px 0px 0px;
-    }
-    .ingresoContacto {
-        block-size: 350px;
-        padding: 45px 0px 45px 0px;
+    .columnaContacto {
+        margin-top: 3%;
+        margin-bottom: 3%;
     }
     .cajaContacto {
         border-radius: 15px;
-        background-size: cover;
-        height: 100%;
-        width: 100%;
+        padding: 4%;
+        vertical-align: middle;
         background: url("https://htgsoluciones.com/wp-content/uploads/2021/02/soluciones-1.jpg") no-repeat fixed center / cover padding-box border-box;
     }
-    @media only screen and (max-width: 500px) {
-        .ingresoContacto {
-            height: 875px;
-        }
-        .cajaContacto {
-            height: 100%;
-            width: 100%;
-        }
-        #tituloC {
-          font-size: 50px;
-        }
-        #tituloContacto, #parrafoContacto {
-            padding-top: 8px;
-            text-align: center;
-        }
-      }
-      @media only screen and (max-width: 992px) and (min-width: 500px) {
-        .ingresoContacto {
-            height: 580px;
-        }
-        .cajaContacto {
-            width: 100%;
-        }
-      }
     .cajaContacto::after {
         content:"";
         border-radius: 15px;
         position: absolute;
-        top: 0;
-        bottom: 0;
         width: 100%;
         height: 100%;
         background-color: #061551;
@@ -429,169 +393,47 @@ body {
     .cajaContacto > * {
         z-index: 100;
     }
-
-
-/*    .inputNombre, .inputCorreo, .inputTelefono, .inputMensaje {
-        font: 300 15px / 24px Raleway, sans-serif;
-        text-align: left;
-        color: white;
-        padding: 20px 0px 5px 50px;
-    }
-   .cajaInputNombre[type=text] {
-        border-radius: 4px;
-        margin: 5px 0px 0px 50px;
-        width: 83.3%;
-    }
-    .cajaInputMensaje[type=textarea] {
-        border-radius: 4px;
-        margin: 10px 0px 0px 50px;
-        width: 83%;
-        height: 30%;
-    }
-    .cajaInputCorreo[type=text], .cajaInputTelefono[type=text] {
-        width: 200px;  
-        border-radius: 4px;
-        margin: 5px 0px 0px 50px;
-    }*/
-
-/* IV.- NUEVO CUARTO BLOQUE - CONTACTANOS */
-
-.ordenContacto{
-    padding: 20px 0px 0px 0px;
-}
-#iconoContacto {
-    width: 20%;
-    filter: brightness(0) invert(1);
-    display: block;
-    margin: auto;
-}
-#tituloContacto {
-    color: white;
-    font: 600 24px Raleway, sans-serif;
-    letter-spacing: 0.6px;
-    display: block;
-    margin: auto;
-}
-#parrafoContacto {
-    color: white;
-    font: 400 16px Raleway, sans-serif;
-}
-
-/* V.- FOOTER*/
-    .footer {
+    #iconoContacto {
+        width: 20%;
+        filter: brightness(0) invert(1);
         display: block;
-        position: relative;
-        background-color: #061551;  
+        margin: auto;
     }
-    .footer > * {
-        z-index: 1;
-    }
-    #logoHtgFooter {
-        position: relative;
-        margin-top: 30px;
-        width: 100%;
-        padding: 35px;
-    }
-    #logoForFooter {
-        position: relative;
-        top: 10px;
-        width: 100%;
-        padding: 35px 45px 35px 45px;
-    }
-    #parrafoFooter {
-        position: relative;
+    #tituloContacto {
         color: white;
-        text-align: left;
-        font: 300 14px / 18px Raleway, sans-serif;
-        width: 100%;
-        padding: 0px 45px 20px 45px;
-    }
-    #usoLink {
-        font: 300 14px / 18px Raleway, sans-serif;
-        color: white;
-        top: 130px;
-        width: 100%;
-        padding: 155px 0px 10px 0px;
+        font: 600 24px Raleway, sans-serif;
+        letter-spacing: 0.6px;
         display: block;
+        margin: auto;
     }
-    #copyrightMensaje {
-        font: 300 14px / 18px Raleway, sans-serif;
+    #parrafoContacto {
         color: white;
-        width: 100%;
-        display: block;
+        font: 400 16px Raleway, sans-serif;
     }
-    #solicite {
-        color: white;
-        position: relative;
-        padding: 55px 25px 0px 45px;
-        font: 600 18px / 24px Raleway, sans-serif;
-    }
-    #comuniquese {
-        color: white;
-        position: relative;
-        padding: 0px 0px 15px 45px;
-        font: 300 14px / 18px Raleway, sans-serif;
-    }
-    #textoicono {
-        color: white;
-        position: relative;
-        padding: 15px 25px 40px 25px;
-        font: 300 14px / 24px Raleway, sans-serif;
-    }
-    #iconoCorreo, #iconoTelefono {
-        color: white;
-        position: relative;
-        padding: 0px 0px 0px 45px;
-    }
-    #quitar {
-        list-style: none;
-    }
-    @media only screen and (max-width: 500px) {
-        .footer {
-            height: 100%;
-            width: 100%;  
+    @media only screen and (max-width: 1016px) {
+        #tituloC {
+          font-size: 45px;
         }
-        #usoLink  {
+        #tituloContacto, #parrafoContacto {
             text-align: center;
-            padding: 30px 20px 10px 20px;
         }
-        #copyrightMensaje  {
-            text-align: center;
-            padding: 10px 20px 10px 20px;
+        #tituloContacto {
+            padding-top: 2%;
         }
-        #solicite, #iconoCorreo, #iconoTelefono, #comuniquese {
-            padding: 15px 25px 0px 65px;
+        #parrafoContacto {
+            padding-bottom: 3%;
+        }
+        #iconoContacto {
+            width: 15%;
+        }
+        .columnaContacto {
+            margin-top: 10%;
+            margin-bottom: 10%;
+        }
+        .cajaContacto {
+            padding: 8%;
         }
       }
-      @media screen and (max-width: 992px) {
-        .footer {
-            width: 100%;
-            height: 100%;
-        }
-      }
-
-/* IV.- NUEVO CUARTO BLOQUE - CONTACTANOS */
-
-.ordenContacto{
-    padding: 20px 0px 0px 0px;
-}
-#iconoContacto {
-    width: 20%;
-    filter: brightness(0) invert(1);
-    display: block;
-    margin: auto;
-}
-#tituloContacto {
-    color: white;
-    font: 600 24px Raleway, sans-serif;
-    letter-spacing: 0.6px;
-    display: block;
-    margin: auto;
-}
-#parrafoContacto {
-    color: white;
-    font: 400 16px Raleway, sans-serif;
-}
 
 /* V.- FOOTER*/
     .footer1 {
@@ -623,7 +465,7 @@ body {
     }
     #solicite1 {
         color: white;
-        font: 600 18px / 24px Raleway, sans-serif;
+        font: 600 18px / 18px Raleway, sans-serif;
     }
     #comuniquese1 {
         color: white;
@@ -631,7 +473,10 @@ body {
     }
     #textoicono1 {
         color: white;
-        font: 300 14px / 24px Raleway, sans-serif;
+        font: 300 14px / 18px Raleway, sans-serif;
+        height: auto;
+        word-wrap: break-word;
+        width: 100px;
     }
     #iconoCorreo1, #iconoTelefono1 {
         color: white;
@@ -640,7 +485,7 @@ body {
     #quitar1 {
         list-style: none;
     }
-    @media only screen and (max-width: 500px) {
+    @media only screen and (max-width: 575px) {
         .politicas1  {
             text-align: center;
             width: 90%;
@@ -658,4 +503,6 @@ body {
             height: 100%;
         }
       }
+
+
     }
