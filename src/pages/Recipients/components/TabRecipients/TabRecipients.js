@@ -91,7 +91,7 @@ const TabRecipients = ({}) => {
         <Col span={3}>Doc. de Identidad</Col>
         <Col span={3}>Tipo Persona</Col>
         <Col span={4}>Email</Col>
-        <Col span={2}>Fecha Recibido</Col>
+        <Col span={2}>Fecha Creación</Col>
         <Col span={2}></Col>
       </Row>
       <div className="body">
