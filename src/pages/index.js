@@ -7,6 +7,7 @@ import NotAuthorized from './NotAuthorized/NotAuthorized'
 import NotFound from './NotFound/NotFound'
 import Design from './Design/Design'
 import Manage from './Manage/Manage'
+import Recipients from './Recipients/Recipients'
 import FormDeclarationComponent from './FormDeclaration/FormDeclaration'
 import FormComponent from './Form/Form'
 
@@ -19,5 +20,6 @@ export const NotAuthorizedPage = NotAuthorized
 export const NotFoundPage = NotFound
 export const DesignPage = Design
 export const ManagePage = Manage
+export const RecipientsPage = Recipients
 export const FormDeclaration = FormDeclarationComponent
 export const Form = FormComponent

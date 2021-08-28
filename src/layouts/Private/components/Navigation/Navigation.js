@@ -49,8 +49,9 @@ export default ({ currentUser }) => {
         </Menu.Item>
       }
       { currentUser.modules.includes('DEST') &&
-        <Menu.Item id="recipíents">
+        <Menu.Item id="recipients">
           Destinatarios
+          <Link to={ '/recipients' } />
         </Menu.Item>
       }
       { currentUser.modules.includes('FORMS') &&

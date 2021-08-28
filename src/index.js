@@ -9,7 +9,7 @@ import { datasourcesContext } from './contexts'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { LayoutPrivate, LayoutPublic } from './layouts'
 import { Loading, ModalChangePassword } from './layouts/Private/components'
-import { AdminPage,HomePage, LoginPage, NotAuthorizedPage, NotFoundPage, DesignPage, Form, ManagePage } from './pages'
+import { AdminPage,HomePage, LoginPage, NotAuthorizedPage, NotFoundPage, DesignPage, Form, ManagePage, RecipientsPage } from './pages'
 import { LocalStorageService } from './services'
 import { authTokenValidatorHelper, sessionStorageCleanerHelper, authTokenRenewerHelper } from './helpers'
 import { animateLogoutPromise, changePasswordPromise, getCurrentUserPromise, logoutPromise, removeLoginAnimationsPromise } from './promises'
@@ -180,6 +180,7 @@ class App extends Component {
                   <Route path="/administracion" exact render={ () => this.renderComponent(AdminPage) } />
                   <Route path="/design" exact render={ () => this.renderComponent(DesignPage, 'design') } />
                   <Route path="/manage/:status?" exact render={ () => this.renderComponent(ManagePage, 'manage') } />
+                  <Route path="/recipients" exact render={ () => this.renderComponent(RecipientsPage, 'recipients') } />
                   <Route path="/forms/:id/:view?" exact render={ () => <Form /> } />
                   <Route path="/form/:hash" exact render={ () => <Form /> } />
 
