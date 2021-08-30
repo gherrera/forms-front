@@ -84,9 +84,9 @@ const Filter = ({cbFilters}) => {
                         <Col span={6}>
                             <Input
                                 size="small"
-                                placeholder={"Destinatario o Nro de Documento"}
+                                placeholder={"Nombre o Nro de Documento"}
                                 value={advancedObj.rutNombre}
-                                onChange={(e) => {debugger;handlerChange("m1", "rutNombre", e.target.value, false)}}
+                                onChange={(e) => {handlerChange("m1", "rutNombre", e.target.value, false)}}
                                 onPressEnter={(e) => enterHandler("m1", "rutNombre", e.target.value)}
                             />
                         </Col>
@@ -113,38 +113,7 @@ const Filter = ({cbFilters}) => {
                         </Col>
                     </Row>
                 </TabPane>
-                <TabPane tab="Datos Opcionales" key="2">
-                    <Row gutter={10}>
-                        <Col span={4}>
-                            <Input
-                                size="small"
-                                placeholder={"Empresa"}
-                                value={advancedObj.empresa}
-                                onChange={(e) => handlerChange("m2", "empresa", e.target.value, false)}
-                                onPressEnter={(e) => enterHandler("m2", "empresa", e.target.value)}
-                            />
-                        </Col>
-                        <Col span={4}>
-                            <Input
-                                size="small"
-                                placeholder={"Gerencia"}
-                                value={advancedObj.gerencia}
-                                onChange={(e) => handlerChange("m2", "gerencia", e.target.value, false)}
-                                onPressEnter={(e) => enterHandler("m2", "gerencia", e.target.value)}
-                            />
-                        </Col>
-                        <Col span={4}>
-                            <Input
-                                size="small"
-                                placeholder={"Area"}
-                                value={advancedObj.area}
-                                onChange={(e) => handlerChange("m2", "area", e.target.value, false)}
-                                onPressEnter={(e) => enterHandler("m2", "area", e.target.value)}
-                            />
-                        </Col>
-                    </Row>
-                </TabPane>
-                <TabPane tab="Formulario" key="3">
+                <TabPane tab="Formularios" key="2">
                     <Row gutter={10}>
                         <Col span={4}>
                             <Select 
@@ -152,7 +121,7 @@ const Filter = ({cbFilters}) => {
                                 size="small"
                                 allowClear
                                 value={advancedObj.category}
-                                onChange={(value) => handlerChange("m3", "category", value, true)}
+                                onChange={(value) => handlerChange("m2", "category", value, true)}
                             >
                                 <Select.Option value="CLIENTE">Cliente</Select.Option>
                                 <Select.Option value="COLABORADOR">Colaborador</Select.Option>
@@ -167,7 +136,7 @@ const Filter = ({cbFilters}) => {
                                 placeholder="Nombre Formulario"
                                 value={advancedObj.formName}
                                 allowClear
-                                onChange={(value) => handlerChange("m3", "formName", value, true)}
+                                onChange={(value) => handlerChange("m2", "formName", value, true)}
                             >
                                 {formNames.map((name) => <Select.Option value={name}>{name}</Select.Option>)}
                             </Select>
@@ -188,7 +157,7 @@ const Filter = ({cbFilters}) => {
                                 }
                                 onChange={(momentObj) => 
                                 handlerChange(
-                                    "m3",
+                                    "m2",
                                     "fechaRecepcion",
                                     momentObj !== null && momentObj.length === 2
                                     ? [
@@ -201,13 +170,35 @@ const Filter = ({cbFilters}) => {
                                 }
                             />
                         </Col>
-                        <Col span={3}>
+                    </Row>
+                </TabPane>
+                <TabPane tab="Datos Opcionales" key="3">
+                    <Row gutter={10}>
+                        <Col span={4}>
                             <Input
                                 size="small"
-                                placeholder="Folio"
-                                value={advancedObj.folio}
-                                onChange={(e) => handlerChange("m3", "folio", e.target.value, false)}
-                                onPressEnter={(e) => enterHandler("m3", "folio", e.target.value)}
+                                placeholder={"Empresa"}
+                                value={advancedObj.empresa}
+                                onChange={(e) => handlerChange("m3", "empresa", e.target.value, false)}
+                                onPressEnter={(e) => enterHandler("m3", "empresa", e.target.value)}
+                            />
+                        </Col>
+                        <Col span={4}>
+                            <Input
+                                size="small"
+                                placeholder={"Gerencia"}
+                                value={advancedObj.gerencia}
+                                onChange={(e) => handlerChange("m3", "gerencia", e.target.value, false)}
+                                onPressEnter={(e) => enterHandler("m3", "gerencia", e.target.value)}
+                            />
+                        </Col>
+                        <Col span={4}>
+                            <Input
+                                size="small"
+                                placeholder={"Area"}
+                                value={advancedObj.area}
+                                onChange={(e) => handlerChange("m3", "area", e.target.value, false)}
+                                onPressEnter={(e) => enterHandler("m3", "area", e.target.value)}
                             />
                         </Col>
                     </Row>

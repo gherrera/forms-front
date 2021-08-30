@@ -102,7 +102,7 @@ const TabRecipients = ({}) => {
             { recipients.map((rec, index) =>
               <Row className="rows-section" gutter={4}>
                 <Col span={6}>{rec.name}</Col>
-                <Col span={3}>{rec.tipoDoc}</Col>
+                <Col span={3}>{rec.tipDoc}</Col>
                 <Col span={3}>{rec.rut}</Col>
                 <Col span={3}>{rec.type}</Col>
                 <Col span={4}>{rec.email}</Col>

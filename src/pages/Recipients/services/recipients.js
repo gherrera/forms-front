@@ -24,21 +24,11 @@ export default {
 	},
 	addComment: (id, comments) => {
 		return apiRequestorHelper({
-			url: apiConfig.url + '/addComment',
+			url: apiConfig.url + '/addCommentDest',
 			method: 'post',
 			body: {
 				id,
 				comments
-			}
-		})
-	},
-	addStatus: (id, status) => {
-		return apiRequestorHelper({
-			url: apiConfig.url + '/addStatus',
-			method: 'post',
-			body: {
-				id,
-				status
 			}
 		})
 	}

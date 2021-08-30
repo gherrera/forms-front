@@ -30,7 +30,7 @@ export default {
 	},
 	addComment: (id, comments) => {
 		return apiRequestorHelper({
-			url: apiConfig.url + '/addComment',
+			url: apiConfig.url + '/addCommentForm',
 			method: 'post',
 			body: {
 				id,

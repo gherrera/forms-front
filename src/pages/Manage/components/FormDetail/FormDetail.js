@@ -131,7 +131,7 @@ const FormDetail = ({ form, closeHandler }) => {
     ]
 
     const downloadJson = () => {
-        ReportService.read('/getJsonFormId/'+form.id, null, null, 'form.json')
+        ReportService.read('/getJsonFormId/'+form.id, null, null, 'form-'+form.folio+'.json')
     }
 
     return (
