@@ -15,6 +15,15 @@ export default {
 			method: 'post'
 		})
 	},
+	deleteRecipient: (id) => {
+		return apiRequestorHelper({
+			url: apiConfig.url + '/deleteDestinatario',
+			method: 'post',
+			body: {
+				id
+			}
+		})
+	},
 	updateRecipient: (rec) => {
 		return apiRequestorHelper({
 			url: apiConfig.url + '/updateRecipient',

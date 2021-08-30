@@ -15,7 +15,7 @@ import { camelizerHelper } from "../../../../helpers";
 
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import { getRecipientsByClienteIdPromise } from "../../promises";
+import { deleteRecipientPromise, getRecipientsByClienteIdPromise } from "../../promises";
 import { RecipientDetail } from "..";
 import { Filter } from "./components";
 import { updateRecipientPromise } from "../../promises";
@@ -68,10 +68,10 @@ const TabRecipients = ({}) => {
   }
 
   const handleDeleteRecipient = (r) => {
-    updateRecipientPromise({ ...r, deleted: true }).then(r => {
+    deleteRecipientPromise(r.id).then(r => {
       loadRecipients(currentPage, filters)
       notification.success({
-        message: 'Formulario borrado'
+        message: 'Destinatario borrado'
       })
     })
   }

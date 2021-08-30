@@ -153,16 +153,22 @@ const FormDetail = ({ form, closeHandler }) => {
                     </Row>
                 </Row>
                 <Row className="block">
-                    <h3>{form.dest.name}</h3>
-                    <Row>
-                        <Col span={6}>Tipo de Documento: <span className="data-value">{form.dest.tipDoc?form.dest.tipDoc:'-'}</span></Col>
-                        <Col span={6}>Nro de Documento: <span className="data-value">{form.dest.rut}</span></Col>
-                        <Col span={6}>Tipo de Persona: <span className="data-value">{form.dest.type?getTypeDest(form.dest.type):'-'}</span></Col>
-                        <Col span={6}>Correo: <span className="data-value">{form.dest.email}</span></Col>
-                        <Col span={6}>Empresa: <span className="data-value">{form.dest.empresa}</span></Col>
-                        <Col span={6}>Gerencia: <span className="data-value">{form.dest.gerencia}</span></Col>
-                        <Col span={6}>Area: <span className="data-value">{form.dest.area}</span></Col>
-                    </Row>
+                    { form.dest ?
+                        <>
+                            <h3>{form.dest.name}</h3>
+                            <Row>
+                                <Col span={6}>Tipo de Documento: <span className="data-value">{form.dest.tipDoc?form.dest.tipDoc:'-'}</span></Col>
+                                <Col span={6}>Nro de Documento: <span className="data-value">{form.dest.rut}</span></Col>
+                                <Col span={6}>Tipo de Persona: <span className="data-value">{form.dest.type?getTypeDest(form.dest.type):'-'}</span></Col>
+                                <Col span={6}>Correo: <span className="data-value">{form.dest.email}</span></Col>
+                                <Col span={6}>Empresa: <span className="data-value">{form.dest.empresa}</span></Col>
+                                <Col span={6}>Gerencia: <span className="data-value">{form.dest.gerencia}</span></Col>
+                                <Col span={6}>Area: <span className="data-value">{form.dest.area}</span></Col>
+                            </Row>
+                        </>
+                        :
+                    <Col><h2>Destinatario eliminado</h2></Col>
+                    }
                 </Row>
                 <Row className="block">
                     <h3>Recibido el: {moment(form.sendDate).format('DD.MM.YYYY HH:mm')}</h3>

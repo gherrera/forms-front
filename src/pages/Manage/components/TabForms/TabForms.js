@@ -126,9 +126,15 @@ const TabForms = ({status}) => {
                 <Col span={1}>{f.folio}</Col>
                 <Col span={2}>{camelizerHelper(f.category)}</Col>
                 <Col span={7}>{f.name}</Col>
-                <Col span={3}>{f.dest.rut}</Col>
-                <Col span={3}>{f.dest.name}</Col>
-                <Col span={4}>{f.dest.email}</Col>
+                { f.dest ?
+                  <>
+                    <Col span={3}>{f.dest.rut}</Col>
+                    <Col span={3}>{f.dest.name}</Col>
+                    <Col span={4}>{f.dest.email}</Col>
+                  </>
+                  :
+                  <Col span={10} style={{textAlign:'center'}}>[Destinatario eliminado]</Col>
+                }
                 <Col span={2}>{f.sendDate && moment(f.sendDate).format('DD/MM/YYYY HH:mm')}</Col>
                 <Col span={2} className="tools-rows-forms">
                   <Tooltip title="Detalles">
