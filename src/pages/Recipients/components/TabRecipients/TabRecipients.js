@@ -112,7 +112,7 @@ const TabRecipients = ({}) => {
                     <Button icon="info" size="small" onClick={(e) => handleViewRecipient(rec)}/>
                   </Tooltip>
                   <Tooltip title="Eliminar">
-                    <Popconfirm title="Confirma eliminar el Formulario?" onConfirm={(e) => handleDeleteRecipient(rec)}>
+                    <Popconfirm title="Confirma eliminar el Destinatario?" onConfirm={(e) => handleDeleteRecipient(rec)}>
                       <Button icon="delete" size="small" />
                     </Popconfirm>
                   </Tooltip>
