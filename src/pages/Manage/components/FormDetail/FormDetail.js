@@ -138,7 +138,7 @@ const FormDetail = ({ form, closeHandler }) => {
         <div>
             <Drawer
                 className="manage-form-detail"
-                title="Detalle de Declaración"
+                title="Detalle del Formulario"
                 placement="right"
                 closable={true}
                 visible={true}
