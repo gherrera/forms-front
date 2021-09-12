@@ -8,23 +8,27 @@ import {
   Select,
   Drawer,
   Input,
-  Table
+  Table,
+  Form,
+  notification
 } from "antd";
 import { camelizerHelper } from "../../../../helpers";
 
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import { getRecipientByIdPromise, addCommentPromise } from "../../promises";
+import { getRecipientByIdPromise, addCommentPromise, updateRecipientPromise } from "../../promises";
 import { ReportService } from "../../../../services";
 import { ModalPdfViewer } from "../../../Manage/components";
 
 const { TextArea } = Input;
 
-const RecipientDetail = ({ recipient, closeHandler }) => {
+const RecipientDetail = ({ form, recipient, closeHandler }) => {
+    const { getFieldDecorator, validateFields, getFieldsError, setFieldsValue } = form;
     const [ recpt, setRecpt ] = useState({})
     const [ comments, setComments ] = useState(null)
     const [ pdfId, setPdfId ] = useState(null)
     const [ isVisibleHistoryComment, setIsVisibleHistoryComment ] = useState(false)
+    const [ enableSave, setEnableSave ] = useState(false)
 
     useEffect(() => {
         loadRecipient()
@@ -36,9 +40,8 @@ const RecipientDetail = ({ recipient, closeHandler }) => {
         })
     }
 
-    const getTypeDest = (type) => {
-        if(type === 'PN') return 'Natural'
-        else return 'Jurídica'
+    const handleChangeValue = (key, value) => {
+        setEnableSave(true)
     }
 
     const handleAddComment = () => {
@@ -119,6 +122,32 @@ const RecipientDetail = ({ recipient, closeHandler }) => {
         }
     ]
 
+    const handleSaveRecipient = () => {
+        let errors = getFieldsError()
+        let errs = Object.keys(errors).filter(f => errors[f])
+        if(errs.length > 0) {
+            notification.error({
+                message: 'Hay errores en los datos',
+                description: errs.map(e => errors[e])
+            })
+        }else {
+            validateFields(['type','email','empresa','gerencia','area']).then((obj) => {
+                updateRecipientPromise({...recipient, ...obj}).then((response) => {
+                    if(response === 'OK') {
+                        notification.success({
+                            message: 'Datos guardados correctamente'
+                        })
+                    }else {
+                        notification.error({
+                            message: 'Se ha producido un error'
+                        })
+                    }
+                })
+                setEnableSave(false)
+            })
+        }
+    }
+
     return (
         <div>
             <Drawer
@@ -132,14 +161,109 @@ const RecipientDetail = ({ recipient, closeHandler }) => {
             >
                 <Row className="block">
                     <h3>{recipient.name}</h3>
-                    <Row>
-                        <Col span={6}>Tipo de Documento: <span className="data-value">{recipient.tipDoc?recipient.tipDoc:'-'}</span></Col>
-                        <Col span={6}>Nro de Documento: <span className="data-value">{recipient.rut}</span></Col>
-                        <Col span={6}>Tipo de Persona: <span className="data-value">{recipient.type?getTypeDest(recipient.type):'-'}</span></Col>
-                        <Col span={6}>Correo: <span className="data-value">{recipient.email}</span></Col>
-                        <Col span={6}>Empresa: <span className="data-value">{recipient.empresa}</span></Col>
-                        <Col span={6}>Gerencia: <span className="data-value">{recipient.gerencia}</span></Col>
-                        <Col span={6}>Area: <span className="data-value">{recipient.area}</span></Col>
+                    <Row gutter={8}>
+                        <Col span={6} className="field">
+                            <Col span={11}>Tipo de Documento:</Col>
+                            <Col span={13}>
+                                <span className="data-value">{recipient.tipDoc?recipient.tipDoc:'-'}</span>
+                            </Col>
+                        </Col>
+                        <Col span={6} className="field">
+                            <Col span={10}>Nro de Documento:</Col>
+                            <Col span={14}>
+                                <span className="data-value">{recipient.rut}</span>
+                            </Col>
+                        </Col>
+                        <Col span={6} className="field">
+                            <Col span={9}>Tipo de Persona:</Col>
+                            <Col span={15}>
+                                { getFieldDecorator('type', {
+                                    initialValue: recpt.type,
+                                    validateTrigger: "onChange"
+                                    })(
+                                        <Select size="small" 
+                                            style={{width: '90%'}} 
+                                            className="input-value" 
+                                            onChange={(value) => handleChangeValue('type', value)}
+                                            autoComplete="off"
+                                        >
+                                            <Select.Option value="PN">Persona Natural</Select.Option>
+                                            <Select.Option value="PJ">Persona Jurídica</Select.Option>
+                                        </Select>
+                                    )
+                                }
+                            </Col>
+                        </Col>
+                        <Col span={6} className="field">
+                            <Col span={6}>Correo:</Col>
+                            <Col span={18}>
+                                { getFieldDecorator('email', {
+                                    initialValue: recpt.email,
+                                    validateTrigger: "onChange",
+                                    rules:
+                                        [{type: "email", message: "Email no es válido"}]
+                                    })(
+                                        <Input size="small" 
+                                            style={{width: '90%'}} 
+                                            className="input-value" 
+                                            onChange={(e) => handleChangeValue('email', e.target.value)}
+                                            autoComplete="off"
+                                        />
+                                    )
+                                }
+                            </Col>
+                        </Col>
+                        <Col span={6} className="field">
+                            <Col span={11}>Empresa:</Col>
+                            <Col span={13}>
+                                { getFieldDecorator('empresa', {
+                                    initialValue: recpt.empresa,
+                                    validateTrigger: "onChange"
+                                    })(
+                                        <Input size="small" 
+                                            style={{width: '90%'}} 
+                                            className="input-value" 
+                                            onChange={(e) => handleChangeValue('empresa', e.target.value)}
+                                            autoComplete="off"
+                                        />
+                                    )
+                                }
+                            </Col>
+                        </Col>
+                        <Col span={6} className="field">
+                            <Col span={10}>Gerencia:</Col>
+                            <Col span={14}>
+                                { getFieldDecorator('gerencia', {
+                                    initialValue: recpt.gerencia,
+                                    validateTrigger: "onChange"
+                                    })(
+                                        <Input size="small" 
+                                            style={{width: '90%'}} 
+                                            className="input-value" 
+                                            onChange={(e) => handleChangeValue('gerencia', e.target.value)}
+                                            autoComplete="off"
+                                        />
+                                    )
+                                }
+                            </Col>
+                        </Col>
+                        <Col span={6} className="field">
+                            <Col span={9}>Area:</Col>
+                            <Col span={15}>
+                                { getFieldDecorator('area', {
+                                    initialValue: recpt.area,
+                                    validateTrigger: "onChange"
+                                    })(
+                                        <Input size="small" 
+                                            style={{width: '90%'}} 
+                                            className="input-value" 
+                                            onChange={(e) => handleChangeValue('area', e.target.value)}
+                                            autoComplete="off"
+                                        />
+                                    )
+                                }
+                            </Col>
+                        </Col>
                     </Row>
                 </Row>
                 <Row className="block">
@@ -172,6 +296,31 @@ const RecipientDetail = ({ recipient, closeHandler }) => {
                         <Table size="small" dataSource={recpt.forms} columns={columnsForm} pagination={{pageSize: 5}}/>
                     </Row>
                 </Row>
+                <div
+                    style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    width: '100%',
+                    borderTop: '1px solid #e8e8e8',
+                    padding: '10px 16px',
+                    textAlign: 'right',
+                    left: 0,
+                    background: '#fff',
+                    borderRadius: '0 0 4px 4px',
+                    }}
+                >
+                    <Button
+                        style={{
+                            marginRight: 8,
+                        }}
+                        onClick={closeHandler}
+                    >
+                        Cerrar
+                    </Button>
+                    <Button onClick={handleSaveRecipient} type="primary" disabled={!enableSave}>
+                        Guardar
+                    </Button>
+                </div>
             </Drawer>
             { isVisibleHistoryComment &&
                 <Modal
@@ -203,4 +352,4 @@ const RecipientDetail = ({ recipient, closeHandler }) => {
     )
 }
 
-export default RecipientDetail;
+export default Form.create()(RecipientDetail);

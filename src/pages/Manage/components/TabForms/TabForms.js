@@ -9,8 +9,7 @@ import {
   Tooltip,
   Pagination,
   Icon,
-  notification,
-  Popconfirm
+  notification
 } from "antd";
 import { camelizerHelper } from "../../../../helpers";
 
@@ -86,11 +85,23 @@ const TabForms = ({status}) => {
   }
 
   const handleDeleteForm = (f) => {
-    updateFormPromise({ ...f, deleted: true }).then(r => {
-      loadForms(currentPage, filters)
-      notification.success({
-        message: 'Formulario borrado'
-      })
+    Modal.confirm({
+      title: 'Está seguro de eliminar el formulario?',
+      content: <>Usted eliminará el {f.folio}, si efectúa esta operación la información contenida dejará de existir.</>,
+      okText: 'Sí',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        updateFormPromise({ ...f, deleted: true }).then(r => {
+          loadForms(currentPage, filters)
+          notification.success({
+            message: 'Formulario borrado'
+          })
+        })
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
     })
   }
 
@@ -138,9 +149,7 @@ const TabForms = ({status}) => {
                     <Button icon="file-pdf" size="small" onClick={(e) => handleViewPDF(f)}/>
                   </Tooltip>
                   <Tooltip title="Eliminar">
-                    <Popconfirm title="Confirma eliminar el Formulario?" onConfirm={(e) => handleDeleteForm(f)}>
-                      <Button icon="delete" size="small" />
-                    </Popconfirm>
+                     <Button icon="delete" size="small" onClick={(e) => handleDeleteForm(f)}/>
                   </Tooltip>
                 </Col>
               </Row>

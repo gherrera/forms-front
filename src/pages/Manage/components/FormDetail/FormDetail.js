@@ -28,6 +28,7 @@ const FormDetail = ({ form, closeHandler }) => {
     const [ statusChanged, setStatusChanged ] = useState(false)
     const [ isVisibleHistoryStatus, setIsVisibleHistoryStatus ] = useState(false)
     const [ isVisibleHistoryComment, setIsVisibleHistoryComment ] = useState(false)
+    const [ isVisibleForms, setIsVisibleForms ] = useState(false)
 
     useEffect(() => {
         loadForm()
@@ -62,6 +63,10 @@ const FormDetail = ({ form, closeHandler }) => {
         }
     }
 
+    const handleViewForms = () => {
+        setIsVisibleForms(true)
+    }
+
     const handleChangleComments = (e) => {
         setComments(e.target.value)
     }
@@ -84,6 +89,10 @@ const FormDetail = ({ form, closeHandler }) => {
 
     const closeModalStatus = () => {
         setIsVisibleHistoryStatus(false)
+    }
+
+    const closeModalForms = () => {
+        setIsVisibleForms(false)
     }
 
     const columnsComment = [
@@ -127,6 +136,36 @@ const FormDetail = ({ form, closeHandler }) => {
             dataIndex: 'date',
             width: '35%',
             render: (text, record) => moment(text).format('DD.MM.YYYY HH:mm')
+        }
+    ]
+
+    const columnsForms = [
+        {
+            title: 'Formulario',
+            dataIndex: 'name',
+            width: '50%'
+        },
+        {
+            title: 'Folio',
+            dataIndex: 'folio',
+            width: '20%'
+        },
+        {   
+            title: 'Fecha',
+            dataIndex: 'sendDate',
+            width: '20%',
+            render: (text, record) => moment(text).format('DD.MM.YYYY HH:mm')
+        },
+        {   
+            title: 'Ver',
+            dataIndex: 'id',
+            width: '20%',
+            render: (text, record) => {
+                return <>
+                    <Button size="small" icon="file-pdf" onClick={() => handleViewForm(record)}/>
+                    <Button size="small" icon="file-text" onClick={() => downloadJson(record)}/>
+                </>
+            }
         }
     ]
 
@@ -176,7 +215,7 @@ const FormDetail = ({ form, closeHandler }) => {
                         <Col className="btns">
                             <Button size="small" type="primary" onClick={handleViewForm}>Ver Formulario</Button>
                             <Button size="small" type="primary" onClick={downloadJson}>Descargar Información</Button>
-                            <Button size="small" type="primary" disabled>Ver todos los formularios</Button>
+                            <Button size="small" type="primary" onClick={handleViewForms}>Ver todos los formularios</Button>
                         </Col>
                     </Row>
                 </Row>
@@ -261,6 +300,18 @@ const FormDetail = ({ form, closeHandler }) => {
                     onCancel={ closeModalStatus }
                 >
                     <Table size="small" dataSource={frm.statuses} columns={columnsStatus} />
+                </Modal>
+            }
+            {isVisibleForms &&
+                <Modal
+                    visible={true}
+                    title="Formularios"
+                    header={ null }
+                    width={800}
+                    footer= { [<Button key="back" onClick={ closeModalForms }>Cerrar</Button>] }
+                    onCancel={ closeModalForms }
+                >
+                    <Table size="small" dataSource={frm.dest.forms} columns={columnsForms} />
                 </Modal>
             }
         </div>

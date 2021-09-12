@@ -1,8 +1,8 @@
 import { recipientsService } from '../services'
 
-export default (form) => {
+export default (rec) => {
  	return new Promise(resolve => {
-		recipientsService.updateRecipient(form)
+		recipientsService.updateRecipient(rec)
  			.then(response => resolve(response.data))
  	})
 }

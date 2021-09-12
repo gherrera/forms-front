@@ -12,7 +12,6 @@ import {
   Select,
   Tooltip,
   notification,
-  Popconfirm,
   Pagination
 } from "antd";
 import { FormDetail } from '../'
@@ -123,11 +122,22 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
   }
 
   const handleDeleteForm = (f) => {
-    updateFormPromise({ ...f, deleted: true }).then(r => {
-      loadForms(currentPage)
-      notification.success({
-        message: 'Formulario borrado'
-      })
+    Modal.confirm({
+      title: 'Está seguro de eliminar el formulario?',
+      okText: 'Sí',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        updateFormPromise({ ...f, deleted: true }).then(r => {
+          loadForms(currentPage)
+          notification.success({
+            message: 'Formulario borrado'
+          })
+        })
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
     })
   }
 
@@ -186,9 +196,7 @@ const TabForms = ({ form, breadcrumbs, refreshBreadCrumbs }) => {
                     <Button icon="folder-open" size="small" />
                   </Tooltip>
                   <Tooltip title="Eliminar">
-                    <Popconfirm title="Confirma eliminar el Formulario?" onConfirm={(e) => handleDeleteForm(f)}>
-                      <Button icon="delete" size="small" />
-                    </Popconfirm>
+                     <Button icon="delete" size="small" onClick={(e) => handleDeleteForm(f)}/>
                   </Tooltip>
                   <Tooltip title="URL">
                     <Button icon="link" size="small" onClick={() => handleVisibleForm(true, f.id)} />

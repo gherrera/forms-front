@@ -17,5 +17,11 @@ export default {
 				rut
 			}
 		})
+	},
+	stats: () => {
+		return apiRequestorHelper({
+			url: apiConfig.url + '/stats',
+			method: 'post'
+		})
 	}
 }

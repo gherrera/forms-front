@@ -9,16 +9,15 @@ import {
   Pagination,
   Icon,
   notification,
-  Popconfirm
+  Modal
 } from "antd";
 import { camelizerHelper } from "../../../../helpers";
 
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import { deleteRecipientPromise, getRecipientsByClienteIdPromise } from "../../promises";
+import { deleteRecipientPromise, getRecipientsByClienteIdPromise, updateRecipientPromise } from "../../promises";
 import { RecipientDetail } from "..";
 import { Filter } from "./components";
-import { updateRecipientPromise } from "../../promises";
 
 const TabRecipients = ({}) => {
 	const { t } = useTranslation()
@@ -68,11 +67,23 @@ const TabRecipients = ({}) => {
   }
 
   const handleDeleteRecipient = (r) => {
-    deleteRecipientPromise(r.id).then(r => {
-      loadRecipients(currentPage, filters)
-      notification.success({
-        message: 'Destinatario borrado'
-      })
+    Modal.confirm({
+      title: 'Está seguro de eliminar el Destinatario?',
+      content: <>Usted eliminará el destinatario {r.rut}, si efectúa esta operación la información contenida dejará de existir.</>,
+      okText: 'Sí',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteRecipientPromise(r.id).then(response => {
+          loadRecipients(currentPage, filters)
+          notification.success({
+            message: 'Destinatario borrado'
+          })
+        })
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
     })
   }
 
@@ -109,12 +120,10 @@ const TabRecipients = ({}) => {
                 <Col span={2}>{moment(rec.creationDate).format('DD/MM/YYYY HH:mm')}</Col>
                 <Col span={2} className="tools-rows-forms">
                   <Tooltip title="Detalles">
-                    <Button icon="info" size="small" onClick={(e) => handleViewRecipient(rec)}/>
+                    <Button icon="edit" size="small" onClick={(e) => handleViewRecipient(rec)}/>
                   </Tooltip>
                   <Tooltip title="Eliminar">
-                    <Popconfirm title="Confirma eliminar el Destinatario?" onConfirm={(e) => handleDeleteRecipient(rec)}>
-                      <Button icon="delete" size="small" />
-                    </Popconfirm>
+                     <Button icon="delete" size="small" onClick={(e) => handleDeleteRecipient(rec)}/>
                   </Tooltip>
                 </Col>
               </Row>

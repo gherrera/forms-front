@@ -9,6 +9,7 @@ import getDataSourcesCatalogo from './getDataSourcesCatalogo'
 import getDataSourcesForm from './getDataSourcesForm'
 import getFormHash from './getFormHash'
 import getDestinatarioByRut from './getDestinatarioByRut'
+import stats from './stats'
 
 export const animateLogoutPromise = animateLogout
 export const changePasswordPromise = changePassword
@@ -21,3 +22,4 @@ export const getDataSourcesCatalogoPromise = getDataSourcesCatalogo
 export const getDataSourcesFormPromise = getDataSourcesForm
 export const getFormHashPromise = getFormHash
 export const getDestinatarioByRutPromise = getDestinatarioByRut
+export const statsPromise = stats
