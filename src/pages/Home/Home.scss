@@ -36,10 +36,22 @@
         .ant-card-body {
           padding: 6px;
         }
-      }
 
-      .ant-table {
-        border: unset;
+        .ant-table {
+          border: unset;
+
+          .ant-table-body {
+            margin: 0px 4px;
+            font-size: .9em;
+
+            .ant-table-thead {
+              th {
+                color: rgba(0,0,0,.4);
+                font-style: italic;
+              }
+            }
+          }
+        }
       }
     }
 

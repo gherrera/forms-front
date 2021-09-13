@@ -2,7 +2,8 @@ import './Home.scss'
 import React, { Component } from 'react'
 import { withTranslation } from 'react-i18next'
 import { withRouter } from 'react-router'
-import { Col, Row, Timeline, Tooltip, Icon, Button, Badge, Spin, Card, Statistic, Table } from 'antd'
+import { Col, Row, Timeline, Spin, Card, Statistic, Table } from 'antd'
+import Plot from "react-plotly.js";
 import { Page, PageBottomBar, PageContent, PageFooter, PageHeader, PageTopBar } from '../../layouts/Private/components'
 import { statsPromise } from '../../promises'
 import { getFormByClienteIdPromise } from '../Manage/promises'
@@ -11,7 +12,8 @@ import moment from "moment";
 class Home extends Component {
   state = {
     stats: {},
-    loading: true
+    loading: true,
+    forms: null
   }
 
   async componentDidMount() {
@@ -19,7 +21,6 @@ class Home extends Component {
     statsPromise().then(r => {
       this.setState({
         stats: r,
-        forms: null,
         loading: false
       })
     })
@@ -81,6 +82,54 @@ class Home extends Component {
                     :
                     <Table size="small" dataSource={forms} columns={this.columnsForms} pagination={false} />
                     }
+                </Card>
+              </Col>
+              <Col span={24}>
+                <Card title="Actividad en los últimos 30 días" className="stats-forms" loading={loading}>
+                  { stats.formsGroupDay &&
+                    <Plot
+                      data={[
+                        {
+                          type: "bar",
+                          x: stats.formsGroupDay.map((el) => el.fecha),
+                          y: stats.formsGroupDay.map((el) => el.cant),
+                          text: stats.formsGroupDay.map((el) => el.cant),
+                          marker: {
+                            color: 'rgba(157,195,230,1)',
+                            opacity: 0.6,
+                            line: {
+                              color: 'rgb(8,48,107)',
+                              width: 1.5
+                            }
+                          },
+                          textposition: 'auto',
+                          hoverinfo: 'none',
+                        }
+                      ]}
+                      layout={{
+                        margin: {
+                          l: 50,
+                          r: 40,
+                          b: 50,
+                          t: 10,
+                        },
+                        paper_bgcolor: "transparent",
+                        plot_bgcolor: "transparent",
+                        height: 200,
+                        yaxis: {
+                          title: {
+                            text: 'Formularios recibidos'
+                          }
+                        },
+                        barmode: 'stack'
+                      }}
+                      useResizeHandler={true}
+                      style={{width: '100%', height: '100%'}}
+                      config={{
+                        displayModeBar: false, // this is the line that hides the plotly bar.
+                      }}
+                    ></Plot>
+                  }
                 </Card>
               </Col>
             </Row>
