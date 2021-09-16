@@ -42,12 +42,25 @@
 
           .ant-table-body {
             margin: 0px 4px;
-            font-size: .9em;
+            font-size: .85em;
 
             .ant-table-thead {
               th {
                 color: rgba(0,0,0,.4);
                 font-style: italic;
+              }
+            }
+            .ant-table-tbody {
+              tr {
+                td {
+                  white-space: nowrap;
+                  
+                  &:first-child {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    max-width: 100px;
+                  }
+                }
               }
             }
           }
