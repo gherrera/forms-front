@@ -3,8 +3,9 @@ import React, { Component } from 'react'
 import { withTranslation } from 'react-i18next'
 import { withRouter } from 'react-router'
 import { Col, Row, Timeline, Spin, Card, Statistic, Table } from 'antd'
-import Plot from "react-plotly.js";
-import { Page, PageBottomBar, PageContent, PageFooter, PageHeader, PageTopBar } from '../../layouts/Private/components'
+//import Plot from "react-plotly.js";
+import { Line, Column } from '@ant-design/charts';
+import { Page, PageContent } from '../../layouts/Private/components'
 import { statsPromise } from '../../promises'
 import { getFormByClienteIdPromise } from '../Manage/promises'
 import moment from "moment";
@@ -57,6 +58,28 @@ class Home extends Component {
       }
   ]
 
+  getConfigChart() {
+    return {
+      data: this.state.stats.formsGroupDay,
+      height: 180,
+      xField: 'fecha',
+      yField: 'cant',
+      point: {
+        size: 5,
+        shape: 'diamond',
+      },
+      label: {
+        style: {
+          fill: '#aaa',
+        },
+      },
+      meta: {
+        fecha: { alias: 'Fecha' },
+        cant: { alias: 'Formularios' }
+      }
+    }
+  };
+
   render() {
     const { t } = this.props
     const { stats, loading, forms } = this.state
@@ -87,6 +110,11 @@ class Home extends Component {
               <Col span={24}>
                 <Card title="Actividad en los últimos 30 días" className="stats-forms" loading={loading}>
                   { stats.formsGroupDay &&
+                    <>
+                      <Column {...this.getConfigChart()} 
+                        
+                      />
+                    {/*
                     <Plot
                       data={[
                         {
@@ -129,6 +157,9 @@ class Home extends Component {
                         displayModeBar: false, // this is the line that hides the plotly bar.
                       }}
                     ></Plot>
+                    */
+                    }
+                    </>
                   }
                 </Card>
               </Col>

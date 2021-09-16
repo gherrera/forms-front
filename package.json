@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/charts": "^1.2.13",
     "antd": "^3.22.2",
     "axios": "^0.19.0",
     "chart.js": "^2.9.3",
@@ -14,7 +15,6 @@
     "query-string": "^6.8.3",
     "react": "^16.9.0",
     "react-beautiful-dnd": "^13.1.0",
-    "react-chartjs-2": "^2.9.0",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.9.0",
     "react-ga": "^2.7.0",
