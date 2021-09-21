@@ -1,13 +1,11 @@
 const api = {}
 
-if (
-  window.location.hostname === 'localhost' ||
-  window.location.hostname === '127.0.0.1' ||
-  window.location.hostname === 'forms-qa.htg.cl'
-) {
-  //api.url = 'https://api-docs-qa.gesintel.cl/api'
-  api.url = 'http://127.0.0.1:5000/api'
-} else {
+if ( process.env.REACT_APP_ENV === 'prod') {
   api.url = 'https://api.formularia.net/api'
+}else if(process.env.REACT_APP_ENV === 'qa') {
+  api.url = 'https://api.formularia.net/api'
+}else {
+  //api.url = 'https://api.formularia.net/api'
+  api.url = 'http://localhost:5000/api'
 }
 export default api

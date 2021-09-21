@@ -88,16 +88,25 @@ class Home extends Component {
       <div className="home">
         <Page>
           <PageContent>
-            <Row gutter={26}>
-              <Col span={5}>
-                  <Card>
-                    <Statistic title="Formularios creados" value={stats.formsCreated} loading={loading} />
-                  </Card>
-              </Col>
-              <Col span={5}>
-                <Card>
-                  <Statistic title="Formularios recibidos" value={stats.formsReceived} loading={loading} />
-                </Card>
+            <Row gutter={[26,18]}>
+              <Col span={10}>
+                <Row gutter={26}>
+                  <Col span={12}>
+                      <Card>
+                        <Statistic title="Formularios creados" value={stats.formsCreated} loading={loading} />
+                      </Card>
+                  </Col>
+                  <Col span={12}>
+                    <Card>
+                      <Statistic title="Formularios recibidos" value={stats.formsReceived} loading={loading} />
+                    </Card>
+                  </Col>
+                  <Col span={24}>
+                    <Card className="cardLogo">
+                      <img src="https://htgsoluciones.com/wp-content/uploads/2021/07/Logo-e1627334345137.png"/>
+                    </Card>
+                  </Col>
+                </Row>
               </Col>
               <Col span={14}>
                 <Card title="Últimas 5 declaraciones recibidas" className="stats-forms">
@@ -107,6 +116,8 @@ class Home extends Component {
                     }
                 </Card>
               </Col>
+            </Row>
+            <Row gutter={26}>
               <Col span={24}>
                 <Card title="Actividad en los últimos 30 días" className="stats-forms" loading={loading}>
                   { stats.formsGroupDay &&
