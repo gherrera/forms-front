@@ -101,7 +101,7 @@ class Home extends Component {
   getConfigChart() {
     return {
       data: this.state.stats.formsGroupDay,
-      height: 160,
+      height: 140,
       xField: 'fecha',
       yField: 'cant',
       point: {
@@ -123,7 +123,7 @@ class Home extends Component {
   getConfigChartStatsCategory() {
     return {
       data: this.state.formsCategory,
-      height: 160,
+      height: 140,
       xField: 'categoria',
       yField: 'cant',
       point: {
@@ -145,7 +145,7 @@ class Home extends Component {
   getConfigChartStatsCategoryStatus() {
     return {
       data: this.state.formsStatus,
-      height: 160,
+      height: 140,
       isGroup: true,
       xField: 'estado',
       yField: 'cant',
