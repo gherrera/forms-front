@@ -2,10 +2,10 @@ import './Home.scss'
 import React, { Component } from 'react'
 import { withTranslation } from 'react-i18next'
 import { withRouter } from 'react-router'
-import { Col, Row, Spin, Card, Statistic, Table, Tooltip } from 'antd'
+import { Col, Row, Spin, Card, Statistic, Table, Tooltip, Select } from 'antd'
 import { Column } from '@ant-design/charts';
 import { Page, PageContent } from '../../layouts/Private/components'
-import { statsPromise } from '../../promises'
+import { statsPromise, statsCategoryPromise, statsCategoryStatusPromise } from '../../promises'
 import { getFormByClienteIdPromise } from '../Manage/promises'
 import moment from "moment";
 
@@ -13,7 +13,23 @@ class Home extends Component {
   state = {
     stats: {},
     loading: true,
-    forms: null
+    forms: null,
+    formsCategory: [],
+    formsStatus: []
+  }
+
+  getEstado(estado) {
+    if(estado === 'RECIBIDO') return 'Recibido'
+    else if(estado === 'PENDIENTE') return 'Pendiente'
+    else if(estado === 'EVALUACION') return 'En Evaluación'
+    else if(estado === 'CERRADO') return 'Cerrado'
+  }
+
+  getCategoria(cat) {
+    if(cat === 'CLIENTE') return 'Cliente'
+    else if(cat === 'COLABORADOR') return 'Colaborador'
+    else if(cat === 'PROVEEDOR') return 'Proveedor'
+    else if(cat === 'DIRECTOR') return 'Director'
   }
 
   async componentDidMount() {
@@ -29,7 +45,31 @@ class Home extends Component {
         forms: response.records
       })
     })
-
+    statsCategoryPromise().then(r => {
+      let list = []
+      r.map(rec => {
+        list.push({
+          categoria: this.getCategoria(rec.categoria),
+          cant: rec.cant
+        })
+      })
+      this.setState({
+        formsCategory: list
+      })
+    })
+    statsCategoryStatusPromise().then(r => {
+      let list = []
+      r.map(rec => {
+        list.push({
+          estado: this.getEstado(rec.estado),
+          categoria: this.getCategoria(rec.categoria),
+          cant: rec.cant
+        })
+      })
+      this.setState({
+        formsStatus: list
+      })
+    })
   }
 
   columnsForms = [
@@ -61,7 +101,7 @@ class Home extends Component {
   getConfigChart() {
     return {
       data: this.state.stats.formsGroupDay,
-      height: 180,
+      height: 160,
       xField: 'fecha',
       yField: 'cant',
       point: {
@@ -80,6 +120,64 @@ class Home extends Component {
     }
   };
 
+  getConfigChartStatsCategory() {
+    return {
+      data: this.state.formsCategory,
+      height: 160,
+      xField: 'categoria',
+      yField: 'cant',
+      point: {
+        size: 5,
+        shape: 'diamond',
+      },
+      label: {
+        style: {
+          fill: '#aaa',
+        },
+      },
+      meta: {
+        fecha: { alias: 'Categoría' },
+        cant: { alias: 'Formularios' }
+      }
+    }
+  };
+
+  getConfigChartStatsCategoryStatus() {
+    return {
+      data: this.state.formsStatus,
+      height: 160,
+      isGroup: true,
+      xField: 'estado',
+      yField: 'cant',
+      seriesField: 'categoria',
+      point: {
+        size: 5,
+        shape: 'diamond',
+      },
+      label: {
+        style: {
+          fill: '#aaa',
+        },
+      },
+      meta: {
+        fecha: { estado: 'Estado' },
+        cant: { alias: 'Formularios' }
+      }
+    }
+  };
+
+  handleChageCategory(value) {
+    this.setState({
+      category1: value
+    })  
+  }
+
+  handleChageCategory2(value) {
+    this.setState({
+      category1: value
+    })  
+  }
+
   render() {
     const { t } = this.props
     const { stats, loading, forms } = this.state
@@ -88,7 +186,7 @@ class Home extends Component {
       <div className="home">
         <Page>
           <PageContent>
-            <Row gutter={[26,18]}>
+            <Row gutter={[20,18]}>
               <Col span={10}>
                 <Row gutter={26}>
                   <Col span={12}>
@@ -124,6 +222,18 @@ class Home extends Component {
                       <Column {...this.getConfigChart()} 
                       />
                   }
+                </Card>
+              </Col>
+            </Row>
+            <Row gutter={[26,42]}>
+              <Col span={12}>
+                <Card title="Formularios recibidos por Categoría" className="stats-forms" loading={loading}>
+                    <Column {...this.getConfigChartStatsCategory()} />
+                </Card>
+              </Col>
+              <Col span={12}>
+                <Card title="Estados asignados" className="stats-forms" loading={loading}>
+                    <Column {...this.getConfigChartStatsCategoryStatus()} />
                 </Card>
               </Col>
             </Row>

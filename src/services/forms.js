@@ -23,5 +23,17 @@ export default {
 			url: apiConfig.url + '/stats',
 			method: 'post'
 		})
+	},
+	statsCategory: () => {
+		return apiRequestorHelper({
+			url: apiConfig.url + '/statsCategory',
+			method: 'post'
+		})
+	},
+	statsCategoryStatus: () => {
+		return apiRequestorHelper({
+			url: apiConfig.url + '/statsCategoryStatus',
+			method: 'post'
+		})
 	}
 }
