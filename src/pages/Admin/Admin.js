@@ -16,7 +16,7 @@ class Admin extends Component {
     const { t } = this.props
 
     const breadcrumbs = [
-      { title: t('messages.aml.administration'), icon: 'file-search', link: '/administracion' },
+      { title: t('messages.aml.administration'), icon: 'file-search', link: '/admin' },
     ]
 
     return breadcrumbs
@@ -28,7 +28,9 @@ class Admin extends Component {
 
     return (
       <div className="admin">
-        <PageTopBar breadcrumbs={ breadcrumbs } />
+        <PageHeader
+            breadcrumbs={breadcrumbs}
+            />
         <Page>
           <PageHeader
             title={ t('messages.aml.administrationPageTitle') }
@@ -40,9 +42,11 @@ class Admin extends Component {
               <TabPane tab={ t('messages.aml.users') } key="1">
                 <AdminUsersPage currentUser={ currentUser } />
               </TabPane>
+              {/*
               <TabPane tab={ t('messages.aml.auditTitle') } key="2">
                 <AdminAuditPage currentUser={ currentUser } />
               </TabPane>
+              */}
             </Tabs>
           </PageContent>
           <PageFooter>

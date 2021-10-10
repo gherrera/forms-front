@@ -5,7 +5,8 @@ export default () => {
     length: 10,
     numbers: true,
     uppercase: true,
-    symbols: false
+    symbols: false,
+    strict: true
   })
 
   return password

@@ -42,13 +42,13 @@ export default ({ currentUser }) => {
           Inicio
           <Link to={ '/' } />
       </Menu.Item>
-      { currentUser.modules.includes('DESIGN') &&
+      { currentUser.modules && currentUser.modules.includes('DESIGN') &&
         <Menu.Item id="design">
           Diseño
           <Link to={ '/design' } />
         </Menu.Item>
       }
-      { currentUser.modules.includes('FORMS') &&
+      { currentUser.modules && currentUser.modules.includes('FORMS') &&
         <Menu.Item id="manage">
           <Dropdown overlay={ dropdownMenuEstados }>
               <Button type="link" ghost>
@@ -58,7 +58,7 @@ export default ({ currentUser }) => {
           </Dropdown>
         </Menu.Item>
       }
-      { currentUser.modules.includes('DEST') &&
+      { currentUser.modules && currentUser.modules.includes('DEST') &&
         <Menu.Item id="recipients">
           Destinatarios
           <Link to={ '/recipients' } />

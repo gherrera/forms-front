@@ -2,7 +2,7 @@ import './Design.scss'
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { Wrapper } from './layout'
-import { Page, PageBottomBar, PageContent, PageFooter, PageHeader, PageTopBar } from '../../layouts/Private/components'
+import { Page, PageContent,  PageHeader } from '../../layouts/Private/components'
 import { TabForms } from './components'
 
 

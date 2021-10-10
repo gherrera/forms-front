@@ -14,12 +14,6 @@
     padding-top: 20px;
   }
 
-  label {
-    display: block;
-    line-height: 1em;
-    padding: 0 0 10px;
-  }
-
   .ant-form-item-control {
     line-height: auto !important;
   }
@@ -133,7 +127,8 @@
    }
 
    .username-input.ant-input-affix-wrapper {
-     width: auto;
+     width: 300px;
+     padding-right: 10px;
    }
 
    .switches {

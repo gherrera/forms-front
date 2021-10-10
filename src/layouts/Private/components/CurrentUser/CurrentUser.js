@@ -49,8 +49,8 @@ class User extends React.Component {
         {
           ( currentUser.type === 'SADMIN' ) &&
             <Menu.Item key="1">
-              <Link to={ '/administracion' }>
-                <Icon type="setting" /> &nbsp;{ t('messages.aml.administrationPageTitle') }
+              <Link to={ '/accounts' }>
+                <Icon type="setting" /> &nbsp;Administración de cuentas
               </Link>
             </Menu.Item>
         }

@@ -4,21 +4,34 @@ import { withTranslation } from 'react-i18next'
 import { UsersService } from '../../services'
 import { getUsersByClientPromise } from '../../promises'
 import { Button, Icon, Modal, notification, Popconfirm, Table, Tooltip, Spin } from 'antd'
+import { Wrapper } from '../Design/layout'
+import { Page, PageContent,  PageHeader } from '../../layouts/Private/components'
 import ModalCreateContent from './ModalContentCreate'
 import { generatePasswordHelper } from '../../helpers'
 import { ReportService } from '../../services'
 
 class AdminUsers extends React.Component {
-  constructor(props) {
-    super(props)
+  state = {
+    breadcrumbs: this.getBreadcrumbs(),
+    title: '',
+    keyTab: Math.random(),
+    data: {},
+    isLoading: true,
+    isLoadingReport: false,
+    isModalVisible: false,
+    modal: ''
+	}
 
-    this.state = {
-      data: {},
-      isLoading: true,
-      isLoadingReport: false,
-      isModalVisible: false,
-      modal: ''
-    }
+  getBreadcrumbs() {
+    const breadcrumbs = [
+      { title: 'Gesitón de cuentas', icon: 'form', link: '/accounts', onClick: this.clickMenuDesign.bind(this) }
+    ]
+
+    return breadcrumbs
+  }
+
+  clickMenuDesign() {
+    this.setState({ keyTab: Math.random(), breadcrumbs: this.getBreadcrumbs(), title: '' })
   }
 
   async componentDidMount() {
@@ -69,13 +82,12 @@ class AdminUsers extends React.Component {
     }
 
     if (modalType === 'create') {
-      await UsersService.create(user)
+      await UsersService.saveUser('I', user)
         .then(async response => {
-          if(response.data.status === 'OK') {
+          if(response.data === 'success') {
             const data = await getUsersByClientPromise()
             this.setState({ data, isModalVisible: false })
 
-            UsersService.saveUser('I', response.data.user)
             notification['success']({
               message: t('messages.aml.notifications.succesfulOperation'),
               description: 'Usuario creado exitosamente'
@@ -89,18 +101,23 @@ class AdminUsers extends React.Component {
         })
         .catch(err => console.log(err))
     }
-
     if (modalType === 'edit') {
-      await UsersService.update(user)
+      await UsersService.saveUser("U", user)
         .then(async response => {
-          const data = await getUsersByClientPromise()
-          this.setState({ data, isModalVisible: false })
+          if(response.data === 'success') {
+            const data = await getUsersByClientPromise()
+            this.setState({ data, isModalVisible: false })
 
-          UsersService.saveUser('U', response.data.user)
-          notification['success']({
-            message: t('messages.aml.notifications.succesfulOperation'),
-            description: 'Usuario guardado'
-          })
+            notification['success']({
+              message: t('messages.aml.notifications.succesfulOperation'),
+              description: 'Usuario guardado'
+            })
+          }else {
+            notification.error({
+              message: t('messages.aml.notifications.anErrorOcurred'),
+              description: response.data.message
+            })
+          }
         })
         .catch(err => console.log(err))
     }
@@ -143,9 +160,10 @@ class AdminUsers extends React.Component {
 
   render() {
     const { currentUser, t } = this.props
+		const { breadcrumbs, title, keyTab } = this.state
 
     const tableColumns = [
-      { title: t('messages.aml.type'), dataIndex: 'type', render: (text => {
+      { title: 'Perfil', dataIndex: 'type', render: (text => {
         switch(text) {
           case 'SADMIN':
             return t('messages.aml.sadmin')
@@ -178,7 +196,7 @@ class AdminUsers extends React.Component {
       },
       { title: t('messages.aml.name'), dataIndex: 'name' },
       { title: t('messages.aml.username'), dataIndex: 'login' },
-      { title: t('messages.aml.email'), dataIndex: 'email' },
+      { title: 'Correo', dataIndex: 'email' },
       { title: t('messages.aml.creationDate'), dataIndex: 'dateShortAsString' },
       { title: t('messages.aml.status'), dataIndex: 'status', render: (text => {
         switch(text) {
@@ -218,34 +236,44 @@ class AdminUsers extends React.Component {
 
     return (
       <div className="admin-users">
-          <div className="tools-area">
-          { currentUser.type !== 'AUDIT' &&
-            <Button id="create-user" type="primary" icon="plus" onClick={ this.renderModal.bind(this, 'create', currentUser) }>{ t('messages.aml.createNewUser') }</Button>
-          }
-          &nbsp;
-          <Button type="primary" icon="file-excel" onClick={ this.exportHandler.bind(this) }>Exportar</Button>
-          </div>
-          <div className="table-wrapper">
-            {
-              this.state.isLoading ?
-                <Spin spinning={ true } size="large" />
-              :
-                <Table columns={ tableColumns } dataSource={ this.state.data } size="small" loading={ this.state.isLoadingReport } />
-            }
-          </div>
-          <div id="modal-user">
-            <Modal
-              title={ this.state.modal.title }
-              className={ this.state.modal.className }
-              visible={ this.state.isModalVisible }
-              style={{ top: 30 }}
-              footer={ null }
-              onCancel={ this.handleModalCancel }
-              >
-              { this.state.modal.content }
-          </Modal>
-          </div>
-        </div>
+        <Page>
+          <PageHeader
+            title={title}
+            breadcrumbs={breadcrumbs}
+            />
+          <PageContent>
+            <Wrapper>
+              <div className="tools-area">
+              { currentUser.type !== 'AUDIT' &&
+                <Button id="create-user" type="primary" icon="plus" onClick={ this.renderModal.bind(this, 'create', currentUser) }>{ t('messages.aml.createNewUser') }</Button>
+              }
+              &nbsp;
+              <Button type="primary" icon="file-excel" onClick={ this.exportHandler.bind(this) }>Exportar</Button>
+              </div>
+              <div className="table-wrapper">
+                {
+                  this.state.isLoading ?
+                    <Spin spinning={ true } size="large" />
+                  :
+                    <Table columns={ tableColumns } dataSource={ this.state.data } size="small" loading={ this.state.isLoadingReport } />
+                }
+              </div>
+              <div id="modal-user">
+                <Modal
+                  title={ this.state.modal.title }
+                  className={ this.state.modal.className }
+                  visible={ this.state.isModalVisible }
+                  style={{ top: 30 }}
+                  footer={ null }
+                  onCancel={ this.handleModalCancel }
+                  >
+                  { this.state.modal.content }
+              </Modal>
+              </div>
+            </Wrapper>
+          </PageContent>
+        </Page>
+      </div>
     )
   }
 }

@@ -14,7 +14,6 @@ class ModalContentCreate extends React.Component {
       name: '',
       email: '',
       type: '',
-      tipoServicio: [],
       login: '',
       password: null,
       token: null,
@@ -31,7 +30,6 @@ class ModalContentCreate extends React.Component {
         id: this.props.user.id,
         name: this.props.user.name,
         email: this.props.user.email,
-        tipoServicio: this.props.user.tipoServicio !== null ? this.props.user.tipoServicio : [],
         type: this.props.user.type,
         login: this.props.user.login,
         status: this.props.user.status,
@@ -43,7 +41,6 @@ class ModalContentCreate extends React.Component {
       form.setFieldsValue({
         name: this.props.user.name,
         email: this.props.user.email,
-        tipoServicio: this.props.user.tipoServicio !== null ? this.props.user.tipoServicio : [],
         type: this.props.user.type,
         status: this.props.user.status,
         login: this.props.user.login,
@@ -59,10 +56,6 @@ class ModalContentCreate extends React.Component {
 
   handleOnChangeType = (value) => {
     this.setState({ type: value })
-  }
-
-  handleOnChangeTipoServicio = (value) => {
-    this.setState({ tipoServicio: value })
   }
 
   handleOnChangeStatus = (value) => {
@@ -97,16 +90,8 @@ class ModalContentCreate extends React.Component {
     const { t, currentUser } = this.props
     let options = []
 
-    options.push( <Select.Option value="ADMIN">{t('messages.aml.admin')}</Select.Option>)
-    options.push( <Select.Option value="AUDIT">{t('messages.aml.audit')}</Select.Option>)
-    options.push( <Select.Option value="SOPORTE">Soporte</Select.Option>)
-    options.push( <Select.Option value="SUPERVISOR">Supervisor</Select.Option>)
-    options.push( <Select.Option value="ANALISTA">Analista</Select.Option>)
-    options.push( <Select.Option value="MOP">Mop</Select.Option>)
-    if (this.state.tipoServicio === 'SERVICIO2'){
-      options.push( <Select.Option value="APOYO">{"Apoyo a Campaña"}</Select.Option>)
-      options.push( <Select.Option value="APROBADOR">{"Aprovador de Campaña"}</Select.Option>)
-    }
+    options.push( <Select.Option value="SADMIN">Administrador</Select.Option>)
+    options.push( <Select.Option value="USUARIO">Usuario</Select.Option>)
 
     return options
 
@@ -161,9 +146,9 @@ class ModalContentCreate extends React.Component {
 
     const { form } = this.props
 
-    form.validateFields(['name', 'email', 'type', 'tipoServicio', 'login'], { force: true });
+    form.validateFields(['name', 'email', 'type', 'login'], { force: true });
 
-    if (!this.state.name.length || !this.state.email.length || !this.state.type.length || !this.state.tipoServicio.length || !this.state.login.length) {
+    if (!this.state.name.length || !this.state.email.length || !this.state.type.length || !this.state.login.length) {
       notification['error']({
         message: 'Ha ocurrido un error',
         description: 'Uno o mas campos requeridos no han sido completados.'
@@ -191,7 +176,36 @@ class ModalContentCreate extends React.Component {
             <Tabs.TabPane tab={[<Icon type="info-circle" />, t('messages.aml.information')]} key="1">
               <Form className="modal-content-create" onSubmit={this.handleSubmit.bind(this)}>
                 <Row gutter={[8]}>
-                  <Col span={12}>
+                  <Col span={24}>
+                    <Form.Item label="Perfil">
+                      {getFieldDecorator('type', {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Perfil es obligatorio',
+                          },
+                        ],
+                      })(
+                        <Select
+                          className="type"
+                          showSearch
+                          placeholder="Perfil"
+                          optionFilterProp="children"
+                          filterOption={(input, option) =>
+                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          }
+                          onChange={(value) => this.handleOnChangeType(value)}
+                          value={this.state.type}
+                          disabled={this.props.modalType === 'view' || this.state.type === 'SADMIN'}
+                        >
+                            {
+                              this.getOptionsUsers()
+                            }
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={24}>
                     <Form.Item label={t('messages.aml.name')}>
                       {getFieldDecorator('name', {
                         rules: [
@@ -203,7 +217,7 @@ class ModalContentCreate extends React.Component {
                       })(<Input value={this.state.name} onChange={(e) => this.handleOnChange('name', e.target.value)} disabled={this.props.modalType === 'view'} />)}
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
+                  <Col span={24}>
                     <Form.Item label="E-mail">
                       {getFieldDecorator('email', {
                         rules: [
@@ -225,113 +239,8 @@ class ModalContentCreate extends React.Component {
                       )
                       }
                     </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={[8]}>
-                  <Col span={12}>
-                    <Form.Item label={[t('messages.aml.serviceType')]}>
-                      {getFieldDecorator('tipoServicio', {
-                        rules: [
-                          {
-                            required: true,
-                            message: t('messages.aml.serviceTypePlaceholder'),
-                          },
-                        ],
-                      })(
-                        <Select
-                          className="type"
-                          showSearch
-                          placeholder={t('messages.aml.serviceTypePlaceholder')}
-                          optionFilterProp="children"
-                          mode="multiple"
-                          filterOption={(input, option) =>
-                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                          }
-                          onChange={(value) => this.handleOnChangeTipoServicio(value)}
-                          value={this.state.tipoServicio}
-                          disabled={this.props.modalType === 'view' || this.state.type === 'SADMIN'}
-                        >
-                              <Select.Option value="SERVICIO1">{t('messages.aml.service1')}</Select.Option>
-                              <Select.Option value="SERVICIO2">{t('messages.aml.service2')}</Select.Option>
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
-
-                  <Col span={12}>
-                    <Form.Item label={[t('messages.aml.userType')]}>
-                      {getFieldDecorator('type', {
-                        rules: [
-                          {
-                            required: true,
-                            message: t('messages.aml.typeMandatory'),
-                          },
-                        ],
-                      })(
-                        <Select
-                          className="type"
-                          showSearch
-                          placeholder={t('messages.aml.typePlaceholder')}
-                          optionFilterProp="children"
-                          filterOption={(input, option) =>
-                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                          }
-                          onChange={(value) => this.handleOnChangeType(value)}
-                          value={this.state.type}
-                          disabled={this.props.modalType === 'view' || this.state.type === 'SADMIN'}
-                        >
-                            {
-                              this.getOptionsUsers()
-                            }
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
-                  { this.props.modalType !== 'create' &&
-                    <Col span={ 12 }>
-                      <Form.Item label={ t('messages.aml.status') }>
-                      { getFieldDecorator('status', {
-                        rules: [
-                          {
-                            required: true,
-                            message: t('messages.aml.status'),
-                          },
-                        ],
-                      })(
-                        <Select
-                            placeholder={ t('messages.aml.status') }
-                            onChange={ (value) => this.handleOnChangeStatus(value) }
-                            value={ this.state.status }
-                            disabled={ this.props.modalType === 'view' }
-                          >
-                            <Select.Option value="ACTIVE">{ t('messages.aml.rule.status.ACTIVE') }</Select.Option>
-                            <Select.Option value="INACTIVE">{ t('messages.aml.rule.status.INACTIVE') }</Select.Option>
-                          </Select>
-                      )}
-                        </Form.Item>
-                    </Col>
-                  }
-                  {(this.props.currentUser.cliente.clientes.length > 0 && this.props.currentUser.cliente.outsourcer) &&
-                    <Col span={this.props.modalType === 'create' ? 12 : 24}>
-                      <Form.Item label={t('messages.aml.subclient')}>
-                        <Select
-                          className="subclient"
-                          placeholder={t('messages.aml.selectSubclient')}
-                          onChange={(value) => this.handleOnChangeEmpresas(value)}
-                          value={this.getEmpresas(this.state.empresas)}
-                          disabled={this.props.modalType === 'view'}
-                          mode="multiple"
-                        >
-                          {this.props.currentUser.cliente.clientes.map((value, index) => {
-                            return <Select.Option value={value.id}>{value.name}</Select.Option>
-                          })}
-                        </Select>
-                      </Form.Item>
-                    </Col>
-                  }
-                </Row>
-                {this.props.modalType === 'view' && this.props.user.type === 'SERVICIO' &&
-                  <Row>
+                  </Col>                 
+                  {this.props.modalType === 'view' && this.props.user.type === 'SERVICIO' &&
                     <Col span={24}>
                       <Form.Item label={t('messages.aml.token')}>
                         {getFieldDecorator('token', {
@@ -354,13 +263,9 @@ class ModalContentCreate extends React.Component {
                         )}
                       </Form.Item>
                     </Col>
-                  </Row>
-                }
-                <Row className="login-username">
+                  }
                   <Col xs={24}>
-                    <h3>{t('messages.aml.loginCredentials')}</h3>
-                    <p><strong className="ant-form-item-required"><span style={{ textDecoration: 'underline' }}>{t('messages.aml.username')}</span>:</strong> {t('messages.aml.usernameDescriptionP1')} <strong>{t('messages.aml.usernameDescriptionP2')}</strong>.</p>
-                    <Form.Item className="username">
+                    <Form.Item className="username" label="Usuario">
                       {getFieldDecorator('login', {
                         rules: [
                           {
@@ -371,74 +276,70 @@ class ModalContentCreate extends React.Component {
                       })(
                         <div className="username-wrapper">
                           <Input
-                            id="username"
                             prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                             className="username-input"
                             maxlength="20"
                             onKeyDown={this.handleUsernameOnKeyDown}
                             onChange={(e) => this.handleOnChange('login', e.target.value.toLowerCase())}
                             value={this.state.login}
-                            disabled={this.props.modalType === 'view'}
                           />
-                          <span className="username-suffix">@{this.props.currentUser.cliente.abreviado}</span>
-                          <Tooltip placement="top" title={t('messages.aml.copyUserToClipboard')}>
-                            <CopyToClipboard text={this.state.login + '@' + this.props.currentUser.cliente.abreviado} onCopy={() => this.handleCopyToClipboard('username')}>
-                              <Button type="primary">
-                                <Icon type="copy" />
-                              </Button>
-                            </CopyToClipboard>
-                          </Tooltip>
+                          <span className="username-suffix">@{this.props.currentUser.client.subdomain}</span>
                         </div>
                       )
                       }
                     </Form.Item>
-                    {modalType === 'create' &&
-                      <div>
-                        <Divider />
-                        <p><strong><span style={{ textDecoration: 'underline' }}>{t('messages.aml.password')}</span>:</strong> {t('messages.aml.passwordDescriptionP1')}.</p>
-                        <Form.Item className="password">
-                          {getFieldDecorator('password')(
-                            <div className="password-wrapper">
-                              <div className="password-inner">
-                                <Tooltip placement="top" title={t('messages.aml.copyPasswordToClipboard')}>
-                                  <CopyToClipboard text={this.props.password} onCopy={() => this.handleCopyToClipboard('password')}>
-                                    <Button type="primary">
-                                      <Icon type="copy" />
-                                    </Button>
-                                  </CopyToClipboard>
-                                </Tooltip>
-                                <Input
-                                  id="password"
-                                  prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                  className="password-input"
-                                  value={this.props.password}
-                                  disabled
-                                />
-                              </div>
-                            </div>
-                          )
-                          }
-                        </Form.Item>
-                      </div>
-                    }
-
-                    {modalType === 'edit' &&
-                      <div>
-                        <Divider />
-                        <p><strong><span style={{ textDecoration: 'underline' }}>{t('messages.aml.password')}</span> :</strong> {t('messages.aml.passwordEditDescriptionP1')}. <strong>{t('messages.aml.passwordDescriptionP2')}</strong>.</p>
-                        <Form.Item className="password">
-                          {getFieldDecorator('password')(
-                            <div className="password-wrapper">
-                              <div className="password-inner">
-                                <Button type="primary" className="password-reset" onClick={this.handlePasswordReset.bind(this)}><Icon type="lock" /> {t('messages.aml.resetPassword')}</Button>
-                              </div>
-                            </div>
-                          )
-                          }
-                        </Form.Item>
-                      </div>
-                    }
                   </Col>
+                  {(modalType === 'edit' || modalType === 'create') &&
+                    <Col xs={24}>
+                      <Form.Item label="Contraseña">
+                        {getFieldDecorator('password')(
+                          <Row>
+                            <Col span={16}>
+                              <Input
+                                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                value={modalType === 'create' ? this.props.password : null}
+                              />
+                            </Col>
+                            <Col span={7} offset={1}>
+                              <Tooltip placement="top" title={t('messages.aml.copyPasswordToClipboard')}>
+                                <CopyToClipboard text={this.props.password} onCopy={() => this.handleCopyToClipboard('password')}>
+                                  <Button type="primary">
+                                    <Icon type="copy" />
+                                  </Button>
+                                </CopyToClipboard>
+                              </Tooltip>
+                            </Col>
+                          </Row>
+                        )
+                        }
+                      </Form.Item>
+                    </Col>
+                  }
+
+                  { this.props.modalType !== 'create' &&
+                    <Col span={ 24 }>
+                      <Form.Item label={ t('messages.aml.status') }>
+                      { getFieldDecorator('status', {
+                        rules: [
+                          {
+                            required: true,
+                            message: t('messages.aml.status'),
+                          },
+                        ],
+                      })(
+                        <Select
+                            placeholder={ t('messages.aml.status') }
+                            onChange={ (value) => this.handleOnChangeStatus(value) }
+                            value={ this.state.status }
+                            disabled={ this.props.modalType === 'view' }
+                          >
+                            <Select.Option value="ACTIVE">{ t('messages.aml.rule.status.ACTIVE') }</Select.Option>
+                            <Select.Option value="INACTIVE">{ t('messages.aml.rule.status.INACTIVE') }</Select.Option>
+                          </Select>
+                      )}
+                        </Form.Item>
+                    </Col>
+                  }
                 </Row>
               </Form>
             </Tabs.TabPane>
