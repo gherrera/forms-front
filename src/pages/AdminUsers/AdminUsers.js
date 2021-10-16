@@ -9,6 +9,7 @@ import { Page, PageContent,  PageHeader } from '../../layouts/Private/components
 import ModalCreateContent from './ModalContentCreate'
 import { generatePasswordHelper } from '../../helpers'
 import { ReportService } from '../../services'
+import moment from "moment";
 
 class AdminUsers extends React.Component {
   state = {
@@ -34,7 +35,7 @@ class AdminUsers extends React.Component {
     this.setState({ keyTab: Math.random(), breadcrumbs: this.getBreadcrumbs(), title: '' })
   }
 
-  async componentDidMount() {
+  async loadUsers() {
     const data = await getUsersByClientPromise()
 
     await this.setState({
@@ -43,26 +44,41 @@ class AdminUsers extends React.Component {
     })
   }
 
+  async componentDidMount() {
+    this.loadUsers()
+  }
+
   async handleUserDelete(userId) {
     const { t } = this.props
-    await UsersService.delete(userId)
-      .then(async response => {
-        if (response.data.status === "OK") {
-          const data = await getUsersByClientPromise()
-          this.setState({ data })
 
-          notification.success({
-            message: t('messages.aml.notifications.succesfulOperation'),
-            description: 'La cuenta de usuario ha sido correctamente eliminada.'
-          })
-        }else {
-          notification.error({
-            message: t('messages.aml.notifications.anErrorOcurred'),
-            description: response.data.message
-          })
-        }
-      })
-      .catch(err => console.log(err))
+    Modal.confirm({
+      title: 'Está seguro de eliminar el usuario?',
+      okText: 'Sí',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk: () => {
+        UsersService.delete(userId)
+        .then(async response => {
+          if (response.data === "OK") {
+            this.loadUsers()
+
+            notification.success({
+              message: t('messages.aml.notifications.succesfulOperation'),
+              description: 'La cuenta de usuario ha sido correctamente eliminada.'
+            })
+          }else {
+            notification.error({
+              message: t('messages.aml.notifications.anErrorOcurred'),
+              description: 'Error al eliminar Usuario'
+            })
+          }
+        })
+        .catch(err => console.log(err))
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    })
   }
 
   handleModalCancel = () => {
@@ -197,7 +213,13 @@ class AdminUsers extends React.Component {
       { title: t('messages.aml.name'), dataIndex: 'name' },
       { title: t('messages.aml.username'), dataIndex: 'login' },
       { title: 'Correo', dataIndex: 'email' },
-      { title: t('messages.aml.creationDate'), dataIndex: 'dateShortAsString' },
+      { 
+        title: t('messages.aml.creationDate'), 
+        dataIndex: 'creationDate', 
+        render: (text => 
+          moment(text).format('DD/MM/YYYY HH:mm')
+        ) 
+      },
       { title: t('messages.aml.status'), dataIndex: 'status', render: (text => {
         switch(text) {
           case 'ACTIVE':
@@ -220,15 +242,7 @@ class AdminUsers extends React.Component {
                 <Icon className="disabled" type="delete" theme="filled" />
               </Tooltip>
             :
-              <Popconfirm
-                  title={ [ 'Realmente desea eliminar ', <strong>{ user.name }</strong>, ' ?' ] }
-                  placement="left"
-                  onConfirm={ () => this.handleUserDelete(id) }
-                  okText="Sí"
-                  cancelText="No"
-                >
-                <Icon type="delete" theme="filled" />
-              </Popconfirm>
+              <Icon type="delete" theme="filled"  onClick={ () => this.handleUserDelete(id) }/>
           }
         </div>
       )}

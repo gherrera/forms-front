@@ -64,9 +64,11 @@ export default ({ currentUser }) => {
           <Link to={ '/recipients' } />
         </Menu.Item>
       }
-      <Menu.Item id="report">
-        Informes
-      </Menu.Item>
+      { currentUser.modules && currentUser.modules.includes('REPORT') &&
+        <Menu.Item id="report">
+          Informes
+        </Menu.Item>
+      }
     </Menu>
   )
 }
