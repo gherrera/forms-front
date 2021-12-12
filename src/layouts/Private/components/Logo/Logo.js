@@ -2,8 +2,8 @@ import './Logo.scss'
 import React from 'react'
 import apiConfig from '../../../../config/api'
 
-export default ({ currentUserId }) => (
+export default ({ clientId }) => (
   <div className="logo">
-    <img src={ apiConfig.urlAml + '/../getImageClientUser/' + currentUserId + '/0' } alt="" />
+    <img src={ apiConfig.url + '/getImageClient?clientId=' + clientId } alt=""/>
   </div>
 )
